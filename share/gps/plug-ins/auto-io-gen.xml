@@ -1,0 +1,14 @@
+<?xml version="1.0"?><!--*- mode: xml -*-->
+<Custom>
+   <action name="auto_text_io-make">
+   <description>Create a Text_io child package</description>
+   <context>Source editor</context>
+   <external>auto_text_io -f -s%Prdf %F %d</external>
+   </action>
+  <submenu>
+    <title>Tools</title>
+       <menu action="auto_text_io-make">
+         <title>Auto Text_Io</title>
+       </menu>
+   </submenu>
+</Custom>

@@ -1,0 +1,349 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Auto_Text_IO</title>
+</head>
+<body>
+
+<h1>Auto_Text_IO</h1>
+
+<p>Current version is 3.05</p>
+
+<p>Auto_Text_IO is a tool for automatically generating a Text_IO
+package for an Ada package. The generated package contains Put and Get
+subprograms for all the types in the Ada package, implemented via
+Ada.Text_IO. The Put and Get subprograms can use named notation
+aggregates (although Get does not support the full flexibility of Ada
+source code; in particular, the components of aggregates must be in
+declaration order). This makes it extremely easy to generate
+well-formatted output for Ada packages, and is one way to provide
+persistent storage in a readable form (see SAL.Config_Files for
+another way).</p>
+
+<p>Auto_Text_IO is an <a
+href="http://info.acm.org/sigada/WG/asiswg/">ASIS</a> application. It
+also uses some <a
+href="http://stephe-leake.org/ada/sal.html">SAL</a> data
+structures, and uses other SAL packages at run-time. It currently uses
+the GNAT implementation of ASIS, including some ASIS extensions. I'd
+be interested to help in porting it to other ASIS implementations.</p>
+
+<p>Auto_Text_IO uses ASIS to iterate thru all the types declared in a
+package (called the &quot;parent&quot;). It creates a one or two child packages,
+containing Get and Put routines for each type. For scalar types,
+Auto_Text_IO generates an instantiation of the appropriate Ada.Text_IO
+package. For array types, it instantiates a package from
+SAL.Gen_Array_IO, a run-time package provided with SAL. For record
+types, it generates code to Put and Get an aggregate, optionally using
+named notation. For fully private types (that are not visible in the
+public part of the parent spec), it generates a separate private child
+package. The Get routine can read what Put outputs.</p>
+
+<p>By default, Auto_Text_IO generates Ada 2005 code. There is an
+optional Ada 83 mode; the generated Text_IO package can be used with
+an Ada 83 compiler. In Ada 83 mode, no Get routines are generated.
+This is because Ada 83 Standard.Text_IO does not provide the
+Look_Ahead function, which is essential in a Get routine. </p>
+
+<p>Most Ada types are supported. If you find one that isn't, it can
+probably be added. A notable exception is access types; it's not at
+all clear what to output in that case.</p>
+
+<p><a href="auto_text_io-3.05.tar.gz">Download the source</a> in tar.gz
+format. Then follow the simple <a
+href="auto_text_io.html#installation">installation</a>
+instructions.</p>
+
+<p>Auto_Text_IO is copyright 2009 by Stephen Leake, released under the
+Gnu General Public License. The run-time portions (in SAL) are
+released under the GNAT Modified Gnu General Public License (the same
+one that covers the supported GNAT run time libraries). </p>
+
+<hr>
+<p>Auto_Text_IO is a command-line application. Here is a description
+of the command line: <br>
+<tt> auto_text_io [options] filename [directory]</tt><br>
+<dl>
+  <dt>filename
+  <dd>Parent package source file
+
+  <dt>directory
+  <dd>Optional directory in which to place generated Text_IO child
+      package (default is '.'). This specifies a path relative to the
+      parent package source directory, or it may be an absolute
+      path.
+
+  <dt>-83
+  <dd>Use Ada 83 syntax (_Text_IO instead of .Text_IO, etc). Don't
+      generate Get routines.
+
+  <dt>-05
+  <dd>Allow Ada 2005 syntax in source file.
+
+  <dt>-d
+  <dd>Output debug information
+
+  <dt>-f
+  <dd>Replace an existing Text_IO child (if any)
+
+  <dt>-g arg
+  <dd>Specify additional argument for running gnatmake.
+
+  <dt>-Idir
+  <dd>Source search dir, has the same meaning as for gnatmake
+
+  <dt>-I-
+  <dd>same as gnatmake
+
+  <dt>-iN
+  <dd>(N in 1 .. 9) Number of spaces used for identation in generated
+      code
+
+  <dt>-k
+  <dd>Do not remove the GNAT tree file
+
+  <dt>-Pfile
+  <dd>Specify a GNAT project file for the source code.
+
+  <dt>-q
+  <dd>Quiet mode - do not output some messages
+
+  <dt>-r
+  <dd>Reuse the GNAT tree file instead of re-creating it. -r also implies -k
+
+  <dt>-sfile
+  <dd>Read the list of source search directories from a file. For use with GPS.
+
+  <dt>-t
+  <dd>Overwrite the existing GNAT tree file
+
+  <dt>-v
+  <dd>Specify verbose mode; less than debug, more than normal.
+
+  <dt>-?
+  <dd>Output this help information
+</dl>
+
+<p>If errors are encountered, no Text_IO child is produced. Errors are
+reported to standard error in standard Gnu format. If the gnatprep
+preprocessor is used, with option '-r', the auto_text_io error
+messages refer to the user source file, not the gnatprep output
+intermediate file.</p>
+
+<p>A previous version of auto_text_io would output a Text_IO child in
+the presence of some warnings (such as a type not being supported).
+However, this turned out to be difficult to support cleanly, so now
+all unsupported types are reported as errors; the user must add &quot;--
+auto_text_io: ignore&quot; comments.</p>
+
+<p>There are special comments you can use to annotate your code,
+to influence what Auto_Text_IO does.</p>
+
+<pre> --  Auto_Text_IO : ignore
+--  Auto_Text_IO : separate
+</pre>
+
+<p><tt>--  Auto_Text_IO : ignore</tt> preceding a type declaration
+excludes the type from Auto_Text_IO processing. This is useful if the
+type is not yet supported by Auto_Text_IO; it suppresses the warning
+message.</p>
+
+<p><tt>--  Auto_Text_IO : ignore</tt> preceding a generic formal
+package excludes it; see the <a
+href="auto_text_io_manual.html">Auto_Text_IO Manual</a> for more
+information.</p>
+
+<p><tt>--  Auto_Text_IO : separate</tt> preceding a type declaration
+tells Auto_Text_IO that the user will provide the core Put and Get
+routines for the type, to provide special processing such as output
+format or input validation. See the <a
+href="auto_text_io_manual.html">Auto_Text_IO Manual</a> for more
+information.</p>
+
+<p>The file <tt>Source/gps.menu</tt> contains XML code to add
+Auto_Text_IO to the GPS menu. Copy it to ~/.gps.</p>
+
+<hr>
+
+<h1>Test code</h1>
+
+<p>There is complete test code for the Auto_Text_IO package. A set of
+example Ada packages is provided, with at least one of each type
+supported by Auto_Text_IO. In addition, all of the Text_IO child
+packages in SAL are generated by Auto_Text_IO; that serves as a test
+of the support for generic packages. The test driver calls Put for
+each type, then reads the result file with Get, verifying the
+correctness of Auto_Text_IO. There is a smaller test for Ada 83 mode,
+and another test that verifies some of the error messages generated by
+Auto_Text_IO. The makefile runs all the tests.</p>
+
+<P>If you find a bug in Auto_Text_IO, or have a patch that provides an
+improvement, let <a href="mailto:stephen_leake@stephe-leake.org">me</a>
+know.</p>
+
+<hr>
+
+<h1><a name="installation"></a>Installation</h1>
+
+<p>Auto_Text_IO is distributed in source form only. There are two
+parts; the source for the Auto_Text_IO tool, and the source for the
+run-time components, which is in SAL. </p>
+
+<p>If you'd like to compile Auto_Text_IO the way I do, see my <a
+href="sal.html#installation">SAL</a> page for the list of tools I use.
+I give instructions here for using these tools (GNAT and Gnu make).</p>
+
+<ol>
+  <li>Install SAL as described in <a href="sal.html#installation">SAL</a>.
+  <li>Download <a href="auto_text_io-3.05.tar.gz">auto_text_io-3.05.tar.gz</a>.
+  <li>Extract to the same root directory as SAL.
+  <li>Download <a href="https://libre2.adacore.com/">asis-gpl-2008-src.tgz</a>.
+  <li>Extract to a directory of your choice; typically the root directory of the GNAT installation.
+  <li>In file<tt>asis-2008-src/Makefile.stub</tt>, change INSTALL_DIR
+      to a directory of your choice; I use <tt>GNAT/local</tt>
+  <li>In directory <tt>asis-2008-src</tt>, run <tt>make install</tt>
+  <li>Define <tt>GNAT_ASIS</tt> as an environment
+      variable; its value must be the absolute path to the directory
+      containing the file <tt>asis.gpr</tt>. In my case, that's <tt>GNAT/local/lib/gnat</tt>.
+  <li>Define <tt>INSTALL_BIN</tt> as an environment
+      variable; its value must be the absolute path to the directory
+      where you want to install the auto_text_io executable.
+  <li>From directory <tt>Auto_Text_IO/Build/x86_gnu_*_release</tt>,
+  run <tt>make</tt>. Windows, Linux and Lynx build directories are
+  provided. This will build the auto_text_io executable, and run all
+  the tests. Note that even on Linux and Lynx, the executable file
+  name ends in &quot;.exe&quot;; that simplifies the makefile.
+  <li>run <tt>make install</tt> to copy the executable to the
+  installation directory.
+  <li>Include <tt>SAL</tt> in your project; it contains the run-time
+  packages that are &quot;with&quot;ed by the code generated by
+  auto_text_io.
+  <li><tt>Makerules/auto_text_io_rules.make</tt> has an example make rule you can use for Auto_Text_IO.
+      It places all automatically generated output in the
+      sub-directory $AUTO_TEXT_IO_DIR, where it can be easily ignored by
+      configuration management tools, and easily deleted by <tt>make
+      clean</tt>.
+</ol>
+
+<h1><a name="known_bugs"></a>Known Bugs</h1>
+
+<ul>
+  <li>none!
+  <li>Well, except that there are Ada types that are not supported by
+      Auto_Text_IO. But that's a missing feature, not a bug :)
+</ul>
+<hr>
+
+<h1><a name="history"></a>History</h1>
+
+<dl>
+  <dt>Version 3.05 11 April 2009</dt>
+  <dd>
+      <ul>
+        <li>Ada 2005 supported, by GNAT GPL-2008 ASIS.
+        <li>Compiles cleanly with GNAT GPL-2008, GNAT 6.2.0, using
+  GNAT project files.
+        <li>Support ordinary fixed point types.
+        <li>Support private types implemented by arrays.
+        <li>Add -P option for GNAT project files.
+        <li>Add -g option for additional gnatmake args.
+        <li>Add -v verbose option.
+      </ul>
+  </dd>
+  <dt>Version 3.04 18 June 2006</dt>
+  <dd>
+      <ul>
+        <li>Add -05 switch
+        <li>Delete support for GNAT 3.15p.
+        <li>Compiles cleanly with GNAT GPL-2006, GNAT 5.04a, using project files.
+        <li>Some redundant 'use' and 'with' clauses are no longer generated.
+        <li>Generic formal package parameters no longer need to be renamed with &quot;Parent_&quot; prefix.
+      </ul>
+  </dd>
+  <dt>Version 3.03 4 August 2004</dt>
+  <dd>
+      <ul>
+        <li>Delete -w; we no longer support 'warnings'; only 'errors'.
+        <li>Text_IO child not generated if there are any errors.
+        <li>Add some documentation on how to add support for types in Standard.
+        <li>Support Duration, Character types.
+        <li>In generated Put, use Single_Line_Record rather than
+            Single_Line_Component to control new lines in some places.
+        <li>Properly support private extensions.
+        <li>Support selected names in discriminants.
+        <li>Properly ignore procedure instantiations and renames.
+        <li>Allow Text_IO child to with Private_Text_IO child, and vice versa.
+      </ul>
+  </dd>
+
+  <dt>Version 3.02 5 April 2004</dt>
+  <dd>
+      <ul>
+        <li>Minor cleanups, bug fixes
+        <li>More complete test coverage
+        <li>Delete -v option, which was not properly implemented.
+        <li>Tested with GNAT 3.15p Windows 2k, 5.02a Windows 2k and Lynx 4.0
+      </ul>
+  </dd>
+
+  <dt>Version 3.01 17 Nov 2003</dt>
+  <dd>
+      <ul>
+        <li>Match SAL 1.51 changes.
+        <li>Add -s command line option and gps.menu file for integration with GPS.
+        <li>Add support for Lynx OS; split out build directories.
+        <li>Tested with GNAT 3.15p, 3.16a1, 5.01a</li>
+      </ul>
+  </dd>
+
+  <dt>Version 3.00 2 Sept 2003</dt>
+  <dd>
+      <ul>
+        <li>Support generic parent packages, with formal package parameters.</li>
+        <li>Support variant records.</li>
+        <li>Support user override of basic Put, Get to allow special formats or input validation.</li>
+        <li>Merge run-time packages into SAL.</li>
+        <li>All Text_IO packages in SAL now generated by Auto_Text_IO.</li>
+        <li>Cleaned up code structure; use more ASIS queries.</li>
+        <li>Tested with GNAT 3.15p, 3.16a1, 5.01a</li>
+      </ul>
+  </dd>
+
+  <dt>Version 2.02 1 May 2003</dt>
+  <dd>
+      <ul>
+        <li>Match changes in SAL 1.06</li>
+        <li>Added support for fully private (invisible) types.</li>
+        <li>Use GNAT 3.15p project in Makefile.</li>
+        <li>Reduce dependencies on GNAT-specific stuff.</li>
+        <li>Support more pre-defined types.</li>
+      </ul>
+  </dd>
+  <dt>Version 2.01 26 September, 2002</dt>
+  <dd>
+      <ul>
+        <li>Restructure code; separate files for each Build element
+            state. More consistent naming conventions.</li>
+        <li>Support private types, tagged types, derived types, discriminants.</li>
+        <li>Special handling of pre-defined Ada.* and Interfaces.* packages.</li>
+        <li>Handle more array component types.</li>
+      </ul>
+  </dd>
+  <dt>Version 1.01 18 November, 2001</dt>
+  <dd>First release.</dd>
+</dl>
+
+<hr>
+<p>
+<a href="../index.html">my</a> home page.</p>
+<p>Author : <a href="mailto:stephen_leake@acm.org">Stephen Leake</a> </p>
+<a href="http://validator.w3.org/check/referer"> <img border=0
+src="../images/vh40.png" alt="Valid HTML 4.0!" align="right" height=31
+width=88></a>
+<a href="http://www.gnu.org/software/emacs/windows/ntemacs.html"> <img
+src="../images/emacs.png" border="0" alt="Created with Emacs" align="right"
+width="100" height="30"></a>
+<!-- hhmts start --> Last modified: Sat Apr 11 11:09:41 EDT 2009 <!-- hhmts end -->
+</body>
+</html>
