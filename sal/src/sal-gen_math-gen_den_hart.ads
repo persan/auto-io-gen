@@ -57,12 +57,12 @@ with SAL.Gen_Math.Gen_DOF_3;
 with SAL.Gen_Math.Gen_DOF_6;
 with SAL.Gen_Math.Gen_Scalar;
 generic
-   --  Auto_Text_IO : ignore
+   --  Auto_Io_Gen : ignore
    with package Elementary is new Ada.Numerics.Generic_Elementary_Functions (Real_Type);
    with package Math_Scalar is new SAL.Gen_Math.Gen_Scalar (Elementary);
-   --  Auto_Text_IO : ignore
+   --  Auto_Io_Gen : ignore
    with package Math_DOF_3 is new SAL.Gen_Math.Gen_DOF_3 (Elementary, Math_Scalar);
-   --  Auto_Text_IO : ignore
+   --  Auto_Io_Gen : ignore
    with package Math_DOF_6 is new SAL.Gen_Math.Gen_DOF_6 (Elementary, Math_Scalar, Math_DOF_3);
 package SAL.Gen_Math.Gen_Den_Hart is
    pragma Pure;

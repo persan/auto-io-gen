@@ -1,7 +1,7 @@
 --  Abstract :
 --
 --  Separate because Get needs to be separate; otherwise just copied
---  from Auto_Text_IO generated body.
+--  from Auto_Io_Gen generated body.
 --
 --  Copyright (C) 2003 Stephen Leake.  All Rights Reserved.
 --

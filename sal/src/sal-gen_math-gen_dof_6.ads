@@ -65,7 +65,7 @@ with SAL.Gen_Math.Gen_Vector;
 with SAL.Gen_Math.Gen_Square_Array;
 with SAL.Gen_Math.Gen_DOF_3;
 generic
-   --  Auto_Text_IO : ignore
+   --  Auto_Io_Gen : ignore
    with package Elementary is new Ada.Numerics.Generic_Elementary_Functions (Real_Type);
    with package Math_Scalar is new SAL.Gen_Math.Gen_Scalar (Elementary);
    with package Math_DOF_3 is new SAL.Gen_Math.Gen_DOF_3 (Elementary, Math_Scalar);
@@ -244,7 +244,7 @@ package SAL.Gen_Math.Gen_DOF_6 is
    ----------
    --  Mass properties
 
-   --  Auto_Text_IO : separate - don't put, get redundant Inertia value; compute it on Get
+   --  Auto_Io_Gen : separate - don't put, get redundant Inertia value; compute it on Get
    type Mass_Type is private;
    --  Private to cache inertia.
 

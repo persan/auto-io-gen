@@ -51,7 +51,7 @@ package SAL.Time_Conversions is
 
    type Month_Type is (Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec);
 
-   --  Auto_Text_IO: ignore
+   --  Auto_Io_Gen: ignore
    type Leap_Second_Table_Type is array (Integer range <>) of Leap_Second_Table_Entry_Type;
 
    function TAI_To_UTC

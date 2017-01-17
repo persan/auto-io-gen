@@ -25,7 +25,7 @@
 
 with Ada.Numerics.Generic_Elementary_Functions;
 generic
-   --  Auto_Text_IO : ignore
+   --  Auto_Io_Gen : ignore
    with package Elementary is new Ada.Numerics.Generic_Elementary_Functions (Real_Type);
 package SAL.Gen_Math.Gen_DOF_2 is
    pragma Preelaborate; -- Ada.Strings.Fixed in body.

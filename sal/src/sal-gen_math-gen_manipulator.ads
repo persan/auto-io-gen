@@ -119,12 +119,12 @@ with SAL.Gen_Math.Gen_DOF_6;
 with SAL.Gen_Math.Gen_Vector;
 with SAL.Gen_Math.Gen_Square_Array;
 generic
-   --  Auto_Text_IO : ignore
+   --  Auto_Io_Gen : ignore
    with package Elementary    is new Ada.Numerics.Generic_Elementary_Functions (Real_Type);
    with package Math_Scalar   is new SAL.Gen_Math.Gen_Scalar (Elementary);
    with package Math_DOF_3    is new SAL.Gen_Math.Gen_DOF_3 (Elementary, Math_Scalar);
    with package Math_DOF_6    is new SAL.Gen_Math.Gen_DOF_6 (Elementary, Math_Scalar, Math_DOF_3);
-   --  Auto_Text_IO : ignore
+   --  Auto_Io_Gen : ignore
    with package Math_Den_Hart is new SAL.Gen_Math.Gen_Den_Hart (Elementary, Math_Scalar, Math_DOF_3, Math_DOF_6);
 
    with function Math_DOF_6_DC_Array_DCV_Inverse
@@ -132,14 +132,14 @@ generic
      return Math_DOF_6.DC_Array_DCV_Type;
 
    type Joint_Index_Type          is (<>);
-   --  Auto_Text_IO : ignore
+   --  Auto_Io_Gen : ignore
    type Joint_Array_Real_Type     is array (Joint_Index_Type) of Real_Type;
-   --  Auto_Text_IO : ignore
+   --  Auto_Io_Gen : ignore
    type Joint_Array_Pose_Type     is array (Joint_Index_Type) of Math_DOF_6.Pose_Type;
-   --  Auto_Text_IO : ignore
+   --  Auto_Io_Gen : ignore
    type Joint_Array_Mass_Type     is array (Joint_Index_Type) of Math_DOF_6.Mass_Type;
    pragma Unreferenced (Joint_Array_Mass_Type); -- referenced in child packages
-   --  Auto_Text_IO : ignore
+   --  Auto_Io_Gen : ignore
    type Joint_Array_Den_Hart_Type is array (Joint_Index_Type) of Math_Den_Hart.Den_Hart_Type;
    pragma Unreferenced (Joint_Array_Den_Hart_Type); -- referenced in child packages
 
@@ -148,12 +148,12 @@ package SAL.Gen_Math.Gen_Manipulator is
 
    type Joint_Array_Boolean_Type           is array (Joint_Index_Type) of Boolean;
    type Joint_Array_Limit_Type             is array (Joint_Index_Type) of Math_Scalar.Limit_Type;
-   --  Auto_Text_IO : ignore
+   --  Auto_Io_Gen : ignore
    type Joint_Array_JAR_Type               is array (Joint_Index_Type) of Joint_Array_Real_Type;
    type Joint_Array_Wrench_Transform_Type  is array (Joint_Index_Type) of Math_DOF_6.Wrench_Transform_Type;
    type Joint_Array_DCV_Type               is array (Joint_Index_Type) of Math_DOF_6.Dual_Cart_Vector_Type;
 
-   --  Auto_Text_IO : ignore
+   --  Auto_Io_Gen : ignore
    type DC_Array_JAR_Type                  is array (Math_DOF_6.Dual_Cart_Axis_Type) of Joint_Array_Real_Type;
 
    package Joint_Array_Real_Ops is new SAL.Gen_Math.Gen_Vector
@@ -231,7 +231,7 @@ package SAL.Gen_Math.Gen_Manipulator is
 
    --  Jacobians
 
-   --  Auto_Text_IO : ignore
+   --  Auto_Io_Gen : ignore
    type Jacobian_Type is new DC_Array_JAR_Type;
    type Inverse_Jacobian_Type is new Joint_Array_DCV_Type;
 
@@ -261,7 +261,7 @@ package SAL.Gen_Math.Gen_Manipulator is
 
    --  Projectors
 
-   --  Auto_Text_IO : ignore
+   --  Auto_Io_Gen : ignore
    type Projector_Type is new Joint_Array_JAR_Type;
 
    function "*" (Left : in Projector_Type; Right : in Joint_Array_Real_Type) return Joint_Array_Real_Type;
@@ -275,7 +275,7 @@ package SAL.Gen_Math.Gen_Manipulator is
    --  If Joint_Array_Real_Type'length <= 6, returns (others =>
    --  (others => 0.0)). Inverse must be a psuedo-inverse of Forward.
 
-   --  Auto_Text_IO : ignore
+   --  Auto_Io_Gen : ignore
    type Inertia_Type is new Joint_Array_JAR_Type;
 
 end SAL.Gen_Math.Gen_Manipulator;

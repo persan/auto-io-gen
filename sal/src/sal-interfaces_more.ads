@@ -67,11 +67,11 @@ package SAL.Interfaces_More is
    type Unsigned_29 is mod 2**29;
    type Unsigned_30 is mod 2**30;
 
-   --  auto_text_io: ignore
+   --  Auto_Io_Gen: ignore
    type Unsigned_8_Access_Type is access all Interfaces.Unsigned_8;
-   --  auto_text_io: ignore
+   --  Auto_Io_Gen: ignore
    type Unsigned_16_Access_Type is access all Interfaces.Unsigned_16;
-   --  auto_text_io: ignore
+   --  Auto_Io_Gen: ignore
    type Unsigned_32_Access_Type is access all Interfaces.Unsigned_32;
 
    type Unsigned_16_Split_Type is record

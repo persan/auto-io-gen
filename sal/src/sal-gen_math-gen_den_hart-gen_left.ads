@@ -53,7 +53,7 @@
 --     changed to SAL.Gen_Math.Gen_Den_Hart.
 with SAL.Gen_Math.Gen_DOF_3.Gen_Left;
 generic
-   --  Auto_Text_IO : ignore
+   --  Auto_Io_Gen : ignore
    with package Math_DOF_3_Left is new Math_DOF_3.Gen_Left;
 package SAL.Gen_Math.Gen_Den_Hart.Gen_Left is
 

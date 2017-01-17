@@ -1,8 +1,8 @@
 --  Abstract :
 --
---  Generate Get procedure body for one type.
+--  Do processing for In_Type state in Build.Process_Element.
 --
---  Copyright (C) 2001, 2003 Stephen Leake.  All Rights Reserved.
+--  Copyright (C) 2001 Stephen Leake.  All Rights Reserved.
 --
 --  This program is free software; you can redistribute it and/or
 --  modify it under terms of the GNU General Public License as
@@ -16,14 +16,7 @@
 --  write to the Free Software Foundation, 59 Temple Place - Suite
 --  330, Boston, MA 02111-1307, USA.
 
-with Ada.Text_IO;
-with Auto_Io_Gen.Lists;
-private package Auto_Io_Gen.Generate.Get_Body is
-   pragma Elaborate_Body; --  Ada.Text_IO, Asis
-
-   procedure Generate
-     (File            : in Ada.Text_IO.File_Type;
-      Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
-   --  Generate body code for a Get procedure for one type.
-
-end Auto_Io_Gen.Generate.Get_Body;
+private procedure Auto_Io_Gen.Build.Process_Element_Do_Type
+   (Element : in     Asis.Element;
+    Control : in out Asis.Traverse_Control;
+    State   : in out State_Type);

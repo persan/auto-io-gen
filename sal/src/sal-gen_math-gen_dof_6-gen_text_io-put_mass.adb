@@ -1,6 +1,6 @@
 --  Abstract :
 --
---  Don't put redundant Inertia. Otherwise copied from Auto_Text_IO
+--  Don't put redundant Inertia. Otherwise copied from Auto_Io_Gen
 --  generated body.
 --
 --  Copyright (C) 2003, 2004 Stephen Leake.  All Rights Reserved.

@@ -1,6 +1,6 @@
 --  Abstract :
 --
---  Run-time utilities used by Auto_Text_IO generated files.
+--  Run-time utilities used by Auto_Io_Gen generated files.
 --
 --  Copyright (C) 2001, 2003, 2004, 2005 Stephen Leake.  All Rights Reserved.
 --

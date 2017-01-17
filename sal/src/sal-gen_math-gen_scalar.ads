@@ -29,7 +29,7 @@ pragma License (Modified_GPL);
 with Ada.Numerics.Generic_Elementary_Functions;
 with Interfaces;
 generic
-   --  Auto_Text_IO : ignore
+   --  Auto_Io_Gen : ignore
    with package Elementary is new Ada.Numerics.Generic_Elementary_Functions (Real_Type);
 package SAL.Gen_Math.Gen_Scalar is
    pragma Pure;
@@ -79,7 +79,7 @@ package SAL.Gen_Math.Gen_Scalar is
    -----------
    --  Limits operations
 
-   --  Auto_Text_IO : separate - Get checks High > Low
+   --  Auto_Io_Gen : separate - Get checks High > Low
    type Limit_Type is private;
    --  Private to enforce High > Low
 
@@ -169,7 +169,7 @@ package SAL.Gen_Math.Gen_Scalar is
    --  = Sqrt (Real_Type'Epsilon)
    --  A linear approximation is used for some operations when Trig.Sin < First_Order_Trig.
 
-   --  Auto_Text_IO : separate - Put, Get as single radians value
+   --  Auto_Io_Gen : separate - Put, Get as single radians value
    type Trig_Pair_Type is private;
    --  Sin and Cos of an angle. Private to enforce sin**2 + cos**2 = 1.
 

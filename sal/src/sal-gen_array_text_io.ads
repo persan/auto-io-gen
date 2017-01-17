@@ -24,7 +24,7 @@
 --  input (if Named_Association is True), or no names are allowed (if
 --  Named_Association is False), unlike standard Ada aggregate syntax.
 --  In addition, names must be in declaration order. Any Get routine
---  may propagate End_Error or Auto_Text_IO_Utils.Syntax_Error.
+--  may propagate End_Error or Auto_Io_Gen_Utils.Syntax_Error.
 --
 --  Copyright (C) 2001, 2002, 2003 Stephen Leake.  All Rights Reserved.
 --
