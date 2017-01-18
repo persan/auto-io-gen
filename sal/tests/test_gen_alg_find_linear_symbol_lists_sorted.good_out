@@ -1,0 +1,22 @@
+SAL.Gen.Alg.Find_Linear.Sorted, SAL.Poly.Lists.Double.
+Indefinite non-limited items (symbols).
+ (Count =>  3) => 
+((First =>-4, Last => 4),
+ (Significant_Digits => 4),
+ (Significant_Digits => 5))
+
+Finding Keys
+(Significant_Digits => 5) (FORWARD) => (Significant_Digits => 5)
+(First =>-4, Last => 4) (BACKWARD) => (First =>-4, Last => 4)
+(Significant_Digits => 0) (FORWARD) => Insert_Before (Significant_Digits => 4)
+
+Sorting
+ (Count =>  3) => 
+((Significant_Digits => 5),
+ (First =>-4, Last => 4),
+ (Significant_Digits => 4))
+Final list => 
+ (Count =>  3) => 
+((First =>-4, Last => 4),
+ (Significant_Digits => 4),
+ (Significant_Digits => 5))

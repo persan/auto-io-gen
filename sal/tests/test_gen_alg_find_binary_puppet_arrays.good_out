@@ -1,0 +1,10 @@
+SAL.Gen.Alg.Find_Binary, SAL.Aux.Enum_Iterators.
+Indefinite tagged limited items (puppets)
+ (Count =>  3) => 
+((Muppet) (Arms =>  2, Fingers =>  5),
+ (Beanie) (Legs =>  0),
+ (Beanie) (Legs =>  4))
+Finding
+(MUPPET, Arms =>  2, Fingers =>  5) find less equal => (Muppet) (Arms =>  2, Fingers =>  5)
+(BEANIE, Legs =>  0) find greater equal => (Beanie) (Legs =>  0)
+(MUPPET, Arms =>  3, Fingers =>  4) find less equal => Insert_After (Muppet) (Arms =>  2, Fingers =>  5)

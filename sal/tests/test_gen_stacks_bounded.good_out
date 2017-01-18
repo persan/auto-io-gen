@@ -1,0 +1,24 @@
+Testing Definite_Private_Item stack (Integers)
+Empty Stack => 
+Empty
+Adding 5 items
+Depth =>  5
+ 1 =>  1
+ 2 =>  2
+ 3 =>  3
+ 4 =>  4
+ 5 =>  5
+Full
+
+Testing Indefinite_Private_Item stack (Controlled Names)
+Empty Stack => 
+Empty
+Adding 5 items
+Depth =>  5
+ 1 => one
+ 2 => two
+ 3 => thirty_three
+ 4 => four
+ 5 => fifty_five
+Full
+String stack finalized

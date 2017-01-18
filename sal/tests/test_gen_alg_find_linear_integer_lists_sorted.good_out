@@ -1,0 +1,227 @@
+SAL.Gen.Alg.Find_Linear.Sorted, SAL.Poly.Lists.Double.
+Definite non-tagged non-limited items (integer_lists)
+ (Count =>  2) => 
+( 1,
+  3)
+Adding 6, backward
+ (Count =>  3) => 
+( 1,
+  3,
+  6)
+Adding 2, forward
+ (Count =>  4) => 
+( 1,
+  2,
+  3,
+  6)
+Adding 4, backward
+ (Count =>  5) => 
+( 1,
+  2,
+  3,
+  4,
+  6)
+
+Finding Keys
+Short List
+ (Count =>  1) => 
+( 5)
+ 6 (FORWARD) => Insert at tail
+ 5 (FORWARD) =>  5
+ 0 (FORWARD) => Insert_Before  5
+ 0 (BACKWARD) => Insert_Before  5
+
+List
+ (Count =>  5) => 
+( 1,
+  2,
+  3,
+  4,
+  6)
+ 6 (FORWARD) =>  6
+ 3 (BACKWARD) =>  3
+ 0 (FORWARD) => Insert_Before  1
+ 5 (BACKWARD) => Insert_Before  6
+ 7 (BACKWARD) => Insert at tail
+
+Finding Nodes
+Short List
+ (Count =>  1) => 
+( 5)
+ 6 (FORWARD) => Insert at tail
+ 5 (FORWARD) =>  5
+ 0 (FORWARD) => Insert_Before  5
+ 0 (BACKWARD) => Insert_Before  5
+
+List
+ 6 (FORWARD) =>  6
+ 3 (BACKWARD) =>  3
+ 0 (FORWARD) => Insert_Before  1
+ 5 (BACKWARD) => Insert_Before  6
+ 7 (BACKWARD) => Insert at tail
+
+Finding Items
+Short List
+ (Count =>  1) => 
+( 5)
+ 6 (FORWARD) => Insert at tail
+ 5 (FORWARD) =>  5
+ 0 (FORWARD) => Insert_Before  5
+ 0 (BACKWARD) => Insert_Before  5
+
+List
+ 6 (FORWARD) =>  6
+ 3 (BACKWARD) =>  3
+ 0 (FORWARD) => Insert_Before  1
+ 5 (BACKWARD) => Insert_Before  6
+ 7 (BACKWARD) => Insert at tail
+
+Remove_Out_Of_Order None
+List (before) => 
+ (Count =>  5) => 
+( 1,
+  2,
+  3,
+  4,
+  6)
+List (after) => 
+ (Count =>  5) => 
+( 1,
+  2,
+  3,
+  4,
+  6)
+Temp_List => 
+ (Count =>  0) => ()
+
+Remove_Out_Of_Order 5 at end
+List (before) => 
+ (Count =>  6) => 
+( 1,
+  2,
+  3,
+  4,
+  6,
+  5)
+List (after) => 
+ (Count =>  5) => 
+( 1,
+  2,
+  3,
+  4,
+  5)
+Temp_List => 
+ (Count =>  1) => 
+( 6)
+
+Remove_Out_Of_Order 0, 7 in middle
+List (before) => 
+ (Count =>  7) => 
+( 1,
+  2,
+  3,
+  0,
+  7,
+  4,
+  5)
+List (after) => 
+ (Count =>  5) => 
+( 1,
+  2,
+  3,
+  4,
+  5)
+Temp_List => 
+ (Count =>  3) => 
+( 0,
+  6,
+  7)
+
+Remove_Out_Of_Order 10 at head
+List (before) => 
+ (Count =>  6) => 
+( 10,
+  1,
+  2,
+  3,
+  4,
+  5)
+List (after) => 
+ (Count =>  5) => 
+( 1,
+  2,
+  3,
+  4,
+  5)
+Temp_List => 
+ (Count =>  4) => 
+( 0,
+  6,
+  7,
+  10)
+
+
+Merge
+List => 
+ (Count =>  9) => 
+( 0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  10)
+Temp_List => 
+ (Count =>  0) => ()
+
+
+Sorting (no change)
+ (Count =>  5) => 
+( 1,
+  2,
+  3,
+  4,
+  6)
+ (Count =>  5) => 
+( 1,
+  2,
+  3,
+  4,
+  6)
+Sorting (5 at end)
+ (Count =>  6) => 
+( 1,
+  2,
+  3,
+  4,
+  6,
+  5)
+ (Count =>  6) => 
+( 1,
+  2,
+  3,
+  4,
+  5,
+  6)
+Sorting (0, 7 in middle)
+ (Count =>  8) => 
+( 1,
+  2,
+  3,
+  0,
+  7,
+  4,
+  5,
+  6)
+Final list => 
+ (Count =>  8) => 
+( 0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7)

@@ -1,0 +1,12 @@
+SAL.Gen.Alg.Find_Linear, SAL.Poly.Lists.Double, Indefinite non-limited items (symbols)
+ (Count =>  2) => 
+((Significant_Digits => 5),
+ (First =>-4, Last => 4))
+
+Finding exact symbols
+Float_5    => (Significant_Digits => 5)
+Discrete_4 => (First =>-4, Last => 4)
+ok, didn't find Float_0
+Finding types
+Float    => (Significant_Digits => 5)
+Discrete => (First =>-4, Last => 4)

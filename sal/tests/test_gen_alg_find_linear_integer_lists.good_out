@@ -1,0 +1,10 @@
+SAL.Gen.Alg.Find_Linear, SAL.Poly.Lists.Double,
+Definite non-tagged non-limited items (integer_lists)
+ (Count =>  3) => 
+( 1,
+  3,
+  5)
+Finding
+5 =>  5
+3 =>  3
+ok, didn't find 0

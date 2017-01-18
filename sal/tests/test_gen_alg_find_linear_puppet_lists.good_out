@@ -1,0 +1,12 @@
+SAL.Gen.Alg.Find_Linear, SAL.Poly.Lists.Double,
+Indefinite tagged limited items (puppets)
+ (Count =>  2) => 
+((Muppet) (Arms =>  2, Fingers =>  5),
+ (Beanie) (Legs =>  4))
+Finding exact Puppets
+Muppet_2_5 => (Muppet) (Arms =>  2, Fingers =>  5)
+Beanie_4   => (Beanie) (Legs =>  4)
+ok, didn't find Beanie_0
+Finding types
+Muppet => (Muppet) (Arms =>  2, Fingers =>  5)
+Beanie => (Beanie) (Legs =>  4)
