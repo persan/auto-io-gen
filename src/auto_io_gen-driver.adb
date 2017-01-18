@@ -34,12 +34,13 @@ with Asis.Extensions;
 with Asis.Implementation;
 with Auto_Io_Gen.Build;
 
-with Auto_Io_Gen.Generate;
-with Auto_Io_Gen.Generate_Image;
-with Auto_Io_Gen.Generate_JSON;
-
 with Auto_Io_Gen.Options;
 with Gnatvsn;
+
+with Auto_Io_Gen.Generate; pragma Warnings(off,Auto_Io_Gen.Generate);
+with Auto_Io_Gen.Generate_Image;pragma Warnings(off,Auto_Io_Gen.Generate_Image);
+with Auto_Io_Gen.Generate_JSON;pragma Warnings(off,Auto_Io_Gen.Generate_JSON);
+
 procedure Auto_Io_Gen.Driver
 is
 begin
@@ -148,82 +149,34 @@ begin
             State   => State);
 
          if State.Error_Count = 0 then
-            if Options.Generate_Text_Io then
-               Generate.Create_Text_IO_Child
-                 (Type_List           => State.Type_List,
-                  Needs_Body          => State.Needs_Body,
-                  Needs_Text_IO_Utils => State.Needs_Text_IO_Utils,
-                  Invisible           => False,
-                  Is_Generic          => State.Is_Generic,
-                  Spec_With_List      => State.Spec_With_List,
-                  Body_With_List      => State.Body_With_List,
-                  Formal_Package_List => State.Formal_Package_List,
-                  Parent_Package_Name => Asis.Aux.Name (State.Parent_Package));
+            for I of Options.Languages loop
 
-               if State.Needs_Invisible_Spec then
-                  Generate.Create_Text_IO_Child
+               if I.Enabled then
+                  I.Generator
                     (Type_List           => State.Type_List,
-                     Needs_Body          => State.Needs_Invisible_Body,
-                     Needs_Text_IO_Utils => State.Needs_Invisible_Text_IO_Utils,
-                     Invisible           => True,
+                     Needs_Body          => State.Needs_Body,
+                     Needs_Text_IO_Utils => State.Needs_Text_IO_Utils,
+                     Invisible           => False,
                      Is_Generic          => State.Is_Generic,
-                     Spec_With_List      => State.Invisible_Spec_With_List,
-                     Body_With_List      => State.Invisible_Body_With_List,
+                     Spec_With_List      => State.Spec_With_List,
+                     Body_With_List      => State.Body_With_List,
                      Formal_Package_List => State.Formal_Package_List,
                      Parent_Package_Name => Asis.Aux.Name (State.Parent_Package));
-               end if;
-            end if;
 
-            if Options.Generate_Image then
-               Generate_Image.Create_Text_IO_Child
-                 (Type_List           => State.Type_List,
-                  Needs_Body          => State.Needs_Body,
-                  Needs_Text_IO_Utils => State.Needs_Text_IO_Utils,
-                  Invisible           => False,
-                  Is_Generic          => State.Is_Generic,
-                  Spec_With_List      => State.Spec_With_List,
-                  Body_With_List      => State.Body_With_List,
-                  Formal_Package_List => State.Formal_Package_List,
-                  Parent_Package_Name => Asis.Aux.Name (State.Parent_Package));
-
-               if State.Needs_Invisible_Spec then
-                  Generate_Image.Create_Text_IO_Child
-                    (Type_List           => State.Type_List,
-                     Needs_Body          => State.Needs_Invisible_Body,
-                     Needs_Text_IO_Utils => State.Needs_Invisible_Text_IO_Utils,
-                     Invisible           => True,
-                     Is_Generic          => State.Is_Generic,
-                     Spec_With_List      => State.Invisible_Spec_With_List,
-                     Body_With_List      => State.Invisible_Body_With_List,
-                     Formal_Package_List => State.Formal_Package_List,
-                     Parent_Package_Name => Asis.Aux.Name (State.Parent_Package));
+                  if State.Needs_Invisible_Spec then
+                     I.Generator
+                       (Type_List           => State.Type_List,
+                        Needs_Body          => State.Needs_Invisible_Body,
+                        Needs_Text_IO_Utils => State.Needs_Invisible_Text_IO_Utils,
+                        Invisible           => True,
+                        Is_Generic          => State.Is_Generic,
+                        Spec_With_List      => State.Invisible_Spec_With_List,
+                        Body_With_List      => State.Invisible_Body_With_List,
+                        Formal_Package_List => State.Formal_Package_List,
+                        Parent_Package_Name => Asis.Aux.Name (State.Parent_Package));
+                  end if;
                end if;
-            end if;
-            if Options.Generate_JSON then
-               Generate_JSON.Create_Text_IO_Child
-                 (Type_List           => State.Type_List,
-                  Needs_Body          => State.Needs_Body,
-                  Needs_Text_IO_Utils => State.Needs_Text_IO_Utils,
-                  Invisible           => False,
-                  Is_Generic          => State.Is_Generic,
-                  Spec_With_List      => State.Spec_With_List,
-                  Body_With_List      => State.Body_With_List,
-                  Formal_Package_List => State.Formal_Package_List,
-                  Parent_Package_Name => Asis.Aux.Name (State.Parent_Package));
-
-               if State.Needs_Invisible_Spec then
-                  Generate_JSON.Create_Text_IO_Child
-                    (Type_List           => State.Type_List,
-                     Needs_Body          => State.Needs_Invisible_Body,
-                     Needs_Text_IO_Utils => State.Needs_Invisible_Text_IO_Utils,
-                     Invisible           => True,
-                     Is_Generic          => State.Is_Generic,
-                     Spec_With_List      => State.Invisible_Spec_With_List,
-                     Body_With_List      => State.Invisible_Body_With_List,
-                     Formal_Package_List => State.Formal_Package_List,
-                     Parent_Package_Name => Asis.Aux.Name (State.Parent_Package));
-               end if;
-            end if;
+            end loop;
 
          else
             Put_Line (Integer'Image (State.Error_Count) & " errors; no Text_IO child generated");

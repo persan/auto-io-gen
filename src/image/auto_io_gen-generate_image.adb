@@ -438,5 +438,7 @@ package body Auto_Io_Gen.Generate_Image is
 
    end Root_Type_Name;
 
+begin
+   Auto_Io_Gen.Options.Register (Option => "image", Language_Name => "Image", Generator => Create_Text_IO_Child'Access);
 
 end Auto_Io_Gen.Generate_Image;

@@ -26,6 +26,7 @@ with GNAT.Traceback.Symbolic;
 with GNAT.Command_Line;
 with Ada.Directories;
 with Ada.Strings.Unbounded;
+with GNAT.Source_Info;
 
 package body Auto_Io_Gen.Options is
 
@@ -87,6 +88,17 @@ package body Auto_Io_Gen.Options is
 
    Command_Line_Parser : GNAT.Command_Line.Command_Line_Configuration;
 
+   procedure Register (Option, Language_Name : String; Generator : Create_Text_IO_Child_Proc) is
+      Temp : constant Language_Description_Access := new Language_Description;
+      use GNAT.Command_Line;
+   begin
+      Put_Line (GNAT.Source_Info.Enclosing_Entity & "(""" & Option & """, """ & Language_Name & """)");
+      Temp.Generator := Generator;
+      Languages.Append (Temp);
+      Define_Switch (Command_Line_Parser, Temp.Enabled'Access, "", "--" & Option, "Generate " & Language_Name & ".");
+   end;
+
+
    procedure Brief_Help
    is
    begin
@@ -116,9 +128,6 @@ package body Auto_Io_Gen.Options is
    procedure Setup_Parser is
       use GNAT.Command_Line;
    begin
-      Define_Switch (Command_Line_Parser, Generate_JSON'Access, "", "--json", "Generate JSON");
-      Define_Switch (Command_Line_Parser, Generate_Text_Io'Access, "", "--text_io", "Generate Text_Io");
-      Define_Switch (Command_Line_Parser, Generate_Image'Access, "", "--image", "Generate images");
       Define_Switch (Command_Line_Parser, Debug'Access, "-d", "--debug", "debug output");
       Define_Switch (Command_Line_Parser, Verbose'Access, "-v", "--verbose", "verbose output");
       Define_Switch (Command_Line_Parser, Overwrite_Child'Access, "-f", "", "Replace existing files");
@@ -132,9 +141,6 @@ package body Auto_Io_Gen.Options is
       Define_Switch (Command_Line_Parser, Indent'Access, "-i=", "", "(N in 1 .. 9) number of spaces used for identation in generated code.");
       Define_Switch (Command_Line_Parser, Trace_Exceptions'Access, "-T", "", "Trace all exceptions.");
       Define_Switch (Command_Line_Parser, Create_Output_Folders'Access, "-p", "", "Create Output Folders.");
-
-
-      -- Define_Switch (Command_Line_Parser, Indent'Access, "", "I-", "(N in 1 .. 9) number of spaces used for identation in generated code.");
 
    end;
 

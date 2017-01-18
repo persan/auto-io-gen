@@ -21,6 +21,8 @@
 --
 with Ada.Strings.Wide_Unbounded;
 with GNAT.Strings;
+with Auto_Io_Gen.Lists;
+with Ada.Containers.Vectors;
 package Auto_Io_Gen.Options is
    pragma Elaborate_Body; --  Gnat.OS_Lib (in body) is.
 
@@ -109,4 +111,24 @@ package Auto_Io_Gen.Options is
    procedure Clean_Up;
    --  Remove the tree file, if needed.
 
+
+   type Create_Text_IO_Child_proc is access procedure
+     (Type_List           : in Auto_Io_Gen.Lists.Type_Descriptor_Lists.List_Type;
+      Spec_With_List      : in Auto_Io_Gen.Lists.Context_Trees.Tree_Type;
+      Body_With_List      : in Auto_Io_Gen.Lists.Context_Trees.Tree_Type;
+      Formal_Package_List : in Lists.Formal_Package_Lists.List_Type;
+      Parent_Package_Name : in String;
+      Needs_Body          : in Boolean;
+      Needs_Text_IO_Utils : in Boolean;
+      Invisible           : in Boolean;
+      Is_Generic          : in Boolean);
+   procedure Register (Option, Language_Name : String; Generator : Create_Text_IO_Child_Proc);
+
+   type Language_Description is record
+      Enabled : aliased Boolean := False;
+      Generator : Create_Text_IO_Child_Proc;
+   end record;
+   type Language_Description_Access is access Language_Description;
+   package Language_Description_Vectors is new Ada.Containers.Vectors (Natural, Language_Description_Access, "=");
+   Languages : Language_Description_Vectors.Vector;
 end Auto_Io_Gen.Options;

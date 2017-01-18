@@ -61,7 +61,6 @@
 with Ada.Exceptions;
 with Ada.IO_Exceptions;
 with Ada.Strings.Fixed;
-with Ada.Strings.Unbounded;
 with Asis.Aux;
 with Asis.Elements;
 with Auto_Io_Gen.Generate.Get_Body;
@@ -451,5 +450,6 @@ package body Auto_Io_Gen.Generate is
       return Type_Name (Type_Name'First .. Root_Name_Index);
 
    end Root_Type_Name;
-
+begin
+   Auto_Io_Gen.Options.Register (Option => "text_io", Language_Name => "Text_Io", Generator => Create_Text_IO_Child'Access);
 end Auto_Io_Gen.Generate;

@@ -21,4 +21,3 @@ procedure Auto_Io_Gen.Driver;
 --  command-line arguments, checks the relations between options and
 --  existing files and creates the Text_IO child package if possible
 --  and necessary.
-

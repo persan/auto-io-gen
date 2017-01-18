@@ -1,3 +1,4 @@
 
 all:
-	auto_io_gen -p simple.ads Auto -v -d --text_io
+	rm -rf Auto
+	auto_io_gen -p simple.ads Auto -v -d --text_io --image

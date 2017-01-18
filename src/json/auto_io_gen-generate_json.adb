@@ -455,5 +455,6 @@ package body Auto_Io_Gen.Generate_JSON is
       return Type_Name (Type_Name'First .. Root_Name_Index);
 
    end Root_Type_Name;
-
+begin
+   Auto_Io_Gen.Options.Register (Option => "json", Language_Name => "JSON", Generator => Create_Text_IO_Child'Access);
 end Auto_Io_Gen.Generate_JSON;
