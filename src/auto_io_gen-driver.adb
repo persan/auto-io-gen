@@ -21,7 +21,6 @@ with Ada.Command_Line;
 with Ada.Exceptions;   use Ada.Exceptions;
 with Ada.Strings.Fixed;
 with Ada.Strings.Maps;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings.Wide_Unbounded;
 with Ada.Text_IO;      use Ada.Text_IO;
 with Ada.Wide_Text_IO;
@@ -34,33 +33,37 @@ with Asis.Exceptions;
 with Asis.Extensions;
 with Asis.Implementation;
 with Auto_Io_Gen.Build;
+
 with Auto_Io_Gen.Generate;
-with Auto_Io_Gen.Options; use Auto_Io_Gen.Options;
+with Auto_Io_Gen.Generate_Image;
+with Auto_Io_Gen.Generate_JSON;
+
+with Auto_Io_Gen.Options;
 with Gnatvsn;
 procedure Auto_Io_Gen.Driver
 is
 begin
 
-   Read_Command_Line;
+   OPtions.Read_Command_Line;
 
 
-   if Verbose then
+   if OPtions.Verbose then
       Put_Line (Version);
       Put_Line ("GNAT version (from ASIS) " & Gnatvsn.Gnat_Version_String);
       New_Line;
    end if;
 
    --  Compile the Asis context if necessary.
-   Initialize;
+   OPtions.Initialize;
 
-   if not Initialized then
+   if not OPtions.Initialized then
       --  Error message already output.
       Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
       return;
    end if;
 
-   if Verbose then
-      Put_Line ("Package_File_Name => " & To_String (Package_File_Name));
+   if OPtions.Verbose then
+      Put_Line ("Package_File_Name => " & OPtions.Package_File_Name.all);
    end if;
 
    declare
@@ -102,14 +105,14 @@ begin
       CU_Kind := Asis.Compilation_Units.Unit_Kind (CU);
 
       if Is_Nil (CU) then
-         Put_Line ("file " & To_String (Package_File_Name) & " does not contain a unit to create a Text_IO child for");
+         Put_Line ("file " & OPtions.Package_File_Name.all & " does not contain a unit to create a Text_IO child for");
          Asis_Clean_Up;
 
       elsif not (CU_Kind = A_Package or else
                  CU_Kind = A_Generic_Package)
       then
 
-         if not Quiet then
+         if not OPtions.Quiet then
             Ada.Wide_Text_IO.Put ("Auto_Io_Gen: Compilation unit " & Unit_Full_Name (CU));
             Put_Line (" does not require a Text_IO child");
             Put_Line (" Unit Kind: " & Unit_Kinds'Image (CU_Kind));
@@ -123,13 +126,6 @@ begin
          --  it is relative to the file directory. So delete the path
          --  info.
          --
-         --  In addition, if the Ada file was produced by a
-         --  preprocessor, the GNAT 3.14a (and later) ASIS
-         --  implementation returns the preprocessor output file name
-         --  for Asis.Compilation_Units.Text_Name. But we want the
-         --  user's file name (the preprocessor input) for error
-         --  messages. Thus we must use the GNAT extension
-         --  Asis.Extensions.Original_Text_Name.
          declare
             Temp_Name : constant String := Ada.Characters.Handling.To_String
             --               (Asis.Compilation_Units.Text_Name (CU)); -- GNAT 3.13 returns preprocessor name here.
@@ -143,7 +139,7 @@ begin
                Set    => Ada.Strings.Maps.To_Set ("/\"),
                Going  => Ada.Strings.Backward);
          begin
-            Options.Report_File_Name := To_Unbounded_String (Temp_Name (Name_First .. Temp_Name'Last));
+            Options.Report_File_Name := new String'(Temp_Name (Name_First .. Temp_Name'Last));
          end;
 
          Auto_Io_Gen.Build.Build_Tree
@@ -152,37 +148,83 @@ begin
             State   => State);
 
          if State.Error_Count = 0 then
-            if Debug then
-               Put_Line ("generating Text_IO child");
-            end if;
-
-            Generate.Create_Text_IO_Child
-              (Type_List           => State.Type_List,
-               Needs_Body          => State.Needs_Body,
-               Needs_Text_IO_Utils => State.Needs_Text_IO_Utils,
-               Invisible           => False,
-               Is_Generic          => State.Is_Generic,
-               Spec_With_List      => State.Spec_With_List,
-               Body_With_List      => State.Body_With_List,
-               Formal_Package_List => State.Formal_Package_List,
-               Parent_Package_Name => Asis.Aux.Name (State.Parent_Package));
-
-            if State.Needs_Invisible_Spec then
-               if Debug then
-                  Put_Line ("generating Private_Text_IO child");
-               end if;
-
+            if Options.Generate_Text_Io then
                Generate.Create_Text_IO_Child
                  (Type_List           => State.Type_List,
-                  Needs_Body          => State.Needs_Invisible_Body,
-                  Needs_Text_IO_Utils => State.Needs_Invisible_Text_IO_Utils,
-                  Invisible           => True,
+                  Needs_Body          => State.Needs_Body,
+                  Needs_Text_IO_Utils => State.Needs_Text_IO_Utils,
+                  Invisible           => False,
                   Is_Generic          => State.Is_Generic,
-                  Spec_With_List      => State.Invisible_Spec_With_List,
-                  Body_With_List      => State.Invisible_Body_With_List,
+                  Spec_With_List      => State.Spec_With_List,
+                  Body_With_List      => State.Body_With_List,
                   Formal_Package_List => State.Formal_Package_List,
                   Parent_Package_Name => Asis.Aux.Name (State.Parent_Package));
+
+               if State.Needs_Invisible_Spec then
+                  Generate.Create_Text_IO_Child
+                    (Type_List           => State.Type_List,
+                     Needs_Body          => State.Needs_Invisible_Body,
+                     Needs_Text_IO_Utils => State.Needs_Invisible_Text_IO_Utils,
+                     Invisible           => True,
+                     Is_Generic          => State.Is_Generic,
+                     Spec_With_List      => State.Invisible_Spec_With_List,
+                     Body_With_List      => State.Invisible_Body_With_List,
+                     Formal_Package_List => State.Formal_Package_List,
+                     Parent_Package_Name => Asis.Aux.Name (State.Parent_Package));
+               end if;
             end if;
+
+            if Options.Generate_Image then
+               Generate_Image.Create_Text_IO_Child
+                 (Type_List           => State.Type_List,
+                  Needs_Body          => State.Needs_Body,
+                  Needs_Text_IO_Utils => State.Needs_Text_IO_Utils,
+                  Invisible           => False,
+                  Is_Generic          => State.Is_Generic,
+                  Spec_With_List      => State.Spec_With_List,
+                  Body_With_List      => State.Body_With_List,
+                  Formal_Package_List => State.Formal_Package_List,
+                  Parent_Package_Name => Asis.Aux.Name (State.Parent_Package));
+
+               if State.Needs_Invisible_Spec then
+                  Generate_Image.Create_Text_IO_Child
+                    (Type_List           => State.Type_List,
+                     Needs_Body          => State.Needs_Invisible_Body,
+                     Needs_Text_IO_Utils => State.Needs_Invisible_Text_IO_Utils,
+                     Invisible           => True,
+                     Is_Generic          => State.Is_Generic,
+                     Spec_With_List      => State.Invisible_Spec_With_List,
+                     Body_With_List      => State.Invisible_Body_With_List,
+                     Formal_Package_List => State.Formal_Package_List,
+                     Parent_Package_Name => Asis.Aux.Name (State.Parent_Package));
+               end if;
+            end if;
+            if Options.Generate_JSON then
+               Generate_JSON.Create_Text_IO_Child
+                 (Type_List           => State.Type_List,
+                  Needs_Body          => State.Needs_Body,
+                  Needs_Text_IO_Utils => State.Needs_Text_IO_Utils,
+                  Invisible           => False,
+                  Is_Generic          => State.Is_Generic,
+                  Spec_With_List      => State.Spec_With_List,
+                  Body_With_List      => State.Body_With_List,
+                  Formal_Package_List => State.Formal_Package_List,
+                  Parent_Package_Name => Asis.Aux.Name (State.Parent_Package));
+
+               if State.Needs_Invisible_Spec then
+                  Generate_JSON.Create_Text_IO_Child
+                    (Type_List           => State.Type_List,
+                     Needs_Body          => State.Needs_Invisible_Body,
+                     Needs_Text_IO_Utils => State.Needs_Invisible_Text_IO_Utils,
+                     Invisible           => True,
+                     Is_Generic          => State.Is_Generic,
+                     Spec_With_List      => State.Invisible_Spec_With_List,
+                     Body_With_List      => State.Invisible_Body_With_List,
+                     Formal_Package_List => State.Formal_Package_List,
+                     Parent_Package_Name => Asis.Aux.Name (State.Parent_Package));
+               end if;
+            end if;
+
          else
             Put_Line (Integer'Image (State.Error_Count) & " errors; no Text_IO child generated");
          end if;

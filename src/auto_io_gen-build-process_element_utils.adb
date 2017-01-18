@@ -19,7 +19,6 @@
 with Ada.Characters.Handling;
 with Ada.Command_Line;
 with Ada.Strings.Fixed;
-with Ada.Strings.Unbounded;
 with Ada.Text_IO;
 with Asis.Aux;
 with Asis.Declarations;
@@ -369,9 +368,6 @@ package body Auto_Io_Gen.Build.Process_Element_Utils is
             return "Boolean_Text_IO";
 
          elsif Type_Name = "character" then
-            --  Put (Character) is already provided by
-            --  Ada.Text_IO (or Text_IO in Ada 83). It doesn't
-            --  hurt to have an extra with/use for that.
             return "Ada.Text_IO";
 
          elsif Type_Name = "duration" then
@@ -386,6 +382,8 @@ package body Auto_Io_Gen.Build.Process_Element_Utils is
          elsif Type_Name = "long_float" then
             return "Ada.Long_Float_Text_IO";
 
+         elsif Type_Name = "string" then
+            return "Ada.String_Text_IO";
          else
             Report_Unsupported (State, Original_Declaration, "this Standard type ");
             raise Not_Supported;
@@ -728,7 +726,7 @@ package body Auto_Io_Gen.Build.Process_Element_Utils is
    begin
       Put_Line
         (Standard_Error,
-         Ada.Strings.Unbounded.To_String (Options.Report_File_Name) & ":" &
+         Options.Report_File_Name.all & ":" &
            Trim (Line_Number_Positive'Image (First_Line), Left) & ":" &
            Trim (Character_Position_Positive'Image (El_Span.First_Column), Left) & ": " &
            Program_Name & ": " &

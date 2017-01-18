@@ -64,12 +64,12 @@ with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded;
 with Asis.Aux;
 with Asis.Elements;
-with Auto_Io_Gen.Generate.Get_Body;
-with Auto_Io_Gen.Generate.Put_Body;
-with Auto_Io_Gen.Generate.Spec;
+with Auto_Io_Gen.Generate_JSON.Get_Body;
+with Auto_Io_Gen.Generate_JSON.Put_Body;
+with Auto_Io_Gen.Generate_JSON.Spec;
 with Auto_Io_Gen.Options;
 with SAL.Gen.Alg.Process_All_Constant;
-package body Auto_Io_Gen.Generate is
+package body Auto_Io_Gen.Generate_JSON is
 
    --------------
    --  Local declarations
@@ -230,10 +230,10 @@ package body Auto_Io_Gen.Generate is
       use Auto_Io_Gen.Options;
       use Ada.Strings.Unbounded;
 
-      Child_File_Name : Unbounded_String :=
-                          Options.Destination_Dir &
-                          Options.Root_File_Name &
-                          Options.File_Package_Separator;
+      Child_File_Name : Unbounded_String := To_Unbounded_String
+        (Options.Destination_Dir.all &
+           Options.Root_File_Name.all &
+           Options.File_Package_Separator);
 
       Child_Spec_File : File_Type; --  The output .Text_IO spec
       Child_Body_File : File_Type; --  The output .Text_IO body
@@ -456,12 +456,4 @@ package body Auto_Io_Gen.Generate is
 
    end Root_Type_Name;
 
-   procedure Set_Indent (File : in Ada.Text_IO.File_Type)
-   is
-      use Ada.Text_IO;
-   begin
-      --  Indent 0 means column 1
-      Set_Col (File, 1 + Auto_Io_Gen.Options.Indent * (Indent_Level - 1));
-   end Set_Indent;
-
-end Auto_Io_Gen.Generate;
+end Auto_Io_Gen.Generate_JSON;

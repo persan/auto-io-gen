@@ -19,9 +19,8 @@
 --  write to the Free Software Foundation, 59 Temple Place - Suite
 --  330, Boston, MA 02111-1307, USA.
 --
-with Ada.Strings.Unbounded;
 with Ada.Strings.Wide_Unbounded;
-with Ada.Text_IO;
+with GNAT.Strings;
 package Auto_Io_Gen.Options is
    pragma Elaborate_Body; --  Gnat.OS_Lib (in body) is.
 
@@ -31,28 +30,28 @@ package Auto_Io_Gen.Options is
    Initialized : Boolean := False;
    --  Set to True by Initialize, if initialization is successful
 
-   Indent : Ada.Text_IO.Positive_Count := 3;
+   Indent : aliased integer := 3;
    --  Indentation per level in the outputted source
 
    ---------------
    --  Command line options (alphabetical).
 
-   Error_On_Warn : constant Boolean := True;
+   Error_On_Warn : aliased Boolean := True;
    --  Return error status for warnings. We now no longer support
    --  warnings; this will be cleaned up later.
 
 
-   Debug : Boolean := False;
+   Debug : aliased Boolean := False;
    --  If True, generate debug information.
 
-   Overwrite_Child : Boolean := False;
+   Overwrite_Child : aliased Boolean := False;
    --  Should an existing .Text_IO child be overwritten
 
-   Quiet : Boolean := False;
+   Quiet : aliased Boolean := False;
    --  If True, do not generate a message when the child package has
    --  successfully been created
 
-   Verbose : Boolean := False;
+   Verbose : aliased Boolean := False;
    --  If True, generate version info, including ASIS/GNAT version
 
    ------------------------------
@@ -61,31 +60,35 @@ package Auto_Io_Gen.Options is
    Package_Separator : Character := '.';
    --  '.' for Ada_83 False, '_' for True.
 
-   File_Package_Separator : Character;
-   --  Determined by Ada_83 flag, compiler conventions.
+   File_Package_Separator : constant Character := '-';
 
-   Spec_File_Extension : Ada.Strings.Unbounded.Unbounded_String;
-   Body_File_Extension : Ada.Strings.Unbounded.Unbounded_String;
+   Spec_File_Extension : constant String := "ads";
+   Body_File_Extension : constant String := "adb";
+
    --  Determined by compiler conventions.
 
-   Package_File_Name : Ada.Strings.Unbounded.Unbounded_String;
+   Package_File_Name : GNAT.Strings.String_Access;
    --  The name of the source file that contains the processed unit.
    --  The file name may or may not contain the path information.
 
-   Root_File_Name  : Ada.Strings.Unbounded.Unbounded_String;
+   Root_File_Name  : GNAT.Strings.String_Access;
    --  Package_File_Name without directory information or file extension
 
-   Report_File_Name : Ada.Strings.Unbounded.Unbounded_String;
+   Report_File_Name : GNAT.Strings.String_Access;
    --  File name to use in reporting errors. This is the string
    --  returned by the ASIS query Text_Name. It can be different from
    --  Package_File_Name if a preprocessor is used (eg gnatprep).
 
-   Destination_Dir : Ada.Strings.Unbounded.Unbounded_String;
+   Destination_Dir : GNAT.Strings.String_Access;
    --  Output files (Text IO child packages) are written here.
 
    Asis_Init_String : Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
    --  Parameter for Asis.Ada_Environments.Associate.
 
+   Generate_JSON : aliased Boolean := False;
+   Generate_Image :  aliased Boolean := False;
+   Generate_Text_Io : aliased Boolean := False;
+   Project_File : aliased GNAT.Strings.String_Access;
    ------------
    --  Procedures
 

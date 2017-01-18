@@ -20,7 +20,7 @@ with Ada.Text_IO;
 with Asis.Aux;
 with Auto_Io_Gen.Options;
 with SAL.Gen.Alg.Process_All_Constant;
-package body Auto_Io_Gen.Generate.Spec is
+package body Auto_Io_Gen.Generate_JSON.Spec is
 
    procedure Generate_Put_Get_Array_Spec
      (File            : in Ada.Text_IO.File_Type;
@@ -827,4 +827,4 @@ package body Auto_Io_Gen.Generate.Spec is
       New_Line (File);
    end Generate_Put_Get_Scalar_Spec;
 
-end Auto_Io_Gen.Generate.Spec;
+end Auto_Io_Gen.Generate_JSON.Spec;

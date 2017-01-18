@@ -22,7 +22,7 @@ with Asis.Declarations;
 with Asis.Elements;
 with Auto_Io_Gen.Options;
 with SAL.Gen.Alg.Process_All_Constant;
-package body Auto_Io_Gen.Generate.Get_Body is
+package body Auto_Io_Gen.Generate_JSON.Get_Body is
    use Ada.Text_IO;
 
    Body_First : Boolean := True; -- Shared between printing discriminants and components.
@@ -658,4 +658,4 @@ package body Auto_Io_Gen.Generate.Get_Body is
 
    end Generate_Record;
 
-end Auto_Io_Gen.Generate.Get_Body;
+end Auto_Io_Gen.Generate_JSON.Get_Body;

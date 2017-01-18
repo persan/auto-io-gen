@@ -61,16 +61,16 @@
 with Ada.Exceptions;
 with Ada.IO_Exceptions;
 with Ada.Strings.Fixed;
-with Ada.Strings.Unbounded;
 with Asis.Aux;
 with Asis.Elements;
-with Auto_Io_Gen.Generate.Get_Body;
-with Auto_Io_Gen.Generate.Put_Body;
-with Auto_Io_Gen.Generate.Spec;
+with Auto_Io_Gen.Generate_Image.Get_Body;
+with Auto_Io_Gen.Generate_Image.Put_Body;
+with Auto_Io_Gen.Generate_Image.Spec;
 with Auto_Io_Gen.Options;
 with SAL.Gen.Alg.Process_All_Constant;
-package body Auto_Io_Gen.Generate is
-
+with GNAT.Source_Info;
+package body Auto_Io_Gen.Generate_Image is
+   use GNAT.Source_Info;
    --------------
    --  Local declarations
 
@@ -137,7 +137,6 @@ package body Auto_Io_Gen.Generate is
          pragma Unreferenced (Type_List);
          use Auto_Io_Gen.Lists.Context_Trees_Iterators;
          Iterator             : Iterator_Type := First (With_List);
-         Have_Use_Ada_Text_IO : Boolean       := False;
       begin
          Put_Line (File, "--  Abstract :");
          Put_Line (File, "--");
@@ -152,9 +151,6 @@ package body Auto_Io_Gen.Generate is
                Put_Line (File, "with " & Current (Iterator).Name.all & "; use " &
                            Current (Iterator).Name.all & ";");
 
-               if Current (Iterator).Name.all = Ada_Text_IO then
-                  Have_Use_Ada_Text_IO := True;
-               end if;
             else
                Put_Line (File, "with " & Current (Iterator).Name.all & ";");
             end if;
@@ -172,10 +168,6 @@ package body Auto_Io_Gen.Generate is
          Indent_Level := 2;
          Set_Indent (File);
 
-         if not Have_Use_Ada_Text_IO then
-            Put_Line (File, "use " & Ada_Text_IO & ";");
-            New_Line (File);
-         end if;
       end Print_Header;
 
       procedure Print_Type
@@ -228,33 +220,27 @@ package body Auto_Io_Gen.Generate is
    is
       use Ada.Text_IO;
       use Auto_Io_Gen.Options;
-      use Ada.Strings.Unbounded;
 
-      Child_File_Name : Unbounded_String :=
-                          Options.Destination_Dir &
-                          Options.Root_File_Name &
-                          Options.File_Package_Separator;
 
       Child_Spec_File : File_Type; --  The output .Text_IO spec
       Child_Body_File : File_Type; --  The output .Text_IO body
 
-      Child_Package_Name : Unbounded_String := To_Unbounded_String (Parent_Package_Name) & Options.Package_Separator;
+      Child_Package_Name : constant String := Parent_Package_Name & Options.Package_Separator &
+      (if Is_Generic then "Gen_" else "" ) &
+      (if Invisible then "Private_" else "" ) & "Images";
+
    begin
 
-      if Is_Generic then
-         Child_File_Name    := Child_File_Name & "gen_";
-         Child_Package_Name := Child_Package_Name & "Gen_";
+      if Options.Debug then
+         Put_Line (Enclosing_Entity & "(" & Parent_Package_Name &
+                   (if Needs_Body then ",Needs_Body" else "" ) &
+                   (if Needs_Text_IO_Utils then ",Needs_Body" else "" ) &
+                   (if Needs_Text_IO_Utils then ",Needs_Text_IO_Utils" else "" ) &
+                   (if Invisible then ",Invisible" else "" ) &
+                   (if Is_Generic then ",Is_Generic" else "" ) & ")");
       end if;
 
-      if Invisible then
-         Child_File_Name    := Child_File_Name & "private_";
-         Child_Package_Name := Child_Package_Name & "Private_";
-      end if;
-
-      Child_File_Name    := Child_File_Name & "text_io";
-      Child_Package_Name := Child_Package_Name & "Text_IO";
-
-      Create_File (Child_Spec_File, To_String (Child_File_Name & Options.Spec_File_Extension));
+      Create_File (Child_Spec_File, Ada2file  (Options.Destination_Dir.all, Child_Package_Name, Options.Spec_File_Extension));
 
       Spec.Generate_Child_Spec
         (Child_Spec_File,
@@ -262,21 +248,21 @@ package body Auto_Io_Gen.Generate is
          With_List           => Spec_With_List,
          Formal_Package_List => Formal_Package_List,
          Parent_Package_Name => Parent_Package_Name,
-         Child_Package_Name  => To_String (Child_Package_Name),
+         Child_Package_Name  => Child_Package_Name,
          Invisible           => Invisible,
          Is_Generic          => Is_Generic);
 
       Close (Child_Spec_File);
 
       if Needs_Body then
-         Create_File (Child_Body_File, To_String (Child_File_Name & Options.Body_File_Extension));
+         Create_File (Child_Body_File, Ada2file  (Options.Destination_Dir.all, Child_Package_Name, Options.Body_File_Extension));
 
          Generate_Child_Body
            (Child_Body_File,
             Type_List,
             Body_With_List,
             Parent_Package_Name => Parent_Package_Name,
-            Child_Package_Name  => To_String (Child_Package_Name),
+            Child_Package_Name  => Child_Package_Name,
             Invisible           => Invisible,
             Needs_Text_IO_Utils => Needs_Text_IO_Utils);
 
@@ -301,10 +287,6 @@ package body Auto_Io_Gen.Generate is
    -----------
    --  Operations for child packages
 
-   function Ada_Text_IO return String
-   is begin
-      return "Ada.Text_IO";
-   end Ada_Text_IO;
 
    function Component_Type_Name
      (Type_Element         : in Asis.Element;
@@ -456,12 +438,5 @@ package body Auto_Io_Gen.Generate is
 
    end Root_Type_Name;
 
-   procedure Set_Indent (File : in Ada.Text_IO.File_Type)
-   is
-      use Ada.Text_IO;
-   begin
-      --  Indent 0 means column 1
-      Set_Col (File, 1 + Auto_Io_Gen.Options.Indent * (Indent_Level - 1));
-   end Set_Indent;
 
-end Auto_Io_Gen.Generate;
+end Auto_Io_Gen.Generate_Image;

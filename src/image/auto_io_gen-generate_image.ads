@@ -18,7 +18,7 @@
 
 with Ada.Text_IO;
 with Auto_Io_Gen.Lists;
-package Auto_Io_Gen.Generate is
+package Auto_Io_Gen.Generate_Image is
 --   pragma Elaborate_Body; -- Body depends on Text_IO, but this is circular due to child packages.
 
    procedure Create_Text_IO_Child
@@ -40,9 +40,6 @@ private
    Indent_Level : Ada.Text_IO.Positive_Count := 1;
    --  1 is no indentation.
 
-   function Ada_Text_IO return String;
-   --  Return package name appropriate for Ada 83 or Ada 95, as
-   --  determined by Options.Ada_83.
 
    function Component_Type_Name
       (Type_Element         : in Asis.Element;
@@ -72,8 +69,5 @@ private
    function Root_Type_Name (Type_Name : in String) return String;
    --  Return Type_Name without trailing _Type, if any.
 
-   procedure Set_Indent (File : in Ada.Text_IO.File_Type);
-   --  Set indent in File according to current Indent_Level and
-   --  Options.Indent.
 
-end Auto_Io_Gen.Generate;
+end Auto_Io_Gen.Generate_Image;

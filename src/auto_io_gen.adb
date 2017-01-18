@@ -23,6 +23,9 @@ with Asis.Declarations;
 with Asis.Elements;
 with Asis.Expressions;
 with Auto_Io_Gen.Options;
+with Ada.Strings.Fixed;
+with Ada.Strings.Maps;
+with Ada.Directories;
 package body Auto_Io_Gen is
 
    function Version return String
@@ -209,5 +212,26 @@ package body Auto_Io_Gen is
       end case;
 
    end Text_IO_Child_Name;
+
+   procedure Set_Indent (File : in Ada.Text_IO.File_Type)
+   is
+      use Ada.Text_IO;
+   begin
+
+      --  Indent 0 means column 1
+      Set_Col (File, 1 + Count(Auto_Io_Gen.Options.Indent) * (Count(Indent_Level) - 1));
+   end Set_Indent;
+   function Ada2file (Name: String) return String is
+      Map : constant Ada.Strings.Maps.Character_Mapping :=
+              Ada.Strings.Maps.To_Mapping ("ABCDEFGHIJKLMNOPQRSTUVWXYZ.",
+              "abcdefghilklmnopqrstuvwxyz-");
+   begin
+      return Ada.Strings.Fixed.Translate (Name, Mapping => Map);
+   end;
+
+   function Ada2file (Folder, Name , Suffix : String) return String is
+   begin
+      return Ada.Directories.Compose (Folder, Ada2file (Name), Suffix);
+   end;
 
 end Auto_Io_Gen;

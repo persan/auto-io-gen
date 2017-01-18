@@ -24,15 +24,15 @@ package Auto_Io_Gen.Build is
    type Private_State_Type is limited private;
 
    type State_Type is limited record
-      Error_Count                   : Integer;
+      Error_Count                   : Integer := 0;
       Type_List                     : Lists.Type_Descriptor_Lists.List_Type;
       Parent_Package                : Asis.Element;
-      Needs_Body                    : Boolean;
-      Needs_Text_IO_Utils           : Boolean;
-      Needs_Invisible_Spec          : Boolean;
-      Needs_Invisible_Body          : Boolean;
-      Needs_Invisible_Text_IO_Utils : Boolean;
-      Is_Generic                    : Boolean;
+      Needs_Body                    : Boolean := False;
+      Needs_Text_IO_Utils           : Boolean := False;
+      Needs_Invisible_Spec          : Boolean := False;
+      Needs_Invisible_Body          : Boolean := False;
+      Needs_Invisible_Text_IO_Utils : Boolean := False;
+      Is_Generic                    : Boolean := False;
       Spec_With_List                : Lists.Context_Trees.Tree_Type;
       Body_With_List                : Lists.Context_Trees.Tree_Type;
       Invisible_Spec_With_List      : Lists.Context_Trees.Tree_Type;

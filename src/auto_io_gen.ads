@@ -28,6 +28,7 @@
 --  330, Boston, MA 02111-1307, USA.
 
 with Asis;
+with Ada.Text_IO;
 package Auto_Io_Gen is
 --   pragma Elaborate_Body; --  Asis is, but this is circular with Options.
 
@@ -65,4 +66,8 @@ package Auto_Io_Gen is
    --  needed.
    Not_Implemented : exception;
    Not_Found       : exception;
+   procedure Set_Indent (File : in Ada.Text_IO.File_Type);
+   Indent_Level : Ada.Text_IO.Positive_Count := 1;
+   --  1 is no indentation.
+   function Ada2file (Folder, Name , Suffix : String) return String;
 end Auto_Io_Gen;

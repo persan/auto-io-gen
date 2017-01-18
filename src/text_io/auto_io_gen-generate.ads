@@ -72,8 +72,4 @@ private
    function Root_Type_Name (Type_Name : in String) return String;
    --  Return Type_Name without trailing _Type, if any.
 
-   procedure Set_Indent (File : in Ada.Text_IO.File_Type);
-   --  Set indent in File according to current Indent_Level and
-   --  Options.Indent.
-
 end Auto_Io_Gen.Generate;

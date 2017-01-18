@@ -3,7 +3,7 @@ with "asis";
 project Auto_Io_Gen is
 
    for Languages use ("Ada", "Python","Md");
-   for Source_Dirs use ("src",".");
+   for Source_Dirs use ("src/**",".");
    for Main use ("auto_io_gen-driver.adb");
    for Exec_Dir use "bin";
    for Object_Dir use ".obj/" & project'Name;
@@ -28,4 +28,5 @@ project Auto_Io_Gen is
       for Implementation_Suffix ("Python") use ".py";
       for Implementation_Suffix ("Md") use ".md";
    end Naming;
+
 end Auto_Io_Gen;
