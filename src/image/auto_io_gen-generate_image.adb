@@ -438,7 +438,55 @@ package body Auto_Io_Gen.Generate_Image is
 
    end Root_Type_Name;
 
+   function Standard_Name (Type_Name : in String) return String
+   is begin
+      return "JUNK";
+      pragma Warnings (Off);
+      if Type_Name = "boolean" then
+         return "Auto_Text_Io.Boolean_Text_IO";
+
+      elsif Type_Name = "character" then
+         return "Auto_Text_Io.Text_IO";
+
+      elsif Type_Name = "duration" then
+         return "Auto_Text_Io.Duration_Text_IO";
+
+      elsif Type_Name = "float" then
+         return "Auto_Text_Io.Float_Text_IO";
+
+      elsif Type_Name = "integer" then
+         return "Auto_Text_Io.Integer_Text_IO";
+
+      elsif Type_Name = "short_integer" then
+         return "Auto_Text_Io.Short_Integer_Text_IO";
+
+      elsif Type_Name = "short_short_integer" then
+         return "Auto_Text_Io.Short_Short_Integer_Text_IO";
+
+      elsif Type_Name = "long_integer" then
+         return "Auto_Text_Io.Long_Integer_Text_IO";
+
+      elsif Type_Name = "long_long_integer" then
+         return "Auto_Text_Io.Long_Long_Integer_Text_IO";
+
+      elsif Type_Name = "long_float" then
+         return "Auto_Text_Io.Long_Float_Text_IO";
+
+      elsif Type_Name = "long_long_float" then
+         return "Auto_Text_Io.Long_Long_Float_Text_IO";
+
+      elsif Type_Name = "string" then
+         return "Auto_Text_Io.Text_IO";
+      else
+         Ada.Text_IO.Put_Line (Ada.Text_IO.Standard_Error, "Unsuported type:  " & Type_Name);
+         raise Not_Supported with Type_Name;
+      end if;
+
+   end Standard_Name;
 begin
-   Auto_Io_Gen.Options.Register (Option => "image", Language_Name => "Image", Generator => Create_Text_IO_Child'Access);
+   Auto_Io_Gen.Options.Register
+     (Option => "image", Language_Name => "Image",
+      Generator => Create_Text_IO_Child'Access,
+      Std_Names =>  Standard_Name'Access);
 
 end Auto_Io_Gen.Generate_Image;

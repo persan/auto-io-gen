@@ -143,15 +143,16 @@ begin
             Options.Report_File_Name := new String'(Temp_Name (Name_First .. Temp_Name'Last));
          end;
 
-         Auto_Io_Gen.Build.Build_Tree
-           (Element => Asis.Elements.Unit_Declaration (CU),
-            Control => Control,
-            State   => State);
 
          if State.Error_Count = 0 then
             for I of Options.Languages loop
-
+               Options.Current := I;
                if I.Enabled then
+                  Auto_Io_Gen.Build.Build_Tree
+                    (Element => Asis.Elements.Unit_Declaration (CU),
+                     Control => Control,
+                     State   => State);
+
                   I.Generator
                     (Type_List           => State.Type_List,
                      Needs_Body          => State.Needs_Body,

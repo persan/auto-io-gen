@@ -362,47 +362,22 @@ package body Auto_Io_Gen.Build.Process_Element_Utils is
 
       Type_Name : constant String := To_Lower (Aux.Name (Type_Declaration));
 
-      function Standard_Text_IO_Name (Type_Name : in String) return String
-      is begin
-         if Type_Name = "boolean" then
-            return "Boolean_Text_IO";
 
-         elsif Type_Name = "character" then
-            return "Ada.Text_IO";
-
-         elsif Type_Name = "duration" then
-            return "Duration_Text_IO";
-
-         elsif Type_Name = "float" then
-            return "Ada.Float_Text_IO";
-
-         elsif Type_Name = "integer" then
-            return "Ada.Integer_Text_IO";
-
-         elsif Type_Name = "long_float" then
-            return "Ada.Long_Float_Text_IO";
-
-         elsif Type_Name = "string" then
-            return "Ada.String_Text_IO";
-         else
-            Report_Unsupported (State, Original_Declaration, "this Standard type ");
-            raise Not_Supported;
-         end if;
-
-      end Standard_Text_IO_Name;
 
       procedure Do_Standard_Type
       is begin
          case Array_Role is
          when None =>
-            Add_Body_With (State, Standard_Text_IO_Name (Type_Name), Need_Use => True);
+            Add_Body_With
+              (State,
+               Auto_Io_Gen.Options.Current.Standard (Type_Name), Need_Use => True);
          when Index =>
             --  No "with" clause needed
             null;
          when Component  =>
             Add_Spec_With
               (State,
-               Standard_Text_IO_Name (Type_Name),
+               Auto_Io_Gen.Options.Current.Standard (Type_Name),
                Need_Use  => True,
                Invisible => State.Private_State.Current_Type.Invisible);
          end case;

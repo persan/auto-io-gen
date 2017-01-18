@@ -88,12 +88,15 @@ package body Auto_Io_Gen.Options is
 
    Command_Line_Parser : GNAT.Command_Line.Command_Line_Configuration;
 
-   procedure Register (Option, Language_Name : String; Generator : Create_Text_IO_Child_Proc) is
+   procedure Register (Option, Language_Name : String;
+                       Generator             : Create_Text_IO_Child_Proc;
+                       Std_Names             : Standard_IO_Name_Proc) is
       Temp : constant Language_Description_Access := new Language_Description;
       use GNAT.Command_Line;
    begin
       Put_Line (GNAT.Source_Info.Enclosing_Entity & "(""" & Option & """, """ & Language_Name & """)");
       Temp.Generator := Generator;
+      Temp.Standard  := Std_Names;
       Languages.Append (Temp);
       Define_Switch (Command_Line_Parser, Temp.Enabled'Access, "", "--" & Option, "Generate " & Language_Name & ".");
    end;

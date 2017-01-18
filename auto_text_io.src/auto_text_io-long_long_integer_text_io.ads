@@ -1,0 +1,2 @@
+with Ada.Long_Long_Integer_Text_IO;
+package Auto_Text_Io.Long_Long_Integer_Text_IO renames Ada.Long_Long_Integer_Text_IO;

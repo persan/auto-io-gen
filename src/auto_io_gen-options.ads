@@ -122,13 +122,22 @@ package Auto_Io_Gen.Options is
       Needs_Text_IO_Utils : in Boolean;
       Invisible           : in Boolean;
       Is_Generic          : in Boolean);
-   procedure Register (Option, Language_Name : String; Generator : Create_Text_IO_Child_Proc);
+
+   type Standard_IO_Name_proc is access  function  (Type_Name : in String) return String;
+
+   procedure Register (Option, Language_Name : String;
+                       Generator             : Create_Text_IO_Child_Proc;
+                       Std_Names             : Standard_IO_Name_Proc);
 
    type Language_Description is record
       Enabled : aliased Boolean := False;
       Generator : Create_Text_IO_Child_Proc;
+      Standard  : Standard_IO_Name_proc;
    end record;
+
    type Language_Description_Access is access Language_Description;
    package Language_Description_Vectors is new Ada.Containers.Vectors (Natural, Language_Description_Access, "=");
    Languages : Language_Description_Vectors.Vector;
+   Current   : Language_Description_Access;
+
 end Auto_Io_Gen.Options;

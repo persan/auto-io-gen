@@ -26,6 +26,7 @@
 --  write to the Free Software Foundation, 59 Temple Place - Suite
 --  330, Boston, MA 02111-1307, USA.
 
+with GNAT.Source_Info;
 with Ada.Exceptions;
 with Ada.Text_IO;
 with Asis.Aux;
@@ -46,7 +47,7 @@ with Auto_Io_Gen.Build.Process_Element_Do_Variant_Part;
 with Auto_Io_Gen.Build.Process_Element_Do_Component;
 with Auto_Io_Gen.Build.Process_Element_Do_Component_Definition;
 package body Auto_Io_Gen.Build is
-
+   use GNAT.Source_Info;
    --------------
    --  Local declarations
 
@@ -78,8 +79,7 @@ package body Auto_Io_Gen.Build is
       State   : in out State_Type)
    is begin
       Debug_Put
-         ("Process_Element.   State " & State_Label_Type'Image (State.Private_State.Label) & " ",
-          New_Line => False);
+        (Enclosing_Entity & "( State => " & State.Private_State.Label'Img  & ", ",   New_Line => False);
 
       case State.Private_State.Label is
       when Initial =>
@@ -120,18 +120,18 @@ package body Auto_Io_Gen.Build is
       Debug_Put ("                   Control => " & Asis.Traverse_Control'Image (Control));
 
    exception
-      --  Don't catch ASIS_Failed here, so Diagnosis is set properly.
-      --
-      --  Not_Supported should be handled locally, not here
+         --  Don't catch ASIS_Failed here, so Diagnosis is set properly.
+         --
+         --  Not_Supported should be handled locally, not here
 
-   when E : Program_Error =>
-      --  ASIS iterator maps any exception to ASIS_Failed, and our top
-      --  level driver assumes an error message is output for that at
-      --  the raise point, so put an error message now.
-      Ada.Text_IO.Put_Line
-         (Ada.Text_IO.Standard_Error,
-          "Exception " & Ada.Exceptions.Exception_Name (E) & " for " & Asis.Aux.Image (Element));
-      raise;
+      when E : Program_Error =>
+         --  ASIS iterator maps any exception to ASIS_Failed, and our top
+         --  level driver assumes an error message is output for that at
+         --  the raise point, so put an error message now.
+         Ada.Text_IO.Put_Line
+           (Ada.Text_IO.Standard_Error,
+            "Exception " & Ada.Exceptions.Exception_Name (E) & " for " & Asis.Aux.Image (Element));
+         raise;
 
    end Process_Element;
 
@@ -143,9 +143,9 @@ package body Auto_Io_Gen.Build is
       use Asis;
    begin
       Debug_Put
-         ("Terminate_Children." &
-          " State " & State_Label_Type'Image (State.Private_State.Label) &
-          " Element " & Aux.Image (Element));
+        (Enclosing_Entity &
+           " (State =>" & State_Label_Type'Image (State.Private_State.Label) &
+           " , Element => " & Aux.Image (Element));
 
       case State.Private_State.Label is
       when Initial =>
@@ -167,9 +167,9 @@ package body Auto_Io_Gen.Build is
             when A_Declaration =>
                case Elements.Declaration_Kind (Element) is
                when A_Formal_Type_Declaration |
-                 An_Ordinary_Type_Declaration |
-                 A_Private_Extension_Declaration |
-                 A_Private_Type_Declaration =>
+                    An_Ordinary_Type_Declaration |
+                    A_Private_Extension_Declaration |
+                    A_Private_Type_Declaration =>
 
                   State.Private_State.Label := In_Package;
 
@@ -195,7 +195,7 @@ package body Auto_Io_Gen.Build is
             when A_Declaration =>
                case Elements.Declaration_Kind (Element) is
                when An_Ordinary_Type_Declaration |
-                 A_Private_Type_Declaration =>
+                    A_Private_Type_Declaration =>
 
                   State.Private_State.Label := In_Package;
 
@@ -323,9 +323,9 @@ package body Auto_Io_Gen.Build is
    --  Public bodies
 
    procedure Build_Tree
-      (Element : in     Asis.Element;
-       Control : in out Asis.Traverse_Control;
-       State   : in out State_Type)
+     (Element : in     Asis.Element;
+      Control : in out Asis.Traverse_Control;
+      State   : in out State_Type)
    is begin
       State.Error_Count         := 0;
       State.Private_State.Label := Initial;
@@ -344,8 +344,8 @@ package body Auto_Io_Gen.Build is
    end Debug_Put;
 
    procedure Debug_Put
-      (Message  : in String;
-       New_Line : in Boolean := True)
+     (Message  : in String;
+      New_Line : in Boolean := True)
    is begin
       if Auto_Io_Gen.Options.Debug then
          if New_Line then

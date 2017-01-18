@@ -78,8 +78,8 @@ package body Auto_Io_Gen.Generate is
    procedure Create_File
      (File : in out Ada.Text_IO.File_Type;
       Name : in     String)
-   --  Create File with Name, deleting an existing one if necessary
-   --  and permitted by Options.
+     --  Create File with Name, deleting an existing one if necessary
+     --  and permitted by Options.
    is
       use Ada.Text_IO;
    begin
@@ -304,7 +304,7 @@ package body Auto_Io_Gen.Generate is
    function Component_Type_Name
      (Type_Element         : in Asis.Element;
       Type_Package_Element : in Asis.Element)
-       return String
+      return String
    is
       use Asis;
    begin
@@ -450,6 +450,53 @@ package body Auto_Io_Gen.Generate is
       return Type_Name (Type_Name'First .. Root_Name_Index);
 
    end Root_Type_Name;
+   function Standard_Text_IO_Name (Type_Name : in String) return String
+   is begin
+      if Type_Name = "boolean" then
+         return "Auto_Text_Io.Boolean_Text_IO";
+
+      elsif Type_Name = "character" then
+         return "Auto_Text_Io.Text_IO";
+
+      elsif Type_Name = "duration" then
+         return "Auto_Text_Io.Duration_Text_IO";
+
+      elsif Type_Name = "float" then
+         return "Auto_Text_Io.Float_Text_IO";
+
+      elsif Type_Name = "integer" then
+         return "Auto_Text_Io.Integer_Text_IO";
+
+      elsif Type_Name = "short_integer" then
+         return "Auto_Text_Io.Short_Integer_Text_IO";
+
+      elsif Type_Name = "short_short_integer" then
+         return "Auto_Text_Io.Short_Short_Integer_Text_IO";
+
+      elsif Type_Name = "long_integer" then
+         return "Auto_Text_Io.Long_Integer_Text_IO";
+
+      elsif Type_Name = "long_long_integer" then
+         return "Auto_Text_Io.Long_Long_Integer_Text_IO";
+
+      elsif Type_Name = "long_float" then
+         return "Auto_Text_Io.Long_Float_Text_IO";
+
+      elsif Type_Name = "long_long_float" then
+         return "Auto_Text_Io.Long_Long_Float_Text_IO";
+
+      elsif Type_Name = "string" then
+         return "Auto_Text_Io.Text_IO";
+      else
+         Ada.Text_IO.Put_Line (Ada.Text_IO.Standard_Error, "Unsuported type:  " & Type_Name);
+         raise Not_Supported with Type_Name;
+      end if;
+
+   end Standard_Text_IO_Name;
+
 begin
-   Auto_Io_Gen.Options.Register (Option => "text_io", Language_Name => "Text_Io", Generator => Create_Text_IO_Child'Access);
+   Auto_Io_Gen.Options.Register
+     (Option => "text_io", Language_Name => "Text_Io",
+      Generator => Create_Text_IO_Child'Access,
+      Std_Names =>  Standard_Text_IO_Name'Access);
 end Auto_Io_Gen.Generate;
