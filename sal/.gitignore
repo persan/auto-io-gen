@@ -6,3 +6,4 @@
 .obj
 lib
 bin
+test-config_files*
