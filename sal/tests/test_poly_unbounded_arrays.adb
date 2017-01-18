@@ -19,7 +19,7 @@
 pragma License (GPL);
 
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with SAL.AUnit;
 with Test_Poly_Unbounded_Arrays_Aux;
 with Test_Storage_Pools;
@@ -717,7 +717,7 @@ package body Test_Poly_Unbounded_Arrays is
       Register_Routine (T, Test_Iterators'Access, "Test_Iterators");
    end Register_Tests;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

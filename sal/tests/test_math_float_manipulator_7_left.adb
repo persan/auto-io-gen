@@ -17,7 +17,7 @@
 --
 
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with SAL.Math_Float.AUnit;
 with SAL.Math_Float.DOF_3;
 with SAL.Math_Float.DOF_6.Left;
@@ -217,14 +217,14 @@ package body Test_Math_Float_Manipulator_7_Left is
    ----------
    --  Public routines
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin
       return new String'("test_math_float_manipulator_7_left");
    end Name;
 
-   procedure Register_Tests (T : in out Test_Case)
+   overriding procedure Register_Tests (T : in out Test_Case)
    is
       use AUnit.Test_Cases.Registration;
    begin
@@ -232,14 +232,14 @@ package body Test_Math_Float_Manipulator_7_Left is
       Register_Routine (T, Gravity'Access, "Gravity");
    end Register_Tests;
 
-   procedure Set_Up_Case (Test : in out Test_Case)
+   overriding procedure Set_Up_Case (Test : in out Test_Case)
    is
       pragma Unreferenced (Test);
    begin
       SAL.Math_Float.AUnit.Default_Tolerance := 10.0e-5;
    end Set_Up_Case;
 
-   procedure Tear_Down_Case (Test : in out Test_Case)
+   overriding procedure Tear_Down_Case (Test : in out Test_Case)
    is
       pragma Unreferenced (Test);
    begin

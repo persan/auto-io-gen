@@ -46,23 +46,23 @@ package SAL.Poly.Stacks.Unbounded_Array is
    ------------
    --  Override dispatching operations on Unbounded_Stack_Type
 
-   procedure Clear (Stack : in out Unbounded_Stack_Type);
+   overriding procedure Clear (Stack : in out Unbounded_Stack_Type);
 
-   function Depth (Stack : in Unbounded_Stack_Type) return Natural;
+   overriding function Depth (Stack : in Unbounded_Stack_Type) return Natural;
 
-   function Is_Empty (Stack : in Unbounded_Stack_Type) return Boolean;
+   overriding function Is_Empty (Stack : in Unbounded_Stack_Type) return Boolean;
 
-   function Max_Depth (Stack : in Unbounded_Stack_Type) return Natural;
+   overriding function Max_Depth (Stack : in Unbounded_Stack_Type) return Natural;
 
-   function Peek (Stack : in Unbounded_Stack_Type; Index : in Natural) return Item_Type;
+   overriding function Peek (Stack : in Unbounded_Stack_Type; Index : in Natural) return Item_Type;
 
-   procedure Pop (Stack : in out Unbounded_Stack_Type);
+   overriding procedure Pop (Stack : in out Unbounded_Stack_Type);
 
-   procedure Pop (Stack : in out Unbounded_Stack_Type; Item : out Item_Type);
+   overriding procedure Pop (Stack : in out Unbounded_Stack_Type; Item : out Item_Type);
 
-   procedure Push (Stack : in out Unbounded_Stack_Type; Item : in Item_Type);
+   overriding procedure Push (Stack : in out Unbounded_Stack_Type; Item : in Item_Type);
 
-   function Top (Stack : in Unbounded_Stack_Type) return Item_Type;
+   overriding function Top (Stack : in Unbounded_Stack_Type) return Item_Type;
 
 private
    package Item_Aux is new SAL.Aux.Definite_Private_Items (Item_Type);
@@ -80,7 +80,7 @@ private
 
    --  Override Item_Array_Type operations
 
-   procedure Initialize (Item : in out Item_Array_Type);
+   overriding procedure Initialize (Item : in out Item_Array_Type);
 
    type Unbounded_Stack_Type is new Stack_Type with record
       Max_Depth : Natural := 0;

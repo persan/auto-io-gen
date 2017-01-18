@@ -30,7 +30,7 @@ package Test_Math_Float_DOF_6_Left is
 
    procedure Register_Tests (T : in out Test_Case);
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access;
+   function Name (T : Test_Case) return AUnit.Message_String;
 
    procedure Set_Up_Case (Test : in out Test_Case);
 

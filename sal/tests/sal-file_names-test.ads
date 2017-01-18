@@ -26,6 +26,6 @@ package SAL.File_Names.Test is
 
    procedure Register_Tests (T : in out Test_Case);
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access;
+   function Name (T : Test_Case) return AUnit.Message_String;
 
 end SAL.File_Names.Test;

@@ -19,7 +19,7 @@
 pragma License (GPL);
 
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with Ada.Directories;
 with Ada.Text_IO;
 with SAL.AUnit;
@@ -147,7 +147,7 @@ package body Test.Config_Files.Iterators_Nested is
       Close (Config);
    end Tear_Down_Case;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

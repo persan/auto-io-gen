@@ -28,6 +28,6 @@ package Test_Math_Float_DOF_6_Config is
 
    overriding procedure Register_Tests (T : in out Test_Case);
 
-   overriding function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access;
+   overriding function Name (T : Test_Case) return AUnit.Message_String;
 
 end Test_Math_Float_DOF_6_Config;

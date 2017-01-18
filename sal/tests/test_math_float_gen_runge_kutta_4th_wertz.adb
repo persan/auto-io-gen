@@ -17,7 +17,7 @@
 --
 
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with SAL.Math_Float.Elementary;
 with SAL.Gen_Math.Gen_Runge_Kutta_4th_Wertz;
 package body Test_Math_Float_Gen_Runge_Kutta_4th_Wertz is
@@ -41,7 +41,7 @@ package body Test_Math_Float_Gen_Runge_Kutta_4th_Wertz is
    ----------
    --  Public routines
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

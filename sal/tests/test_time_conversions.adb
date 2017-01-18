@@ -17,7 +17,7 @@
 --  330, Boston, MA 02111-1307, USA.
 
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with Ada.Exceptions;
 with Interfaces;
 with SAL.AUnit;                  use SAL.AUnit;
@@ -627,7 +627,7 @@ package body Test_Time_Conversions is
       Register_Routine (T, Test_TAI_To_UTC'Access, "Test_TAI_To_UTC");
    end Register_Tests;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

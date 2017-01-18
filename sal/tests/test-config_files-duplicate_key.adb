@@ -18,7 +18,7 @@
 --
 
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with Ada.Exceptions;
 with Ada.Text_IO;
 with SAL.AUnit;
@@ -91,7 +91,7 @@ package body Test.Config_Files.Duplicate_Key is
       Close (File);
    end Set_Up_Case;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

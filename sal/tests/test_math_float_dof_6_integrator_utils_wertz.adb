@@ -18,7 +18,7 @@
 
 pragma License (GPL);
 
-with AUnit.Test_Cases.Registration;
+
 with SAL.Gen_Math.Gen_Runge_Kutta_4th_Wertz;
 with SAL.Math_Float.AUnit;                        use SAL.Math_Float.AUnit;
 with SAL.Math_Float.DOF_3.AUnit;                  use SAL.Math_Float.DOF_3.AUnit;
@@ -453,7 +453,7 @@ is
       Register_Routine (T, Non_Principal_Axis_Tran'Access, "Non_Principal_Axis_Tran");
    end Register_Tests;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

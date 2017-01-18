@@ -18,7 +18,7 @@
 
 with Ada.Text_IO;
 with Ada.Directories;
-with AUnit.Test_Cases.Registration;
+
 with SAL.AUnit;
 with AUnit.Assertions;
 package body SAL.AUnit.Text_IO.Test is
@@ -86,7 +86,7 @@ package body SAL.AUnit.Text_IO.Test is
    ----------
    --  Public bodies
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

@@ -83,7 +83,7 @@ package body SAL.Memory_Streams.Bounded is
       end case;
    end Address;
 
-   procedure Read
+   overriding procedure Read
      (Stream : in out Stream_Type;
       Item   : out Stream_Element_Array;
       Last   : out Stream_Element_Offset)
@@ -108,7 +108,7 @@ package body SAL.Memory_Streams.Bounded is
       end case;
    end Read;
 
-   procedure Write
+   overriding procedure Write
      (Stream : in out Stream_Type;
       Item   : in Stream_Element_Array)
    is begin

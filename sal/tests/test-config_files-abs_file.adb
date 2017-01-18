@@ -18,7 +18,7 @@
 --
 
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with Ada.Environment_Variables;
 with Ada.Exceptions;
 with Ada.IO_Exceptions;
@@ -125,7 +125,7 @@ package body Test.Config_Files.Abs_File is
    ----------
    --  public bodies
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

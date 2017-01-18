@@ -17,7 +17,7 @@
 --  MA 02111-1307, USA.
 --
 
-with AUnit.Test_Cases.Registration;
+
 with Ada.Text_IO;
 with SAL.AUnit;
 with SAL.Config_Files; use SAL.Config_Files;
@@ -34,7 +34,7 @@ package body Test.Config_Files.Comment_No_Equal is
    ----------
    --  Subprogram bodies (alphabetical order)
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

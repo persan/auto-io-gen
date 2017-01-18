@@ -29,7 +29,6 @@ with Test.Config_Files.Error_Message;
 with Test.Config_Files.Iterators;
 with Test.Config_Files.Iterators_Nested;
 with Test.Config_Files.No_File;
-with Test.Config_Files.Time_Tests;
 function Test.Config_Files.All_Suite return AUnit.Test_Suites.Access_Test_Suite
 is
    use Test.Config_Files;
@@ -49,7 +48,6 @@ begin
    Add_Test (Suite, new Iterators.Test_Case);
    Add_Test (Suite, new Iterators_Nested.Test_Case);
    Add_Test (Suite, new No_File.Test_Case);
-   Add_Test (Suite, new Time_Tests.Test_Case);
 
    return Suite;
 end Test.Config_Files.All_Suite;

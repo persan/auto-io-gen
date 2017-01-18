@@ -26,6 +26,6 @@ package SAL.AUnit.Text_IO.Test is
 
    overriding procedure Register_Tests (T : in out Test_Case);
 
-   overriding function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access;
+   overriding function Name (T : Test_Case) return AUnit.Message_String;
 
 end SAL.AUnit.Text_IO.Test;

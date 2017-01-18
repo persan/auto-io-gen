@@ -18,7 +18,7 @@
 
 with Ada.Streams; use Ada.Streams;
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with Interfaces;
 with SAL.Network_Order.Gen_Scalar_32;
 with SAL.Network_Order.Gen_Scalar_64;
@@ -139,7 +139,7 @@ is
    ----------
    --  Public subprograms
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

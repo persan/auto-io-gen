@@ -19,7 +19,7 @@
 
 with Ada.Exceptions; use Ada.Exceptions;
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with SAL.Config_Files.Boolean; use SAL.Config_Files.Boolean;
 with SAL.Config_Files.Duration; use SAL.Config_Files.Duration;
 with SAL.Config_Files.Integer; use SAL.Config_Files.Integer;
@@ -186,7 +186,7 @@ package body Test.Config_Files.Error_Message is
       Close (Config);
    end Tear_Down_Case;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

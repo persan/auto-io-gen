@@ -18,7 +18,7 @@
 --
 
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with Ada.Exceptions;
 with Ada.Text_IO;
 with Interfaces;
@@ -481,7 +481,7 @@ package body Test.Config_Files.Extra_Key is
       Register_Routine (T, Test_Iterator_Fixed'Access, "Test_Iterator_Fixed");
    end Register_Tests;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

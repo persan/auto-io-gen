@@ -38,7 +38,7 @@ package SAL.Simple.Lists.Double is
    --------------
    --  Override List_Type operations
 
-   procedure Finalize (List : in out List_Type);
+   overriding procedure Finalize (List : in out List_Type);
    --  Free all items in List.
 
    -------------

@@ -28,7 +28,7 @@ package body SAL.Simple.Lists.Double is
 
    procedure Free_Node is new Ada.Unchecked_Deallocation (Node_Type, Node_Access_Type);
 
-   procedure Finalize (List : in out List_Type)
+   overriding procedure Finalize (List : in out List_Type)
    is
       Next : Node_Access_Type := List.Head;
    begin

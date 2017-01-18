@@ -18,7 +18,7 @@
 
 pragma License (GPL);
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with SAL.Gen_Sets;
 package body Test_Gen_Sets is
 
@@ -74,7 +74,7 @@ package body Test_Gen_Sets is
    ----------
    --  Public routines
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

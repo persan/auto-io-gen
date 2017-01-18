@@ -16,7 +16,7 @@
 --  write to the Free Software Foundation, 59 Temple Place - Suite
 --  330, Boston, MA 02111-1307, USA.
 
-with AUnit.Test_Cases.Registration;
+
 with SAL.AUnit;                  use SAL.AUnit;
 with SAL.Math_Float.AUnit;       use SAL.Math_Float.AUnit;
 with SAL.Math_Float.DOF_3.AUnit; use SAL.Math_Float.DOF_3.AUnit;
@@ -359,7 +359,7 @@ package body Test_Math_Float_DOF_6 is
    ----------
    --  Public routines
 
-   procedure Register_Tests (T : in out Test_Case)
+   overriding procedure Register_Tests (T : in out Test_Case)
    is
       use AUnit.Test_Cases.Registration;
    begin
@@ -372,21 +372,21 @@ package body Test_Math_Float_DOF_6 is
       Register_Routine (T, Test_DOF_6_DC_Array_DCV_Inverse'Access, "Test_DOF_6_DC_Array_DCV_Inverse");
    end Register_Tests;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin
       return new String'("Test_Math_Float_DOF_6");
    end Name;
 
-   procedure Set_Up_Case (Test : in out Test_Case)
+   overriding procedure Set_Up_Case (Test : in out Test_Case)
    is
       pragma Unreferenced (Test);
    begin
       SAL.Math_Float.AUnit.Default_Tolerance := 1.0e-4;
    end Set_Up_Case;
 
-   procedure Tear_Down_Case (Test : in out Test_Case)
+   overriding procedure Tear_Down_Case (Test : in out Test_Case)
    is
       pragma Unreferenced (Test);
    begin

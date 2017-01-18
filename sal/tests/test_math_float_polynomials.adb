@@ -17,7 +17,7 @@
 --
 
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with SAL.Math_Float.Polynomials; use SAL.Math_Float.Polynomials;
 package body Test_Math_Float_Polynomials is
 
@@ -73,14 +73,14 @@ package body Test_Math_Float_Polynomials is
    ----------
    --  Public routines
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin
       return new String'("Test Math_Float.Polynomial");
    end Name;
 
-   procedure Register_Tests (T : in out Test_Case)
+   overriding procedure Register_Tests (T : in out Test_Case)
    is
       use AUnit.Test_Cases.Registration;
    begin

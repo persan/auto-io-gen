@@ -17,7 +17,7 @@
 --  MA 02111-1307, USA.
 
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with GNAT.OS_Lib;
 with SAL.AUnit;
 with SAL.Config_Files.Integer; use SAL.Config_Files.Integer;
@@ -218,7 +218,7 @@ package body Test.Config_Files.Iterators is
    ----------
    --  Public subprograms
 
-   procedure Register_Tests (T : in out Test_Case)
+   overriding procedure Register_Tests (T : in out Test_Case)
    is
       use AUnit.Test_Cases.Registration;
    begin
@@ -227,7 +227,7 @@ package body Test.Config_Files.Iterators is
       Register_Routine (T, Errors'Access, "Errors");
    end Register_Tests;
 
-   procedure Set_Up_Case (T : in out Test_Case)
+   overriding procedure Set_Up_Case (T : in out Test_Case)
    is
       pragma Unreferenced (T);
 
@@ -264,7 +264,7 @@ package body Test.Config_Files.Iterators is
       Open (Config, File_Name, Missing_File => Raise_Exception);
    end Set_Up_Case;
 
-   procedure Tear_Down_Case (T : in out Test_Case)
+   overriding procedure Tear_Down_Case (T : in out Test_Case)
    is
       pragma Unreferenced (T);
    begin
@@ -272,7 +272,7 @@ package body Test.Config_Files.Iterators is
       Close (Config);
    end Tear_Down_Case;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

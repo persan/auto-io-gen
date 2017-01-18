@@ -3,10 +3,10 @@
 --  Also see Ada Letters September 2005, article by Randal Andress.
 
 with SAL.Interfaces_More; use SAL.Interfaces_More;
-with SAL.Endianness;      use SAL.Endianness;
 with System;
 procedure Endianness_Example
 is
+use System;
 
    --  This fails with GNAT if Bit_Order is not the default
    type Other_Date_And_Time_Type is record

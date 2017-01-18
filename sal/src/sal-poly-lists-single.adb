@@ -45,7 +45,7 @@ package body SAL.Poly.Lists.Single is
       List.Count := List.Count - 1;
    end Delete_Head;
 
-   procedure Finalize (List : in out List_Type)
+   overriding procedure Finalize (List : in out List_Type)
    is
       Next : Node_Access_Type := List.Head;
    begin

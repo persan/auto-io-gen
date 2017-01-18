@@ -589,7 +589,7 @@ package body SAL.Gen_Math.Gen_DOF_3 is
       end if;
    end Mag;
 
-   function Inverse (Item : in Rot_Matrix_Type) return Rot_Matrix_Type
+   overriding function Inverse (Item : in Rot_Matrix_Type) return Rot_Matrix_Type
    is begin
       return
          ((Item (X)(X), Item (Y)(X), Item (Z)(X)),

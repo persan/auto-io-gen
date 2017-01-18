@@ -30,6 +30,6 @@ package Test_Math_Float_Scalar_Config is
 
    procedure Register_Tests (T : in out Test_Case);
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access;
+   function Name (T : Test_Case) return AUnit.Message_String;
 
 end Test_Math_Float_Scalar_Config;

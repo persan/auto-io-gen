@@ -1,7 +1,7 @@
 --  Test of Polynomial Inverse - Including Newton-Raphson technique
 
 with AUnit.Assertions;                   use AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with SAL.Math_Float.Polynomials.Inverse; use SAL.Math_Float.Polynomials.Inverse;
 with SAL.Math_Float.Polynomials.AUnit;   use SAL.Math_Float.Polynomials.AUnit;
 with SAL.Math_Float.AUnit;               use SAL.Math_Float.AUnit;
@@ -96,7 +96,7 @@ package body Test_Math_Float_Polynomials_Inverse is
    ----------
    --  Public routines
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

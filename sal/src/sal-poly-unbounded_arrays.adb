@@ -159,12 +159,12 @@ package body SAL.Poly.Unbounded_Arrays is
    ---------
    --  Override Limited_Controlled operations
 
-   procedure Initialize (Array_Obj : in out Array_Type)
+   overriding procedure Initialize (Array_Obj : in out Array_Type)
    is begin
       Create (Array_Obj);
    end Initialize;
 
-   procedure Finalize (Array_Obj : in out Array_Type)
+   overriding procedure Finalize (Array_Obj : in out Array_Type)
    is begin
       if Array_Obj.Base = null then
          --  not initialized yet; nothing to do.
@@ -181,7 +181,7 @@ package body SAL.Poly.Unbounded_Arrays is
       Free (Array_Obj.Base);
    end Finalize;
 
-   procedure Adjust (Array_Obj : in out Array_Type)
+   overriding procedure Adjust (Array_Obj : in out Array_Type)
    is begin
       if Array_Obj.Base = null then
          --  not initialized yet; nothing to do.

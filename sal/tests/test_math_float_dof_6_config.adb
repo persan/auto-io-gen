@@ -18,7 +18,7 @@
 
 pragma License (GPL);
 
-with AUnit.Test_Cases.Registration;
+
 with Ada.Directories;
 with Ada.Text_IO;
 with SAL.AUnit;                   use SAL.AUnit;
@@ -127,7 +127,7 @@ package body Test_Math_Float_DOF_6_Config is
       Register_Routine (T, Test_Read_Pose'Access, "Test_Read_Pose");
    end Register_Tests;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

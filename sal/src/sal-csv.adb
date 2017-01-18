@@ -32,7 +32,7 @@ package body SAL.CSV is
    procedure Free is new Ada.Unchecked_Deallocation (String, Ada.Strings.Unbounded.String_Access);
    procedure Free is new Ada.Unchecked_Deallocation (Positive_Array_Integer_Type, Positive_Array_Integer_Access_Type);
 
-   procedure Finalize (File : in out File_Type)
+   overriding procedure Finalize (File : in out File_Type)
    is
       use type Ada.Strings.Unbounded.String_Access;
    begin

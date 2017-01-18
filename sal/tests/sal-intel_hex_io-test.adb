@@ -18,7 +18,7 @@
 
 pragma License (GPL);
 
-with AUnit.Test_Cases.Registration;
+
 with SAL.AUnit;
 with SAL.Interfaces_More.AUnit;
 package body SAL.Intel_Hex_IO.Test is
@@ -214,7 +214,7 @@ package body SAL.Intel_Hex_IO.Test is
    ----------
    --  Public routines
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

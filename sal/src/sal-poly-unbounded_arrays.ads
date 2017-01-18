@@ -129,13 +129,13 @@ package SAL.Poly.Unbounded_Arrays is
    ----------
    --  Override Limited_Controlled operations
 
-   procedure Initialize (Array_Obj : in out Array_Type);
+   overriding procedure Initialize (Array_Obj : in out Array_Type);
    --  Calls Create with default parameters.
 
-   procedure Finalize (Array_Obj : in out Array_Type);
+   overriding procedure Finalize (Array_Obj : in out Array_Type);
    --  Free all added items, free array storage.
 
-   procedure Adjust (Array_Obj : in out Array_Type);
+   overriding procedure Adjust (Array_Obj : in out Array_Type);
    --  Deep copy.
 
    ----------

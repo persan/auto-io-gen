@@ -56,7 +56,7 @@ package SAL.Memory_Streams.Bounded is
    --  for an Out_Stream, the address of the first element of the raw
    --  Stream, for passing to system routines.
 
-   procedure Read
+   overriding procedure Read
      (Stream : in out Stream_Type;
       Item   : out Stream_Element_Array;
       Last   : out Stream_Element_Offset);
@@ -66,7 +66,7 @@ package SAL.Memory_Streams.Bounded is
    --
    --  for an Out_Stream, raises Status_Error.
 
-   procedure Write
+   overriding procedure Write
      (Stream : in out Stream_Type;
       Item   : in Stream_Element_Array);
    --  for an In_Stream, raises Status_Error.

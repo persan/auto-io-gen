@@ -95,7 +95,7 @@ package body SAL.Simple.Function_Tables.Monotonic.First_Order is
        Last => Table_Last,
        Less_Equal => Range_Less_Equal);
 
-   function Compute
+   overriding function Compute
       (Function_Table : in Function_Table_Type;
        Domain_Value   : in Domain_Type)
        return Range_Type
@@ -126,7 +126,7 @@ package body SAL.Simple.Function_Tables.Monotonic.First_Order is
       end;
    end Compute;
 
-   function Compute_Inverse
+   overriding function Compute_Inverse
       (Function_Table : in Function_Table_Type;
        Range_Value    : in Range_Type)
        return Domain_Type

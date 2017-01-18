@@ -18,7 +18,7 @@
 
 pragma License (GPL);
 
-with AUnit.Test_Cases.Registration;
+
 with SAL.Math_Double.AUnit;
 with SAL.Math_Double.Tank;
 with Ada.Numerics; use Ada.Numerics;
@@ -149,7 +149,7 @@ package body Test_Math_Double_Tank is
       Register_Routine (T, Test_Sphere_Sect_Moments'Access, "Test_Sphere_Sect_Moments");
    end Register_Tests;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

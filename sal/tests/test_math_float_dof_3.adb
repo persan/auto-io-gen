@@ -18,7 +18,7 @@
 
 
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with SAL.Math_Float.AUnit;       use SAL.Math_Float.AUnit;
 with SAL.Math_Float.DOF_3.AUnit; use SAL.Math_Float.DOF_3.AUnit;
 with SAL.Math_Float.Scalar;      use SAL.Math_Float.Scalar;
@@ -353,7 +353,7 @@ package body Test_Math_Float_DOF_3 is
       Register_Routine (T, Inertia'Access, "Inertia");
    end Register_Tests;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

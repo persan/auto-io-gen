@@ -28,7 +28,7 @@ package Test.Config_Files.Comment_No_Equal is
    procedure Register_Tests (T : in out Test_Case);
 
    --  Provide name identifying the test case:
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access;
+   function Name (T : Test_Case) return AUnit.Message_String;
 
    procedure Set_Up_Case (T : in out Test_Case);
 

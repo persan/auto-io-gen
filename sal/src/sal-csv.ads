@@ -34,7 +34,7 @@ package SAL.CSV is
 
    type File_Type is new Ada.Finalization.Limited_Controlled with private;
 
-   procedure Finalize (File : in out File_Type);
+   overriding procedure Finalize (File : in out File_Type);
    --  close file, free data structures
 
    procedure Open

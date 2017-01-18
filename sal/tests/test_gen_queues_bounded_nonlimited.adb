@@ -17,7 +17,7 @@
 --  330, Boston, MA 02111-1307, USA.
 
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with SAL.Gen.Queues.Gen_Bounded_Nonlimited.Gen_Test;
 package body Test_Gen_Queues_Bounded_Nonlimited
 is
@@ -164,7 +164,7 @@ is
    ----------
    --  Public subprograms
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

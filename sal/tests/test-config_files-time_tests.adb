@@ -18,16 +18,14 @@
 --
 
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with Ada.Calendar;
 with Ada.IO_Exceptions;
 with Ada.Text_IO;
-with Ada_Calendar_Config;
 with GNAT.Calendar.Time_IO;
 with SAL.Config_Files; use SAL.Config_Files;
 package body Test.Config_Files.Time_Tests is
 
-   use Ada_Calendar_Config;
 
    Config    : Configuration_Type;
    File_Name : constant String := "test-config_files-time.config";
@@ -56,7 +54,7 @@ package body Test.Config_Files.Time_Tests is
            "Got " & Image (Result, "%x %r"));
    end Check_Time;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

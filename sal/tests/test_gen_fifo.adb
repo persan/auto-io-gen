@@ -21,7 +21,7 @@
 --  MA 02111-1307, USA.
 
 pragma License (GPL);
-with AUnit.Test_Cases.Registration;
+
 with Ada.Text_IO; use Ada.Text_IO;
 with SAL.AUnit.Text_IO;
 with SAL.Gen_FIFO.Gen_Text_IO;
@@ -98,7 +98,7 @@ package body Test_Gen_FIFO is
    ----------
    --  Public routines
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

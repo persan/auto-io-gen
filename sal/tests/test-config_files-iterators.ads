@@ -24,12 +24,12 @@ package Test.Config_Files.Iterators is
 
    --  Override:
 
-   procedure Register_Tests (T : in out Test_Case);
+   overriding procedure Register_Tests (T : in out Test_Case);
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access;
+   function Name (T : Test_Case) return AUnit.Message_String;
 
-   procedure Set_Up_Case (T : in out Test_Case);
+   overriding procedure Set_Up_Case (T : in out Test_Case);
 
-   procedure Tear_Down_Case (T : in out Test_Case);
+   overriding procedure Tear_Down_Case (T : in out Test_Case);
 
 end Test.Config_Files.Iterators;

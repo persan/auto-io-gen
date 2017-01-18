@@ -18,7 +18,7 @@
 --
 
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with Ada.Characters.Handling;
 with GNAT.Directory_Operations;
 with GNAT.OS_Lib;
@@ -149,7 +149,7 @@ package body Test.Config_Files.Base_Tests is
    ----------
    --  Public routines
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

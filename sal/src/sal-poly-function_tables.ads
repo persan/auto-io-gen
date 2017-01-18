@@ -50,7 +50,7 @@ package SAL.Poly.Function_Tables is
    -----------
    --  Dispatching operations on Function_Table_Type.
 
-   procedure Initialize (Function_Table : in out Function_Table_Type);
+   overriding procedure Initialize (Function_Table : in out Function_Table_Type);
    --
    --  Raises Initialization_Error if Domain_Values are not
    --  monotonically increasing.

@@ -16,7 +16,7 @@
 --  the Free Software Foundation, 59 Temple Place - Suite 330, Boston,
 --  MA 02111-1307, USA.
 
-with AUnit.Test_Cases.Registration;
+
 with GNAT.OS_Lib;
 with SAL.AUnit;
 package body SAL.File_Names.Test is
@@ -391,7 +391,7 @@ package body SAL.File_Names.Test is
    ----------
    --  Public bodies
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

@@ -459,7 +459,7 @@ private
       Data                  : Node_Access_Type;          -- root of tree.
    end record;
 
-   procedure Finalize (Config : in out Configuration_Type);
+   overriding procedure Finalize (Config : in out Configuration_Type);
 
    ----------
    --  Iterators

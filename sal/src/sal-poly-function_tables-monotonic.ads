@@ -32,7 +32,7 @@ package SAL.Poly.Function_Tables.Monotonic is
    ---------------
    --  Override Function_Table_Type operations
 
-   procedure Initialize (Function_Table : in out Function_Table_Type);
+   overriding procedure Initialize (Function_Table : in out Function_Table_Type);
    --  Add restriction on Range_Values.
    --
    --  Raises Initialization_Error if Range_Values are not

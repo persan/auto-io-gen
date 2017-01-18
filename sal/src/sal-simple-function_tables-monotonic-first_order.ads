@@ -33,12 +33,12 @@ package SAL.Simple.Function_Tables.Monotonic.First_Order is
    ---------------
    --  Override Function_Table_Type operations
 
-   function Compute
+   overriding function Compute
       (Function_Table : in Function_Table_Type;
        Domain_Value   : in Domain_Type)
       return Range_Type;
 
-   function Compute_Inverse
+   overriding function Compute_Inverse
       (Function_Table : in Function_Table_Type;
        Range_Value    : in Range_Type)
       return Domain_Type;

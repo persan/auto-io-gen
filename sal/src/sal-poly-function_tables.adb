@@ -25,7 +25,7 @@
 
 package body SAL.Poly.Function_Tables is
 
-   procedure Initialize (Function_Table : in out Function_Table_Type)
+   overriding procedure Initialize (Function_Table : in out Function_Table_Type)
    is
       Table : Table_Type renames Function_Table.Table.all;
    begin

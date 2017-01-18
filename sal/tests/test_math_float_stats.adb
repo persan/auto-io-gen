@@ -17,7 +17,7 @@
 --
 
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with SAL.Math_Float.Stats.Image;
 package body Test_Math_Float_Stats is
 
@@ -141,7 +141,7 @@ package body Test_Math_Float_Stats is
    ----------
    --  Public routines
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

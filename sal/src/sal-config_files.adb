@@ -404,7 +404,7 @@ package body SAL.Config_Files is
       raise Config_File_Error with Format_Line_Column (Config, Node.Line, Node.Column) & Label;
    end Error_Line_Column;
 
-   procedure Finalize (Config : in out Configuration_Type)
+   overriding procedure Finalize (Config : in out Configuration_Type)
    is
       use GNAT.OS_Lib;
    begin

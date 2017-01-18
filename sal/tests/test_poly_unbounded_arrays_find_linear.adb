@@ -18,7 +18,7 @@
 
 pragma License (GPL);
 
-with AUnit.Test_Cases.Registration;
+
 with SAL.AUnit;
 with SAL.Gen.Alg.Find_Linear;
 with Test_Poly_Unbounded_Arrays_Aux;
@@ -137,7 +137,7 @@ package body Test_Poly_Unbounded_Arrays_Find_Linear is
       Register_Routine (T, Nominal'Access, "Nominal");
    end Register_Tests;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

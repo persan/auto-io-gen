@@ -18,7 +18,7 @@
 
 pragma License (GPL);
 
-with AUnit.Test_Cases.Registration;
+
 with SAL.Math_Double.AUnit;
 with SAL.Math_Double.DOF_3;
 with SAL.Math_Double.DOF_6.AUnit;
@@ -136,7 +136,7 @@ package body Test_Math_Double_DOF_6 is
       Register_Routine (T, Test_DOF_6_Integrator_Utils_Wertz'Access, "Test_DOF_6_Integrator_Utils_Wertz");
    end Register_Tests;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

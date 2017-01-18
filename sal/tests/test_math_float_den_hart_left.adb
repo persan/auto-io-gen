@@ -15,7 +15,7 @@
 --  file COPYING. If not, write to the Free Software Foundation, 59
 --  Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-with AUnit.Test_Cases.Registration;
+
 with SAL.Math_Float.AUnit;          use SAL.Math_Float;
 with SAL.Math_Float.Scalar;         use SAL.Math_Float.Scalar;
 with SAL.Math_Float.DOF_3;          use SAL.Math_Float.DOF_3;
@@ -228,14 +228,14 @@ package body Test_Math_Float_Den_Hart_Left is
    ----------
    --  Public routines
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin
       return new String'("Test_Math_Float_Den_Hart_Left");
    end Name;
 
-   procedure Register_Tests (T : in out Test_Case)
+   overriding procedure Register_Tests (T : in out Test_Case)
    is
       use AUnit.Test_Cases.Registration;
    begin
@@ -243,14 +243,14 @@ package body Test_Math_Float_Den_Hart_Left is
       Register_Routine (T, Test_Mult'Access, "Test_Mult");
    end Register_Tests;
 
-   procedure Set_Up_Case (Test : in out Test_Case)
+   overriding procedure Set_Up_Case (Test : in out Test_Case)
    is
       pragma Unreferenced (Test);
    begin
       SAL.Math_Float.AUnit.Default_Tolerance := 10.0e-5;
    end Set_Up_Case;
 
-   procedure Tear_Down_Case (Test : in out Test_Case)
+   overriding procedure Tear_Down_Case (Test : in out Test_Case)
    is
       pragma Unreferenced (Test);
    begin

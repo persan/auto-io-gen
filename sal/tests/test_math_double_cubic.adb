@@ -18,7 +18,7 @@
 
 pragma License (GPL);
 
-with AUnit.Test_Cases.Registration;
+
 with SAL.Math_Double.AUnit;
 with SAL.Math_Double.Complex_Types;
 with SAL.Math_Double.Cubic;
@@ -77,7 +77,7 @@ package body Test_Math_Double_Cubic is
       Register_Routine (T, Test_Cubic'Access, "Test_Cubic");
    end Register_Tests;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

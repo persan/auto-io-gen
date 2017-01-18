@@ -16,7 +16,7 @@
 --  Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 --
 
-with AUnit.Test_Cases.Registration;
+--  
 with SAL.Math_Float.AUnit;
 with SAL.Math_Float.DOF_3.Left;
 with SAL.Math_Float.DOF_6.Left;
@@ -458,14 +458,14 @@ package body Test_Math_Float_Manipulator_6_Left is
    ----------
    --  Public routines
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin
       return new String'("Test_Math_Float_Manipulator_6_Left");
    end Name;
 
-   procedure Register_Tests (T : in out Test_Case)
+   overriding procedure Register_Tests (T : in out Test_Case)
    is
       use AUnit.Test_Cases.Registration;
    begin
@@ -480,14 +480,14 @@ package body Test_Math_Float_Manipulator_6_Left is
       Register_Routine (T, T0_T_Ti_7'Access, "T0_T_Ti_7");
    end Register_Tests;
 
-   procedure Set_Up_Case (Test : in out Test_Case)
+   overriding procedure Set_Up_Case (Test : in out Test_Case)
    is
       pragma Unreferenced (Test);
    begin
       SAL.Math_Float.AUnit.Default_Tolerance := 10.0e-5;
    end Set_Up_Case;
 
-   procedure Tear_Down_Case (Test : in out Test_Case)
+   overriding procedure Tear_Down_Case (Test : in out Test_Case)
    is
       pragma Unreferenced (Test);
    begin

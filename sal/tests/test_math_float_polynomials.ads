@@ -26,8 +26,8 @@ package Test_Math_Float_Polynomials is
 
    --  Override:
 
-   procedure Register_Tests (T : in out Test_Case);
+   overriding procedure Register_Tests (T : in out Test_Case);
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access;
+   function Name (T : Test_Case) return AUnit.Message_String;
 
 end Test_Math_Float_Polynomials;

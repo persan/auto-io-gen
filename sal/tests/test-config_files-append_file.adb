@@ -17,7 +17,7 @@
 --  MA 02111-1307, USA.
 --
 
-with AUnit.Test_Cases.Registration;
+
 with Ada.Text_IO;
 with SAL.Config_Files; use SAL.Config_Files;
 with SAL.AUnit; use SAL.AUnit;
@@ -48,7 +48,7 @@ package body Test.Config_Files.Append_File is
    ----------
    --  Public bodies (alphabetical order)
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

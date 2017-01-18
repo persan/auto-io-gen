@@ -18,7 +18,7 @@
 
 pragma License (GPL);
 
-with AUnit.Test_Cases.Registration;
+
 with SAL.AUnit; use SAL.AUnit;
 with SAL.Config_Files;
 with SAL.Math_Float.AUnit;
@@ -144,7 +144,7 @@ package body Test_Math_Float_Scalar_Config is
       Register_Routine (T, Test_Read_Scale_Limit'Access, "Test_Read_Scale_Limit");
    end Register_Tests;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

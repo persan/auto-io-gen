@@ -27,7 +27,7 @@ pragma License (Modified_GPL);
 
 package body SAL.Simple.Function_Tables.Monotonic is
 
-   procedure Initialize (Function_Table : in out Function_Table_Type)
+   overriding procedure Initialize (Function_Table : in out Function_Table_Type)
    is
       Table : Table_Type renames Function_Table.Table.all;
    begin

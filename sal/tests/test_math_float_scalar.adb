@@ -19,7 +19,7 @@
 pragma License (GPL);
 
 with AUnit.Assertions;
-with AUnit.Test_Cases.Registration;
+
 with Ada.Numerics;
 with Interfaces;
 with SAL.AUnit;
@@ -427,7 +427,7 @@ package body Test_Math_Float_Scalar is
       Register_Routine (T, Test_Trig_Sum_Diff'Access, "Test_Trig_Sum_Diff");
    end Register_Tests;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

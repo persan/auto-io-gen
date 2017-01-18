@@ -26,7 +26,7 @@ package Test.Config_Files.Base_Tests is
 
    procedure Register_Tests (T : in out Test_Case);
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access;
+   function Name (T : Test_Case) return AUnit.Message_String;
 
    procedure Set_Up_Case (T : in out Test_Case);
 

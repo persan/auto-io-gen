@@ -17,7 +17,7 @@
 
 pragma License (GPL);
 
-with AUnit.Test_Cases.Registration;
+
 with SAL.Gen_Math.Gen_Manipulator.Gen_Wertz;
 with SAL.Math_Double.AUnit;
 with SAL.Math_Double.DOF_3.Wertz; use SAL.Math_Double.DOF_3.Wertz;
@@ -142,28 +142,28 @@ package body Test_Math_Double_Manipulator_3_Wertz is
    ----------
    --  Public routines
 
-   procedure Register_Tests (T : in out Test_Case)
+   overriding procedure Register_Tests (T : in out Test_Case)
    is
       use AUnit.Test_Cases.Registration;
    begin
       Register_Routine (T, Nominal'Access, "Nominal");
    end Register_Tests;
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin
       return new String'("Test_Math_Double_Manipulator_3_Wertz");
    end Name;
 
-   procedure Set_Up_Case (Test : in out Test_Case)
+   overriding procedure Set_Up_Case (Test : in out Test_Case)
    is
       pragma Unreferenced (Test);
    begin
       SAL.Math_Double.AUnit.Default_Tolerance := 0.000_01;
    end Set_Up_Case;
 
-   procedure Tear_Down_Case (Test : in out Test_Case)
+   overriding procedure Tear_Down_Case (Test : in out Test_Case)
    is
       pragma Unreferenced (Test);
    begin

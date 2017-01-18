@@ -79,7 +79,7 @@ package SAL.Poly.Lists.Single is
    --
    --  Raises Constraint_Error if List is empty.
 
-   procedure Finalize (List : in out List_Type);
+   overriding procedure Finalize (List : in out List_Type);
    --  Free all items in List.
 
    function Head (List : in List_Type) return Item_Node_Type;

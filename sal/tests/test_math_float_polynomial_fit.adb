@@ -16,7 +16,7 @@
 --  Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 --
 
-with AUnit.Test_Cases.Registration;
+
 with SAL.Gen_Math.Gen_Polynomial_Fit;
 with SAL.Gen_Math.Gen_Square_Array.Gen_Inverse;
 with SAL.Math_Float.AUnit;
@@ -161,7 +161,7 @@ package body Test_Math_Float_Polynomial_Fit is
    ----------
    --  Public routines
 
-   function Name (T : Test_Case) return Ada.Strings.Unbounded.String_Access
+   function Name (T : Test_Case) return AUnit.Message_String
    is
       pragma Unreferenced (T);
    begin

@@ -1,15 +1,15 @@
-with "aunit";
 with "sal";
+with "aunit";
 project SAL.Tests is
 
-   for Source_Dirs use ("tests");
-
-   package Compiler is
-      for Default_Switches ("ada") use ("-gnatwa", "-gnat12", "-gnata", "-g", "-fstack-check", "-gnatf", "-gnatQ", "-gnatyxpOlkhfda");
-   end Compiler;
-
+   for Source_Dirs use ("tests/**");
    for Object_Dir use ".obj/" & project'Name;
    for Exec_Dir use "bin";
+
+   package Compiler is
+      --       for Default_Switches ("ada") use ("-gnatwa", "-gnat12", "-gnata", "-g", "-fstack-check", "-gnatf", "-gnatQ", "-gnatyxpOlkhfda");
+   end Compiler;
+
    package Builder is
       for Default_Switches ("ada") use ("-g", "-j0");
    end Builder;
@@ -17,5 +17,29 @@ project SAL.Tests is
    package Binder is
       for Default_Switches ("ada") use ("-E");
    end Binder;
+
+   for Main use ("test_all_harness.adb",
+                 "debug_math_double_cubic.adb",
+                 "debug_math_double_dof_6_network_order.adb",
+                 "debug_math_double_runge_kutta_4th.adb",
+                 "debug_math_double_tank.adb",
+                 "debug_math_double_tank_cubic.adb",
+                 "debug_math_float_gen_runge_kutta_4th.adb",
+                 "debug_math_float_manipulator_6.adb",
+                 "debug_math_float_manipulator_7.adb",
+                 "endianness_example.adb",
+                 "show_attributes.adb",
+                 "test_math_float_inverse_array.adb",
+                 "test_poly_binary_trees_sorted.adb",
+                 "test_poly_function_tables_monotonic_first_order.adb",
+                 "test_poly_lists_double.adb",
+                 "test_poly_lists_single.adb",
+                 "test_simple_function_tables_monotonic_first_order.adb",
+                 "time_inverse_inertia.adb", "time_math_float_den_hart.adb",
+                 "time_poly_function_tables_monotonic_first_order.adb",
+                 "time_poly_lists_double.adb",
+                 "time_poly_lists_double_aux.ads",
+                 "time_simple_function_tables_monotonic_first_order.adb",
+                 "time_simple_lists_double.adb");
 
 end SAL.Tests;

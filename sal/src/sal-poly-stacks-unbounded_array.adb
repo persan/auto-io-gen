@@ -25,50 +25,50 @@
 
 package body SAL.Poly.Stacks.Unbounded_Array is
 
-   procedure Clear (Stack : in out Unbounded_Stack_Type)
+   overriding procedure Clear (Stack : in out Unbounded_Stack_Type)
    is begin
       Finalize (Stack.Data);
       Initialize (Stack.Data);
    end Clear;
 
-   function Depth (Stack : in Unbounded_Stack_Type) return Natural
+   overriding function Depth (Stack : in Unbounded_Stack_Type) return Natural
    is begin
       return Item_Arrays.Length (Stack.Data);
    end Depth;
 
-   function Is_Empty (Stack : in Unbounded_Stack_Type) return Boolean
+   overriding function Is_Empty (Stack : in Unbounded_Stack_Type) return Boolean
    is begin
       return Item_Arrays.Length (Stack.Data) = 0;
    end Is_Empty;
 
-   function Max_Depth (Stack : in Unbounded_Stack_Type) return Natural
+   overriding function Max_Depth (Stack : in Unbounded_Stack_Type) return Natural
    is begin
       return Stack.Max_Depth;
    end Max_Depth;
 
-   function Peek (Stack : in Unbounded_Stack_Type; Index : in Natural) return Item_Type
+   overriding function Peek (Stack : in Unbounded_Stack_Type; Index : in Natural) return Item_Type
    is begin
       return Get (Stack.Data, Item_Arrays.First (Stack.Data) - 1 + Index);
    end Peek;
 
-   procedure Pop (Stack : in out Unbounded_Stack_Type)
+   overriding procedure Pop (Stack : in out Unbounded_Stack_Type)
    is begin
       Delete_First (Stack.Data);
    end Pop;
 
-   procedure Pop (Stack : in out Unbounded_Stack_Type; Item : out Item_Type)
+   overriding procedure Pop (Stack : in out Unbounded_Stack_Type; Item : out Item_Type)
    is begin
       Item := Peek (Stack, 1);
       Delete_First (Stack.Data);
    end Pop;
 
-   procedure Push (Stack : in out Unbounded_Stack_Type; Item : in Item_Type)
+   overriding procedure Push (Stack : in out Unbounded_Stack_Type; Item : in Item_Type)
    is begin
       Add_First (Stack.Data, Item);
       Stack.Max_Depth := Natural'Max (Stack.Max_Depth, Item_Arrays.Length (Stack.Data));
    end Push;
 
-   function Top (Stack : in Unbounded_Stack_Type) return Item_Type
+   overriding function Top (Stack : in Unbounded_Stack_Type) return Item_Type
    is begin
       if Item_Arrays.Length (Stack.Data) < 1 then
          raise SAL.Container_Empty;
@@ -77,7 +77,7 @@ package body SAL.Poly.Stacks.Unbounded_Array is
       end if;
    end Top;
 
-   procedure Initialize (Item : in out Item_Array_Type)
+   overriding procedure Initialize (Item : in out Item_Array_Type)
    is begin
       Create (Item, Initial_Stack_Size, Item_Arrays.Prepend, First => 1);
    end Initialize;
