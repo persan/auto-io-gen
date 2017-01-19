@@ -98,7 +98,7 @@ package body Auto_Io_Gen.Generate_Image is
                when Ada.IO_Exceptions.Use_Error =>
                   Ada.Exceptions.Raise_Exception
                     (Parameter_Error'Identity,
-                     "cannot create Text_IO child " & Name & ". Possibly it exists but is read-only");
+                     "cannot create Images child " & Name & ". Possibly it exists but is read-only");
             end;
             Delete (File);
             begin
@@ -107,12 +107,12 @@ package body Auto_Io_Gen.Generate_Image is
                when others =>
                   Ada.Exceptions.Raise_Exception
                     (Parameter_Error'Identity,
-                     "cannot create Text_IO child " & Name);
+                     "cannot create Images child " & Name);
             end;
          else
             Ada.Exceptions.Raise_Exception
               (Parameter_Error'Identity,
-               "Text_IO child " & Name & " already exists. Use -f to overwrite it.");
+               "Images child " & Name & " already exists. Use -f to overwrite it.");
          end if;
 
       when Ada.IO_Exceptions.Name_Error =>
@@ -130,6 +130,7 @@ package body Auto_Io_Gen.Generate_Image is
       Invisible           : in Boolean;
       Needs_Text_IO_Utils : in Boolean)
    is
+      pragma Unreferenced (Needs_Text_IO_Utils);
       use Ada.Text_IO;
 
       procedure Print_Header (Type_List : in Auto_Io_Gen.Lists.Type_Descriptor_Lists.List_Type)
@@ -158,11 +159,9 @@ package body Auto_Io_Gen.Generate_Image is
             Next (Iterator);
          end loop;
 
-         if  Needs_Text_IO_Utils then
-            Put_Line (File, "with SAL.Text_IO_Utils; use SAL.Text_IO_Utils;");
-         end if;
 
          Put_Line (File, "package body " & Child_Package_Name & " is");
+         Put_Line (File, "   pragma Warnings(off);");
 
          New_Line (File);
          Indent_Level := 2;
@@ -326,7 +325,7 @@ package body Auto_Io_Gen.Generate_Image is
          Root_Name_Index := Root_Name_Index - 1;
       end if;
 
-      return Type_Name (Type_Name'First .. Root_Name_Index) & "_Text_IO";
+      return Type_Name (Type_Name'First .. Root_Name_Index) & "_Images";
 
    end Instantiated_Package_Name;
 
@@ -439,50 +438,12 @@ package body Auto_Io_Gen.Generate_Image is
    end Root_Type_Name;
 
    function Standard_Name (Type_Name : in String) return String
-   is begin
-      return "JUNK";
-      pragma Warnings (Off);
-      if Type_Name = "boolean" then
-         return "Auto_Text_Io.Boolean_Text_IO";
-
-      elsif Type_Name = "character" then
-         return "Auto_Text_Io.Text_IO";
-
-      elsif Type_Name = "duration" then
-         return "Auto_Text_Io.Duration_Text_IO";
-
-      elsif Type_Name = "float" then
-         return "Auto_Text_Io.Float_Text_IO";
-
-      elsif Type_Name = "integer" then
-         return "Auto_Text_Io.Integer_Text_IO";
-
-      elsif Type_Name = "short_integer" then
-         return "Auto_Text_Io.Short_Integer_Text_IO";
-
-      elsif Type_Name = "short_short_integer" then
-         return "Auto_Text_Io.Short_Short_Integer_Text_IO";
-
-      elsif Type_Name = "long_integer" then
-         return "Auto_Text_Io.Long_Integer_Text_IO";
-
-      elsif Type_Name = "long_long_integer" then
-         return "Auto_Text_Io.Long_Long_Integer_Text_IO";
-
-      elsif Type_Name = "long_float" then
-         return "Auto_Text_Io.Long_Float_Text_IO";
-
-      elsif Type_Name = "long_long_float" then
-         return "Auto_Text_Io.Long_Long_Float_Text_IO";
-
-      elsif Type_Name = "string" then
-         return "Auto_Text_Io.Text_IO";
-      else
-         Ada.Text_IO.Put_Line (Ada.Text_IO.Standard_Error, "Unsuported type:  " & Type_Name);
-         raise Not_Supported with Type_Name;
-      end if;
-
+   is
+      pragma Unreferenced (Type_Name);
+   begin
+      return "Auto_Image.Standard";
    end Standard_Name;
+
 begin
    Auto_Io_Gen.Options.Register
      (Option => "image", Language_Name => "Image",

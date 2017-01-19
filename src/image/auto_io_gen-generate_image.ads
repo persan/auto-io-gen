@@ -37,9 +37,6 @@ private
 
    --  Visible for child packages.
 
-   Indent_Level : Ada.Text_IO.Positive_Count := 1;
-   --  1 is no indentation.
-
 
    function Component_Type_Name
       (Type_Element         : in Asis.Element;

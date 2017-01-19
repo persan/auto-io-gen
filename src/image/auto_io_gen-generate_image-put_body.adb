@@ -26,25 +26,26 @@ package body Auto_Io_Gen.Generate_Image.Put_Body is
    Body_First : Boolean := True; --  Shared between printing discriminants and components.
 
    procedure Generate_Component_Line
-      (File      : in Ada.Text_IO.File_Type;
-       Component : in Auto_Io_Gen.Lists.Component_Type;
-       First     : in Boolean);
+     (File      : in Ada.Text_IO.File_Type;
+      Component : in Auto_Io_Gen.Lists.Component_Type;
+      First     : in Boolean);
    --  Generate body code to put one component.
 
    procedure Generate_Derived_Array
-      (File            : in Ada.Text_IO.File_Type;
-       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
+     (File            : in Ada.Text_IO.File_Type;
+      Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
+
    --  Generate body code for all Put subprograms for a derived array type.
 
    procedure Generate_Private_Array_Wrapper
-      (File            : in Ada.Text_IO.File_Type;
-       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
+     (File            : in Ada.Text_IO.File_Type;
+      Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
    --  Generate body code for all Put subprograms in the public child
    --  for a private array type.
 
    procedure Generate_Record
-      (File            : in Ada.Text_IO.File_Type;
-       Type_Descriptor : in Auto_Io_Gen.Lists.Record_Type_Descriptor_Type);
+     (File            : in Ada.Text_IO.File_Type;
+      Type_Descriptor : in Auto_Io_Gen.Lists.Record_Type_Descriptor_Type);
    --  Generate body code for all Put subprograms for a record type.
 
    procedure Generate
@@ -88,9 +89,9 @@ package body Auto_Io_Gen.Generate_Image.Put_Body is
    end Generate;
 
    procedure Generate_Component_Line
-      (File      : in Ada.Text_IO.File_Type;
-       Component : in Auto_Io_Gen.Lists.Component_Type;
-       First     : in Boolean)
+     (File      : in Ada.Text_IO.File_Type;
+      Component : in Auto_Io_Gen.Lists.Component_Type;
+      First     : in Boolean)
    is
       pragma Unreferenced (First);
       Component_Name : constant String := Asis.Aux.Name (Component.Component_Name);
@@ -99,8 +100,8 @@ package body Auto_Io_Gen.Generate_Image.Put_Body is
       if not Body_First then
          --  Finish last component put
          Indent_Line
-            (File,
-             "Put (File, ','); if not Single_Line_Record then New_Line (File); end if;");
+           (File,
+            "Put (File, ','); if not Single_Line_Record then New_Line (File); end if;");
 
          --  Start current component put
          Indent (File, "Put (File, ' ');");
@@ -131,16 +132,16 @@ package body Auto_Io_Gen.Generate_Image.Put_Body is
          Indent_Level := Indent_Level + 1;
 
          Indent_Line
-            (File,
-             "Single_Line => Single_Line_Component, Named_Association => Named_Association_Component);");
+           (File,
+            "Single_Line => Single_Line_Component, Named_Association => Named_Association_Component);");
          Indent_Level := Indent_Level - 1;
       end if;
 
    end Generate_Component_Line;
 
    procedure Generate_Derived_Array
-      (File            : in Ada.Text_IO.File_Type;
-       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
+     (File            : in Ada.Text_IO.File_Type;
+      Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
    is begin
       Indent_Line (File, "procedure Put");
       Indent_Level := Indent_Level + 1;
@@ -217,8 +218,8 @@ package body Auto_Io_Gen.Generate_Image.Put_Body is
    end Generate_Derived_Array;
 
    procedure Generate_Private_Array_Wrapper
-      (File            : in Ada.Text_IO.File_Type;
-       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
+     (File            : in Ada.Text_IO.File_Type;
+      Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
    is
       Package_Name : constant String := Instantiated_Package_Name (Asis.Aux.Name (Type_Descriptor.Type_Name));
    begin
@@ -385,55 +386,18 @@ package body Auto_Io_Gen.Generate_Image.Put_Body is
       begin
          Indent_Level := Indent_Level + 1;
 
-         Put_Line (File, "Item                        : in " & Lists.Type_Name (Type_Descriptor) & ";");
+         Put_Line (File, "Item : in " & Lists.Type_Name (Type_Descriptor) & ";");
 
-         if Is_Item then
-            Indent_Line (File, " Single_Line                 : in Boolean := False;");
-            Indent_Line (File, " Named_Association           : in Boolean := False)");
-         else
-            Indent_Line (File, " Single_Line_Record          : in Boolean := True;");
-            Indent_Line (File, " Named_Association_Record    : in Boolean := False;");
-            Indent_Line (File, " Single_Line_Component       : in Boolean := True;");
-            Indent_Line (File, " Named_Association_Component : in Boolean := False)");
-         end if;
 
          Indent_Level := Indent_Level - 1;
 
-         if not Separate_Body then
-            Indent_Line (File, "is");
-
-            if Check_Unreferenced then
-               if Discriminants then
-                  Need_Single_Line_Record :=
-                    Lists.Length (Type_Descriptor.Record_Components) +
-                    Lists.Length (Type_Descriptor.Record_Discriminants) +
-                    Lists.Length (Type_Descriptor.Record_Variant_Part.Variants) > 1;
-               else
-                  Need_Single_Line_Record :=
-                    Lists.Length (Type_Descriptor.Record_Components) > 1;
-               end if;
-
-               if not Need_Single_Line_Record then
-                  Indent_Level := Indent_Level + 1;
-                  Indent_Line (File, "pragma Unreferenced (Single_Line_Record);");
-                  Indent_Level := Indent_Level - 1;
-               end if;
-
-               if not Type_Descriptor.Record_Structured_Components then
-                  Indent_Level := Indent_Level + 1;
-                  Indent_Line (File, "pragma Unreferenced (Named_Association_Component);");
-                  Indent_Level := Indent_Level - 1;
-               end if;
-            end if;
-
-            Indent_Line (File, "begin");
-            Indent_Level := Indent_Level + 1;
-         end if;
+         Indent_Line (File, "begin");
+         Indent_Level := Indent_Level + 1;
       end Print_Parameter_List;
 
       procedure Print_Component
-         (Component : in Lists.Component_Type;
-          First     : in Boolean)
+        (Component : in Lists.Component_Type;
+         First     : in Boolean)
       is
          pragma Unreferenced (First);
       begin
@@ -443,7 +407,7 @@ package body Auto_Io_Gen.Generate_Image.Put_Body is
       procedure Print_Components is new Lists.Component_Algs.Process_All_Constant (Process_Item => Print_Component);
 
       procedure Print_Variant
-        (Variant : in Lists.Variant_Access_Type;
+        (Variant   : in Lists.Variant_Access_Type;
          First     : in Boolean)
       is
          pragma Unreferenced (First);
