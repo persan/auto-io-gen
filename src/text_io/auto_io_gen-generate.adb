@@ -168,6 +168,7 @@ package body Auto_Io_Gen.Generate is
          end if;
 
          Put_Line (File, "package body " & Child_Package_Name & " is");
+         Put_Line (File, "   pragma Warnings(off);");
 
          New_Line (File);
          Indent_Level := 2;
