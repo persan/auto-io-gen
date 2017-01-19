@@ -26,7 +26,6 @@
 --  write to the Free Software Foundation, 59 Temple Place - Suite
 --  330, Boston, MA 02111-1307, USA.
 
-with GNAT.Source_Info;
 with Ada.Exceptions;
 with Ada.Text_IO;
 with Asis.Aux;
@@ -47,6 +46,7 @@ with Auto_Io_Gen.Build.Process_Element_Do_Variant_Part;
 with Auto_Io_Gen.Build.Process_Element_Do_Component;
 with Auto_Io_Gen.Build.Process_Element_Do_Component_Definition;
 package body Auto_Io_Gen.Build is
+   use GNAT;
    use GNAT.Source_Info;
    --------------
    --  Local declarations
@@ -78,8 +78,7 @@ package body Auto_Io_Gen.Build is
       Control : in out Asis.Traverse_Control;
       State   : in out State_Type)
    is begin
-      Debug_Put
-        (Enclosing_Entity & "( State => " & State.Private_State.Label'Img  & ", ",   New_Line => False);
+      Debug.Put_Line ("State => " & State.Private_State.Label'Img);
 
       case State.Private_State.Label is
       when Initial =>
@@ -117,7 +116,7 @@ package body Auto_Io_Gen.Build is
 
       end case;
 
-      Debug_Put ("                   Control => " & Asis.Traverse_Control'Image (Control));
+      Debug.Put_Line ("Control => " & Asis.Traverse_Control'Image (Control));
 
    exception
          --  Don't catch ASIS_Failed here, so Diagnosis is set properly.
@@ -142,10 +141,9 @@ package body Auto_Io_Gen.Build is
    is
       use Asis;
    begin
-      Debug_Put
-        (Enclosing_Entity &
-           " (State =>" & State_Label_Type'Image (State.Private_State.Label) &
-           " , Element => " & Aux.Image (Element));
+      Debug.Put_Line
+        ("State =>" & State.Private_State.Label'Img &
+           " ,Element => " & Aux.Image (Element));
 
       case State.Private_State.Label is
       when Initial =>
@@ -315,7 +313,7 @@ package body Auto_Io_Gen.Build is
 
       end case;
 
-      Debug_Put ("           Control " & Traverse_Control'Image (Control));
+      Debug.Put_Line ("Control =>" & Control'Img);
 
    end Terminate_Children;
 
@@ -336,24 +334,59 @@ package body Auto_Io_Gen.Build is
    -----------
    --  Utilities visible to child subprograms (alphabetical).
 
-   procedure Debug_Put (Element : in Asis.Element; Action : in Element_Action_Type)
-   is begin
-      if Options.Debug then
-         Ada.Text_IO.Put_Line (Element_Action_Type'Image (Action) & " " & Asis.Aux.Image (Element));
-      end if;
-   end Debug_Put;
+   package body Debug is
+      function Image (Action : in Element_Action_Type) return String is
+      begin
+         return Action'Img;
+      end;
 
-   procedure Debug_Put
-     (Message  : in String;
-      New_Line : in Boolean := True)
-   is begin
-      if Auto_Io_Gen.Options.Debug then
-         if New_Line then
-            Ada.Text_IO.Put_Line (Message);
-         else
-            Ada.Text_IO.Put (Message);
+      function Image (Element : in Asis.Element) return String is
+      begin
+         return Asis.Aux.Image (Element);
+      end;
+
+      function Image (Action : in Element_Action_Type; Element : in Asis.Element) return String is
+      begin
+         return "Element => " & Element_Action_Type'Image (Action) & ", Action => " & Asis.Aux.Image (Element);
+      end image;
+
+      function Image (Item : Positive ) return String is
+         Ret : constant STring := Item'Img;
+      begin
+         return Ret (Ret'First + 1 .. Ret'Last);
+      end;
+      procedure Put (Element : in Asis.Element; Action : in Element_Action_Type)
+      is begin
+         if Options.Debug then
+            Ada.Text_IO.Put_Line (Image (Action, Element));
          end if;
-      end if;
-   end Debug_Put;
+      end Put;
 
+      procedure Put_Line
+        (Message  : in String; Enclosing_Entity : String := GNAT.Source_Info.Enclosing_Entity; Line : Positive := GNAT.Source_Info.Line) is
+      begin
+         if Options.Debug then
+            Ada.Text_IO.Put_Line (Enclosing_Entity & "[" & Image (Line) & "](" & Message & ")");
+         end if;
+      end;
+      procedure Put_Line
+        (Message  : in Element_Action_Type; Enclosing_Entity : String := GNAT.Source_Info.Enclosing_Entity; Line : Positive := GNAT.Source_Info.Line) is
+      begin
+         Put_Line ("<"  & Message'Img & ">" , Enclosing_Entity, Line);
+      end;
+
+
+      procedure Put
+        (Message  : in String;
+         New_Line : in Boolean := True)
+      is begin
+         if Auto_Io_Gen.Options.Debug then
+            if New_Line then
+               Ada.Text_IO.Put_Line (Message);
+            else
+               Ada.Text_IO.Put (Message);
+            end if;
+         end if;
+      end Put;
+   end Debug;
 end Auto_Io_Gen.Build;

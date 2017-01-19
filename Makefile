@@ -10,3 +10,8 @@ test:
 
 install:
 	sudo `which gprinstall` -f -p -r -P auto_io_gen.gpr --prefix=${PREFIX}
+
+gps:
+	gps -P auto_io_gen.gpr&
+	gps -P tests/simple.gpr&
+	

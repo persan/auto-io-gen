@@ -26,9 +26,12 @@ procedure Auto_Io_Gen.Build.Process_Element_Do_Formal_Package
    State   : in out State_Type)
 is
    use Asis;
+   use GNAT.Source_Info;
+   use GNAT;
    Ignore        : Boolean;
    Separate_Body : Boolean;
 begin
+   Debug.Put_Line ("Element =>" & Elements.Element_Kind (Element)'Img & ", State => " & State.Private_State.Label'Img);
 
    case Elements.Element_Kind (Element) is
    when An_Association =>
@@ -40,7 +43,7 @@ begin
          Debug_Put (Element, Ignoring);
          Control := Abandon_Children;
       else
-         Debug_Put (Element, Processing);
+         Debug.Put_line ( Processing);
 
          --  We use a query to get the actual parameter, rather than
          --  waiting until the Asis iterator gets us there - because
@@ -76,7 +79,7 @@ begin
       when A_Defining_Identifier =>
          --  The formal package name.
 
-         Debug_Put (Element, Processing);
+         Debug.Put_line ( Processing);
 
          --  There are no children of this element. The siblings of
          --  this element include the instantiation arguments, which
@@ -84,7 +87,7 @@ begin
          Control := Abandon_Children;
 
       when others =>
-         Debug_Put (Element, Skipping);
+         Debug.Put_line ( Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
 
@@ -93,7 +96,7 @@ begin
    when An_Expression =>
       --  The Generic_Unit_Name; accessed by Text_IO_Child_Name via
       --  the Formal_Package_Declaration, so we don't need to save it.
-      Debug_Put (Element, Processing);
+      Debug.Put_line ( Processing);
 
       --  The children of this element are the identifiers of a
       --  selected component, which we don't want. The siblings
@@ -101,7 +104,7 @@ begin
       Control := Abandon_Children;
 
    when others =>
-      Debug_Put (Element, Skipping);
+      Debug.Put_line ( Skipping);
       Report_Unsupported (State, Element);
       Control := Abandon_Siblings;
    end case;

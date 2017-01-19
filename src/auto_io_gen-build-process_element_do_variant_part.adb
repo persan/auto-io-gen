@@ -27,12 +27,14 @@ procedure Auto_Io_Gen.Build.Process_Element_Do_Variant_Part
 is
    use Asis;
 begin
+      Debug.Put_Line ("Element =>" & Elements.Element_Kind (Element)'Img & ", State => " & State.Private_State.Label'Img);
+
    case Elements.Element_Kind (Element) is
    when A_Declaration =>
       case Elements.Declaration_Kind (Element) is
       when A_Component_Declaration =>
 
-         Debug_Put (Element, Processing);
+         Debug.Put_line ( Processing);
 
          declare
             Component            : Lists.Component_Type;
@@ -75,7 +77,7 @@ begin
          end;
 
       when others =>
-         Debug_Put (Element, Skipping);
+         Debug.Put_line ( Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
       end case;
@@ -83,7 +85,7 @@ begin
    when A_Definition =>
       case Elements.Definition_Kind (Element) is
       when A_Variant =>
-         Debug_Put (Element, Processing);
+         Debug.Put_line ( Processing);
          declare
             Choices  : constant Element_List := Definitions.Variant_Choices (Element);
             Variants : Lists.Variant_Lists.List_Type renames
@@ -108,7 +110,7 @@ begin
          Control := Abandon_Children;
 
       when others =>
-         Debug_Put (Element, Skipping);
+         Debug.Put_line ( Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
       end case;
@@ -116,11 +118,11 @@ begin
    when An_Expression =>
       --  Some expression, containing stuff that we got by query. The
       --  children include identifiers, which we don't need.
-      Debug_Put (Element, Skipping);
+      Debug.Put_line ( Skipping);
       Control := Abandon_Children;
 
    when others =>
-      Debug_Put (Element, Skipping);
+      Debug.Put_line ( Skipping);
       Report_Unsupported (State, Element);
       Control := Abandon_Siblings;
 

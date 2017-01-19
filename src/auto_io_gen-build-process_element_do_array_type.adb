@@ -26,26 +26,26 @@ procedure Auto_Io_Gen.Build.Process_Element_Do_Array_Type
 is
    use Asis;
 begin
-
+   Debug.Put_Line ("Element =>" & Elements.Element_Kind (Element)'Img & ", State => " & State.Private_State.Label'Img);
    case Elements.Element_Kind (Element) is
    when A_Definition =>
       case Elements.Definition_Kind (Element) is
       when A_Component_Definition =>
 
-         Debug_Put (Element, Processing);
+         Debug.Put_line ( Processing);
 
          --  The child of this element is the component type.
          Control := Continue;
 
       when A_Discrete_Subtype_Definition |
          A_Subtype_Indication =>
-         Debug_Put (Element, Processing);
+         Debug.Put_line ( Processing);
 
          --  The child of this element is the index or component type name.
          Control := Continue;
 
       when others =>
-         Debug_Put (Element, Skipping);
+         Debug.Put_line ( Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
       end case;
@@ -58,7 +58,7 @@ begin
          when An_Identifier | A_Selected_Component =>
             --  This is the index or component type name
 
-            Debug_Put (Element, Processing);
+            Debug.Put_line ( Processing);
 
             --  Don't need any children; sibling of index type is
             --  array component type.
@@ -103,19 +103,19 @@ begin
 
          when An_Integer_Literal =>
 
-            Debug_Put (Element, Skipping);
+            Debug.Put_line ( Skipping);
             Report_Unsupported (State, Element, "Arrays with anonymous index type ");
             Control := Abandon_Siblings;
 
          when others =>
-            Debug_Put (Element, Skipping);
+            Debug.Put_line ( Skipping);
             Report_Unsupported (State, Element);
             Control := Abandon_Siblings;
          end case;
       end;
 
    when others =>
-      Debug_Put (Element, Skipping);
+      Debug.Put_line ( Skipping);
 
       Report_Unsupported (State, Element);
       Control := Abandon_Siblings;

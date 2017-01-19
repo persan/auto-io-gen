@@ -26,17 +26,17 @@ procedure Auto_Io_Gen.Build.Process_Element_Do_Component_Definition
 is
    use Asis;
 begin
+   Debug.Put_Line ("Element =>" & Elements.Element_Kind (Element)'Img & ", State => " & State.Private_State.Label'Img);
    case Elements.Element_Kind (Element) is
    when A_Definition =>
       case Elements.Definition_Kind (Element) is
       when A_Subtype_Indication =>
-         Debug_Put (Element, Processing);
-
+         Debug.Put_Line (Processing);
          --  The children of this element include the subtype name.
          Control := Continue;
 
       when others =>
-         Debug_Put (Element, Skipping);
+         Debug.Put_Line (Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Children;
       end case;
@@ -45,7 +45,7 @@ begin
       case Elements.Expression_Kind (Element) is
       when An_Identifier =>
          --  This is the component type name.
-         Debug_Put (Element, Processing);
+         Debug.Put_line ( Processing);
 
          State.Private_State.Current_Component.Type_Name := Element;
 
@@ -81,7 +81,7 @@ begin
 
       when A_Selected_Component =>
          --  This is the component type name.
-         Debug_Put (Element, Processing);
+         Debug.Put_line ( Processing);
 
          State.Private_State.Current_Component.Type_Name := Expressions.Selector (Element);
 
@@ -116,13 +116,13 @@ begin
          end;
 
       when others =>
-         Debug_Put (Element, Skipping);
+         Debug.Put_line ( Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
       end case;
 
    when others =>
-      Debug_Put (Element, Skipping);
+      Debug.Put_line ( Skipping);
       Report_Unsupported (State, Element);
       Control := Abandon_Children;
 

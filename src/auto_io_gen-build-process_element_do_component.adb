@@ -18,20 +18,24 @@
 
 with Asis.Elements;
 with Auto_Io_Gen.Build.Process_Element_Utils; use Auto_Io_Gen.Build.Process_Element_Utils;
+
 procedure Auto_Io_Gen.Build.Process_Element_Do_Component
    (Element : in     Asis.Element;
     Control : in out Asis.Traverse_Control;
     State   : in out State_Type)
 is
    use Asis;
+   use GNAT;
+   use GNAT.Source_Info;
 begin
+   Debug.Put_Line ("Element =>" & Elements.Element_Kind (Element)'Img & ", State => " & State.Private_State.Label'Img);
 
    case Elements.Element_Kind (Element) is
    when A_Defining_Name =>
 
       case Elements.Defining_Name_Kind (Element) is
       when A_Defining_Identifier =>
-         Debug_Put (Element, Processing);
+         Debug.Put_line ( Processing);
 
          State.Private_State.Current_Component.Component_Name := Element;
 
@@ -40,7 +44,7 @@ begin
          Control := Continue;
 
       when others =>
-         Debug_Put (Element, Skipping);
+         Debug.Put_line ( Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
       end case;
@@ -49,7 +53,7 @@ begin
 
       case Elements.Definition_Kind (Element) is
       when A_Component_Definition =>
-         Debug_Put (Element, Processing);
+         Debug.Put_line ( Processing);
 
          --  The children of this element include the component
          --  type name, which we want.
@@ -57,13 +61,13 @@ begin
          State.Private_State.Label := In_Component_Definition;
 
       when others =>
-         Debug_Put (Element, Skipping);
+         Debug.Put_line ( Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
       end case;
 
    when others =>
-      Debug_Put (Element, Skipping);
+      Debug.Put_line ( Skipping);
       Report_Unsupported (State, Element);
       Control := Abandon_Siblings;
 

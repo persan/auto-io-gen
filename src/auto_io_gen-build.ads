@@ -18,6 +18,7 @@
 
 with Asis;
 with Auto_Io_Gen.Lists;
+with GNAT.Source_Info;
 package Auto_Io_Gen.Build is
 --   pragma Elaborate_Body; -- body depends on Asis, but this is circular due to child packages.
 
@@ -118,12 +119,31 @@ private
 
    type Element_Action_Type is (Processing, Skipping, Ignoring);
 
-   procedure Debug_Put (Element : in Asis.Element; Action : in Element_Action_Type);
-   --  If Options.Debug, put an appropriate message to Current_Output
+   package Debug is
+      function Image (Action : in Element_Action_Type; Element : in Asis.Element) return String;
+      function Image (Action : in Element_Action_Type) return String;
+      function Image (Element : in Asis.Element) return String;
+
+      procedure Put (Element : in Asis.Element; Action : in Element_Action_Type);
+      --  If Options.Debug, put an appropriate message to Current_Output
+
+      procedure Put_Line
+        (Message  : in String; Enclosing_Entity : String := GNAT.Source_Info.Enclosing_Entity; Line : Positive := GNAT.Source_Info.Line);
+
+      procedure Put_Line
+        (Message  : in Element_Action_Type; Enclosing_Entity : String := GNAT.Source_Info.Enclosing_Entity; Line : Positive := GNAT.Source_Info.Line);
+
+
+      procedure Put
+        (Message  : in String;
+         New_Line : in Boolean := True);
+      --  if Options.Debug, write Message to Current_Output.
+   end Debug;
+   procedure Debug_Put
+     (Message  : in String;
+      New_Line : in Boolean := True) renames Debug.Put;
 
    procedure Debug_Put
-      (Message  : in String;
-       New_Line : in Boolean := True);
-   --  if Options.Debug, write Message to Current_Output.
+     (Element : in Asis.Element; Action : in Element_Action_Type) renames Debug.Put;
 
 end Auto_Io_Gen.Build;

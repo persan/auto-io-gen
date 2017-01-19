@@ -24,8 +24,11 @@ procedure Auto_Io_Gen.Build.Process_Element_Do_Package
    State   : in out State_Type)
 is
    use Asis;
+   use GNAT;
+   use GNAT.Source_Info;
    Ignore : Boolean;
 begin
+   Debug.Put_Line ("Element =>" & Elements.Element_Kind (Element)'Img & ", State => " & State.Private_State.Label'Img);
 
    State.Private_State.Abandon_Current_Type := False;
 
@@ -35,7 +38,7 @@ begin
      A_Pragma =>
       --  don't need Text_IO
 
-      Debug_Put (Element, Skipping);
+      Debug.Put_Line (Skipping);
 
       Control := Abandon_Children;
 
@@ -43,7 +46,7 @@ begin
       Annotations (Element, Ignore, State.Private_State.Separate_Body);
 
       if Ignore then
-         Debug_Put (Element, Ignoring);
+         Debug.Put_Line (Ignoring);
          Control := Abandon_Children;
 
       else
@@ -73,12 +76,12 @@ begin
 
             --  These don't need Text_IO
 
-            Debug_Put (Element, Skipping);
+            Debug.Put_Line (Skipping);
 
             Control := Abandon_Children;
 
          when A_Formal_Package_Declaration =>
-            Debug_Put (Element, Processing);
+            Debug.Put_Line (Processing);
 
             Lists.Formal_Package_Lists.Add (State.Formal_Package_List, Element);
 
@@ -117,7 +120,7 @@ begin
            A_Private_Type_Declaration |
            A_Private_Extension_Declaration =>
 
-            Debug_Put (Element, Processing);
+            Debug.Put_Line ( Processing);
 
             --  The children of a type declaration include the type
             --  name and components, which we want.
@@ -126,7 +129,7 @@ begin
             State.Private_State.Current_Type := null;
 
          when others =>
-            Debug_Put (Element, Skipping);
+            Debug.Put_Line (Processing);
             Report_Unsupported (State, Element);
             Control := Abandon_Children;
          end case;
@@ -135,12 +138,12 @@ begin
    when A_Defining_Name =>
       --  The package name.
 
-      Debug_Put (Element, Skipping);
+      Debug.Put_Line (Skipping);
 
       Control := Abandon_Children;
 
    when others =>
-      Debug_Put (Element, Skipping);
+      Debug.Put_Line (Skipping);
 
       Report_Unsupported (State, Element);
 

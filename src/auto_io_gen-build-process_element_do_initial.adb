@@ -26,14 +26,16 @@ procedure Auto_Io_Gen.Build.Process_Element_Do_Initial
    State   : in out State_Type)
 is
    use Asis;
+   use GNAT;
 begin
+   Debug.Put_Line ("Element =>" & Elements.Element_Kind (Element)'Img & ", State => " & State.Private_State.Label'Img);
 
    case Elements.Element_Kind (Element) is
    when A_Declaration =>
       case Elements.Declaration_Kind (Element) is
       when A_Package_Declaration |
         A_Generic_Package_Declaration =>
-         Debug_Put (Element, Processing);
+         Debug.Put_line (Processing);
 
          State.Parent_Package                := Element;
          State.Needs_Body                    := False;

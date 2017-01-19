@@ -26,12 +26,13 @@ procedure Auto_Io_Gen.Build.Process_Element_Do_Discriminant_Part
 is
    use Asis;
 begin
+   Debug.Put_Line ("Element =>" & Elements.Element_Kind (Element)'Img & ", State => " & State.Private_State.Label'Img);
    case Elements.Element_Kind (Element) is
    when A_Declaration =>
       case Elements.Declaration_Kind (Element) is
       when A_Discriminant_Specification =>
 
-         Debug_Put (Element, Processing);
+         Debug.Put_line ( Processing);
 
          State.Private_State.Current_Type.Record_Constrained :=
             Not_An_Element = Elements.Element_Kind
@@ -43,7 +44,7 @@ begin
          State.Private_State.Label := In_Discriminant;
 
       when others =>
-         Debug_Put (Element, Skipping);
+         Debug.Put_line ( Skipping);
          --  The current type has not yet been added to
          --  State.Type_List, so we don't need to delete it.
          Report_Unsupported (State, Element);
@@ -56,7 +57,7 @@ begin
          A_Private_Extension_Definition |
          A_Tagged_Private_Type_Definition =>
 
-         Debug_Put (Element, Processing);
+         Debug.Put_line ( Processing);
 
          --  We created a Record_Label descriptor when we processed
          --  the discriminants; now it turns out this is a private
@@ -75,7 +76,7 @@ begin
          case Elements.Type_Kind (Element) is
          when A_Record_Type_Definition =>
 
-            Debug_Put (Element, Processing);
+            Debug.Put_line ( Processing);
 
             --  The children of this element are the components of the
             --  record, which we want.
@@ -83,21 +84,21 @@ begin
             State.Private_State.Label := In_Record_Type;
 
          when others =>
-            Debug_Put (Element, Skipping);
+            Debug.Put_line ( Skipping);
             Report_Unsupported (State, Element);
             Control := Abandon_Siblings;
 
          end case;
 
       when others =>
-         Debug_Put (Element, Skipping);
+         Debug.Put_line ( Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
 
       end case;
 
    when others =>
-      Debug_Put (Element, Skipping);
+      Debug.Put_line ( Skipping);
       Report_Unsupported (State, Element);
       Control := Abandon_Siblings;
 

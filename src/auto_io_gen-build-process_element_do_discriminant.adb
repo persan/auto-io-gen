@@ -26,11 +26,12 @@ procedure Auto_Io_Gen.Build.Process_Element_Do_Discriminant
 is
    use Asis;
 begin
+   Debug.Put_Line ("Element =>" & Elements.Element_Kind (Element)'Img & ", State => " & State.Private_State.Label'Img);
    case Elements.Element_Kind (Element) is
    when A_Defining_Name =>
       case Elements.Defining_Name_Kind (Element) is
       when A_Defining_Identifier =>
-         Debug_Put (Element, Processing);
+         Debug.Put_line ( Processing);
          State.Private_State.Current_Component.Component_Name := Element;
 
          --  There are no children of Defining_Identifiers, but the
@@ -38,7 +39,7 @@ begin
          Control := Continue;
 
       when others =>
-         Debug_Put (Element, Skipping);
+         Debug.Put_line ( Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
       end case;
@@ -47,7 +48,7 @@ begin
       case Elements.Expression_Kind (Element) is
       when An_Identifier =>
          --  The discriminant type.
-         Debug_Put (Element, Processing);
+         Debug.Put_line ( Processing);
 
          Find_Defining_Package
             (State,
@@ -77,7 +78,7 @@ begin
          Control := Abandon_Siblings;
 
       when A_Selected_Component =>
-         Debug_Put (Element, Processing);
+         Debug.Put_line ( Processing);
 
          State.Private_State.Current_Component.Type_Name := Expressions.Selector (Element);
 
@@ -109,13 +110,13 @@ begin
          Control := Abandon_Siblings;
 
       when others =>
-         Debug_Put (Element, Skipping);
+         Debug.Put_line ( Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
       end case;
 
    when others =>
-      Debug_Put (Element, Skipping);
+      Debug.Put_line ( Skipping);
       Report_Unsupported (State, Element);
       Control := Abandon_Children;
 
