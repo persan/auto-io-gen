@@ -7,4 +7,11 @@ project Simple is
    for Exec_Dir use "bin";
    for Main use ("simple-main.adb");
 
+   package Compiler is
+      for Driver ("md") use "";
+      for Driver ("python") use "";
+      for Default_Switches ("ada") use ("-gnatwa", "-gnat12", "-gnata", "-g", "-fstack-check", "-gnatf", "-gnatQ");
+   end Compiler;
+
+
 end Simple;
