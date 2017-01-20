@@ -147,7 +147,7 @@ begin
                State.Needs_Body := True;
             end if;
 
-               Add_Spec_With (State, "SAL.Gen_Array_Text_IO", State.Private_State.Current_Type.Invisible);
+               Add_Spec_With (State, "Auto_Text_Io.Gen_Array_Text_IO", State.Private_State.Current_Type.Invisible);
 
             --  The children of this element include the index and
             --  component types of the array, which we want.

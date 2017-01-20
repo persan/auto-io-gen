@@ -164,7 +164,7 @@ package body Auto_Io_Gen.Generate is
          end loop;
 
          if  Needs_Text_IO_Utils then
-            Put_Line (File, "with SAL.Text_IO_Utils; use SAL.Text_IO_Utils;");
+            Put_Line (File, "with Auto_Text_Io.Text_IO_Utils; use Auto_Text_Io.Text_IO_Utils;");
          end if;
 
          Put_Line (File, "package body " & Child_Package_Name & " is");
@@ -370,7 +370,7 @@ package body Auto_Io_Gen.Generate is
       Type_Name    : constant String := Asis.Aux.Name (Type_Descriptor.Type_Name);
       Package_Name : constant String := Instantiated_Package_Name (Type_Name);
    begin
-      Indent (File, "package " & Package_Name & " is new SAL.Gen_Array_Text_IO.");
+      Indent (File, "package " & Package_Name & " is new Auto_Text_Io.Gen_Array_Text_IO.");
 
 
       case Lists.Array_Labels_Type'(Type_Descriptor.Label) is
