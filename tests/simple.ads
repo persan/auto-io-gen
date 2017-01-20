@@ -1,15 +1,24 @@
 package Simple is
-   type Integer_Type is range 0 .. 10 with Default_Value => 0;
+   type Integer_Type is range 0 .. 10;
 
-   type Mod_Type is mod 8 with Default_Value => 0;
+   type Mod_Type is mod 8;
 
-   type Enum_Type is (E1, E2, E3) with
-     Default_Value => E1,
-     Annotate => Auto_Io_Ignore;
+   type Enum_Type is (E1, E2, E3);
 
-   type Float_Type is digits 5 range 1.0 .. 60.0 with Default_Value => 5.0;
+   type Float_Type is digits 5 range 1.0 .. 60.0;
 
-   type Fixed_Type is delta 0.1 range 0.0 .. 1.0 with Default_Value => 0.0;
+   type Fixed_Type is delta 0.1 range 0.0 .. 1.0;
+--     type Integer_Type is range 0 .. 10 with Default_Value => 0;
+--
+--     type Mod_Type is mod 8 with Default_Value => 0;
+--
+--     type Enum_Type is (E1, E2, E3) with
+--       Default_Value => E1,
+--       Annotate => Auto_Io_Ignore;
+--
+--     type Float_Type is digits 5 range 1.0 .. 60.0 with Default_Value => 5.0;
+--
+--     type Fixed_Type is delta 0.1 range 0.0 .. 1.0 with Default_Value => 0.0;
 
 
    type Simple_Struct is record
@@ -67,7 +76,7 @@ package Simple is
 
       Duration_Field  : Character := ' ';
 
-      Integer_Type_Field : Integer_Type ;
+      Integer_Type_Field : Integer_Type := 0;
    end record;
 
    type Standard_Types_Array is array (Natural range <>) of Standard_Types_Record;

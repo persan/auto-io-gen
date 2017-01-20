@@ -1,4 +1,3 @@
-with "../auto_io_gen.gpr";
 with "../auto_text_io.gpr";
 with "../auto_image.gpr";
 project Simple is
