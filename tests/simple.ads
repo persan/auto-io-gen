@@ -67,12 +67,12 @@ package Simple is
       Long_Long_Float_Field : Long_Long_Float := 0.0;
 
       Character_Field : Character := ' ';
-      --        Wide_Character_Field : Wide_Character := ' ';
-      --        Wide_Wide_Character_Field : Wide_Wide_Character := ' ';
+      Wide_Character_Field : Wide_Character := ' ';
+      Wide_Wide_Character_Field : Wide_Wide_Character := ' ';
 
       String_Field    : String (1 .. 5) := (others => '1');
-      --        Wide_String_Field : Wide_String (1 .. 10) := (others => '2');
-      --        Wide_Wide_String_Field : Wide_Wide_String (1 .. 20) := (others => '1');
+      Wide_String_Field : Wide_String (1 .. 10) := (others => '2');
+      Wide_Wide_String_Field : Wide_Wide_String (1 .. 20) := (others => '1');
 
       Duration_Field  : Character := ' ';
 

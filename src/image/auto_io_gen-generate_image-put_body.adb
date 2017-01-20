@@ -101,10 +101,10 @@ package body Auto_Io_Gen.Generate_Image.Put_Body is
          --  Finish last component put
          Indent_Line
            (File,
-            "Put (File, ','); if not Single_Line_Record then New_Line (File); end if;");
+            "Put (File, Character'(',')); if not Single_Line_Record then New_Line (File); end if;");
 
          --  Start current component put
-         Indent (File, "Put (File, ' ');");
+         Indent (File, "Put (File, Character'(' '));");
 
       else
          Body_First := False;
@@ -508,7 +508,7 @@ package body Auto_Io_Gen.Generate_Image.Put_Body is
       if Type_Descriptor.Separate_Body then
          Indent_Line (File, "renames " & Separate_Body_Name & ";");
       else
-         Indent_Line (File, "Put (File, ""("");");
+         Indent_Line (File, "Put (File, String'(""(""));");
 
          Body_First := True;
          Print_Components (Type_Descriptor.Record_Discriminants);
@@ -518,9 +518,9 @@ package body Auto_Io_Gen.Generate_Image.Put_Body is
                --  Finish last discriminant put
                Indent_Line
                  (File,
-                  "Put (File, ','); if not Single_Line_Record then New_Line (File); end if;");
+                  "Put (File, Character'(',')); if not Single_Line_Record then New_Line (File); end if;");
                --  Start components put
-               Indent_Line (File, "Put (File, ' ');");
+               Indent_Line (File, "Put (File, Character'(' '));");
 
             else
                Body_First := False;
@@ -532,7 +532,7 @@ package body Auto_Io_Gen.Generate_Image.Put_Body is
             Print_Variant_Part;
          end if;
 
-         Indent_Line (File, "Put (File, "")"");");
+         Indent_Line (File, "Put (File, String'("")""));");
          Indent_Level := Indent_Level - 1;
          Indent_Line (File, "end Put;");
       end if;

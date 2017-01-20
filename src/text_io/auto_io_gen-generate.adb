@@ -488,6 +488,14 @@ package body Auto_Io_Gen.Generate is
 
       elsif Type_Name = "string" then
          return "Auto_Text_Io.Text_IO";
+      elsif Type_Name = "wide_string" then
+         return "Auto_Text_Io.Wide_Text_IO";
+      elsif Type_Name = "wide_wide_string" then
+         return "Auto_Text_Io.Wide_Wide_Text_IO";
+      elsif Type_Name = "wide_character" then
+         return "Auto_Text_Io.Wide_Text_IO";
+      elsif Type_Name = "wide_wide_character" then
+         return "Auto_Text_Io.Wide_Wide_Text_IO";
       else
          Ada.Text_IO.Put_Line (Ada.Text_IO.Standard_Error, "Unsuported type:  " & Type_Name);
          raise Not_Supported with Type_Name;
