@@ -1,3 +1,5 @@
+with Ada.Strings.UTF_Encoding.Wide_Wide_Strings;
+with Ada.Strings.UTF_Encoding.Wide_Strings;
 with Ada.Wide_Characters;
 package Auto_Image.Standard is
 
@@ -14,8 +16,8 @@ package Auto_Image.Standard is
 
    function Image (Item  : String) return String is ('"' & Item & '"');
 
-   --   function Image (Item  : Wide_String) return String is (Ada.Wide_Characters.);
-   --   function Image (Item  : Wide_Wide_String) return String is (Item);
+   function Image (Item  : Wide_String) return String is (Ada.Strings.UTF_Encoding.Wide_Strings.Encode (Item));
+   function Image (Item  : Wide_Wide_String) return String is (Ada.Strings.UTF_Encoding.Wide_Wide_Strings.Encode (Item));
 
    function Image (Item  : Duration) return String is (Item'Img);
 
