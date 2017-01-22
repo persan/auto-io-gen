@@ -1,8 +1,0 @@
-testing SAL.Memory_Streams.Bounded
-write => (1, 2)
-Got => ( 1,  0,  0,  0,  2,  0,  0,  0)
-
-read => 
-( 1,  2)
-
-done
