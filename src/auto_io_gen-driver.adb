@@ -24,6 +24,7 @@ with Ada.Strings.Maps;
 with Ada.Strings.Wide_Unbounded;
 with Ada.Text_IO;      use Ada.Text_IO;
 with Ada.Wide_Text_IO;
+with GNAT.Command_Line;
 with Asis.Ada_Environments;
 with Asis.Aux;
 with Asis.Compilation_Units;
@@ -214,6 +215,14 @@ exception
          Put_Line ("ASIS Error");
          Ada.Wide_Text_IO.Put_Line (Asis.Implementation.Diagnosis);
       end if;
+
+   when GNAT.Command_Line.Exit_From_Command_Line =>
+      New_Line;
+      Put_Line ("Auto_Io_Gen: illegal command line. Run with -d option for more info.");
+
+      Auto_Io_Gen.Options.Clean_Up;
+
+      Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
 
    when E : others =>
       New_Line;

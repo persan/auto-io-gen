@@ -53,6 +53,9 @@ package body Auto_Io_Gen.Options is
    Overwrite_Tree : aliased Boolean := True;
    --  Should an existing tree file be overwritten
 
+   Parser_Was_Set_Up : Boolean := False;
+   -- Auxiliary flag for avoiding double execution of Setup_Parser
+
    Reuse_Tree : aliased Boolean := False;
    --  Should an existing tree file be reused
 
@@ -131,20 +134,24 @@ package body Auto_Io_Gen.Options is
    procedure Setup_Parser is
       use GNAT.Command_Line;
    begin
+      if Parser_Was_Set_Up then
+         return;
+      end if;
+
       Define_Switch (Command_Line_Parser, Debug'Access, "-d", "--debug", "debug output");
       Define_Switch (Command_Line_Parser, Verbose'Access, "-v", "--verbose", "verbose output");
       Define_Switch (Command_Line_Parser, Overwrite_Child'Access, "-f", "", "Replace existing files");
-      Define_Switch (Command_Line_Parser, Quiet'Access, "-q", "", "Quite mode");
-      Define_Switch (Command_Line_Parser, Quiet'Access, "-o", "", "Set Output Directory");
+      Define_Switch (Command_Line_Parser, Quiet'Access, "-q", "", "Quiet mode");
       Define_Switch (Command_Line_Parser, Create_Output_Folders'Access, "-o", "", "Set Output Directory");
       Define_Switch (Command_Line_Parser, Project_Arg'Access, "-P", "", "Use project file");
       Define_Switch (Command_Line_Parser, Overwrite_Child'Access, "-t", "", "overwrite the existing tree file");
       Define_Switch (Command_Line_Parser, Delete_Tree'Access, "-k", "", "do not remove the GNAT tree file", Value => False);
       Define_Switch (Command_Line_Parser, Reuse_Tree'Access, "-r", "", "reuse the GNAT tree file instead of re-creating it (-r also implies -k)");
-      Define_Switch (Command_Line_Parser, Indent'Access, "-i=", "", "(N in 1 .. 9) number of spaces used for identation in generated code.");
+      Define_Switch (Command_Line_Parser, Indent'Access, "-i=", "", "(N in 1 .. 9) number of spaces used for indentation in generated code.");
       Define_Switch (Command_Line_Parser, Trace_Exceptions'Access, "-T", "", "Trace all exceptions.");
       Define_Switch (Command_Line_Parser, Create_Output_Folders'Access, "-p", "", "Create Output Folders.");
 
+      Parser_Was_Set_Up := True;
    end;
 
    procedure Check_Parameters
