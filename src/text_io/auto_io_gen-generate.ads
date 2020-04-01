@@ -45,9 +45,9 @@ private
    --  determined by Options.Ada_83.
 
    function Component_Type_Name
-      (Type_Element         : in Asis.Element;
-       Type_Package_Element : in Asis.Element)
-      return String;
+     (Type_Element         : in Asis.Element;
+      Type_Package_Element : in Asis.Element)
+       return String;
    --  Type_Element must be from Type_Descriptor_Type.Array_Component
    --  or Component_Type.Type_Name; Type_Package_Element must be from
    --  corresponding package element. Return appropriate type name;

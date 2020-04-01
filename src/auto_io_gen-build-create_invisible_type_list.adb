@@ -41,8 +41,8 @@ begin
             when Asis.A_Declaration =>
                case Asis.Elements.Declaration_Kind (Public_Elements (I)) is
                when Asis.An_Ordinary_Type_Declaration |
-                 Asis.A_Private_Type_Declaration |
-                 Asis.A_Private_Extension_Declaration =>
+                    Asis.A_Private_Type_Declaration |
+                    Asis.A_Private_Extension_Declaration =>
 
                   declare
                      Name : constant String := To_String

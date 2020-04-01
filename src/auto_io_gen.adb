@@ -64,7 +64,7 @@ package body Auto_Io_Gen is
    function Text_IO_Child_Name
      (Package_Declaration : in Asis.Element;
       Label               : in Child_Name_Label_Type := Expression)
-     return String
+      return String
    is
       use Asis;
 
@@ -83,23 +83,23 @@ package body Auto_Io_Gen is
       function Check_Name (Package_Name : in String) return String
       is begin
          if Package_Name'Length >= 4 and then
-            Package_Name (Package_Name'First .. Package_Name'First + 3) = "Ada." then
+           Package_Name (Package_Name'First .. Package_Name'First + 3) = "Ada." then
             return Subst_Underscores (Package_Name) & "_Text_IO";
 
          elsif Package_Name'Length = 10 and then
-            Package_Name = "Interfaces" then
+           Package_Name = "Interfaces" then
             return "Interfaces_Text_IO";
 
          elsif Package_Name'Length > 10 and then
-            Package_Name (Package_Name'First .. Package_Name'First + 10) = "Interfaces." then
+           Package_Name (Package_Name'First .. Package_Name'First + 10) = "Interfaces." then
             return Subst_Underscores (Package_Name) & "_Text_IO";
 
          elsif Package_Name'Length = 6 and then
-            Package_Name = "System" then
+           Package_Name = "System" then
             return "System_Text_IO";
 
          elsif Package_Name'Length > 6 and then
-            Package_Name (Package_Name'First .. Package_Name'First + 6) = "System." then
+           Package_Name (Package_Name'First .. Package_Name'First + 6) = "System." then
             return Subst_Underscores (Package_Name) & "_Text_IO";
 
          else
@@ -199,7 +199,7 @@ package body Auto_Io_Gen is
             return Formal_Text_IO_Name (Package_Declaration);
 
          when Generic_Unit |
-           With_Clause =>
+              With_Clause =>
             return Aux.Name (Package_Declaration) & ".Gen_Text_IO";
 
          end case;
@@ -219,12 +219,12 @@ package body Auto_Io_Gen is
    begin
 
       --  Indent 0 means column 1
-      Set_Col (File, 1 + Count(Auto_Io_Gen.Options.Indent) * (Count(Indent_Level) - 1));
+      Set_Col (File, 1 + Count (Auto_Io_Gen.Options.Indent) * (Count (Indent_Level) - 1));
    end Set_Indent;
-   function Ada2file (Name: String) return String is
+   function Ada2file (Name : String) return String is
       Map : constant Ada.Strings.Maps.Character_Mapping :=
               Ada.Strings.Maps.To_Mapping ("ABCDEFGHIJKLMNOPQRSTUVWXYZ.",
-              "abcdefghilklmnopqrstuvwxyz-");
+                                           "abcdefghilklmnopqrstuvwxyz-");
    begin
       return Ada.Strings.Fixed.Translate (Name, Mapping => Map);
    end;

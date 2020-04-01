@@ -47,7 +47,7 @@ package Auto_Io_Gen is
    function Text_IO_Child_Name
      (Package_Declaration : in Asis.Element;
       Label               : in Child_Name_Label_Type := Expression)
-     return String;
+      return String;
    --  Return appropriate Text_IO child package name.
    --  Package_Declaration must be A_Package_Declaration,
    --  A_Generic_Package_Declaration, or A_Formal_Package_Declaration.

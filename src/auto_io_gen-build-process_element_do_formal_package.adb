@@ -41,7 +41,7 @@ begin
          Debug_Put (Element, Ignoring);
          Control := Abandon_Children;
       else
-         Debug.Put_line ( Processing);
+         Debug.Put_Line ( Processing);
 
          --  We use a query to get the actual parameter, rather than
          --  waiting until the Asis iterator gets us there - because
@@ -57,7 +57,7 @@ begin
          declare
             Actual_Parameter    : constant Asis.Element := Expressions.Actual_Parameter (Element);
             Package_Declaration : constant Asis.Element :=
-              Lists.Find_Package (State.Formal_Package_List, Aux.Name (Actual_Parameter));
+                                    Lists.Find_Package (State.Formal_Package_List, Aux.Name (Actual_Parameter));
          begin
             if not Elements.Is_Nil (Package_Declaration) then
                Lists.Element_Lists.Add
@@ -77,7 +77,7 @@ begin
       when A_Defining_Identifier =>
          --  The formal package name.
 
-         Debug.Put_line ( Processing);
+         Debug.Put_Line ( Processing);
 
          --  There are no children of this element. The siblings of
          --  this element include the instantiation arguments, which
@@ -85,7 +85,7 @@ begin
          Control := Abandon_Children;
 
       when others =>
-         Debug.Put_line ( Skipping);
+         Debug.Put_Line ( Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
 
@@ -94,7 +94,7 @@ begin
    when An_Expression =>
       --  The Generic_Unit_Name; accessed by Text_IO_Child_Name via
       --  the Formal_Package_Declaration, so we don't need to save it.
-      Debug.Put_line ( Processing);
+      Debug.Put_Line ( Processing);
 
       --  The children of this element are the identifiers of a
       --  selected component, which we don't want. The siblings
@@ -102,7 +102,7 @@ begin
       Control := Abandon_Children;
 
    when others =>
-      Debug.Put_line ( Skipping);
+      Debug.Put_Line ( Skipping);
       Report_Unsupported (State, Element);
       Control := Abandon_Siblings;
    end case;

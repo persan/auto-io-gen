@@ -20,9 +20,9 @@ with Asis.Declarations;
 with Asis.Elements;
 with Auto_Io_Gen.Build.Process_Element_Utils; use Auto_Io_Gen.Build.Process_Element_Utils;
 procedure Auto_Io_Gen.Build.Process_Element_Do_Discriminant_Part
-   (Element : in     Asis.Element;
-    Control : in out Asis.Traverse_Control;
-    State   : in out State_Type)
+  (Element : in     Asis.Element;
+   Control : in out Asis.Traverse_Control;
+   State   : in out State_Type)
 is
    use Asis;
 begin
@@ -32,11 +32,11 @@ begin
       case Elements.Declaration_Kind (Element) is
       when A_Discriminant_Specification =>
 
-         Debug.Put_line ( Processing);
+         Debug.Put_Line ( Processing);
 
          State.Private_State.Current_Type.Record_Constrained :=
-            Not_An_Element = Elements.Element_Kind
-            (Declarations.Initialization_Expression (Element));
+           Not_An_Element = Elements.Element_Kind
+             (Declarations.Initialization_Expression (Element));
 
          --  The children of discriminants include the discriminant
          --  name and type name, which we want.
@@ -44,7 +44,7 @@ begin
          State.Private_State.Label := In_Discriminant;
 
       when others =>
-         Debug.Put_line ( Skipping);
+         Debug.Put_Line ( Skipping);
          --  The current type has not yet been added to
          --  State.Type_List, so we don't need to delete it.
          Report_Unsupported (State, Element);
@@ -54,17 +54,17 @@ begin
    when A_Definition =>
       case Elements.Definition_Kind (Element) is
       when A_Private_Type_Definition |
-         A_Private_Extension_Definition |
-         A_Tagged_Private_Type_Definition =>
+           A_Private_Extension_Definition |
+           A_Tagged_Private_Type_Definition =>
 
-         Debug.Put_line ( Processing);
+         Debug.Put_Line ( Processing);
 
          --  We created a Record_Label descriptor when we processed
          --  the discriminants; now it turns out this is a private
          --  type, so put it on the private type tree.
          Lists.Type_Iterator_Trees.Add
-            (State.Private_State.Private_Type_Tree,
-             Lists.Type_Descriptor_Lists.Last (State.Type_List));
+           (State.Private_State.Private_Type_Tree,
+            Lists.Type_Descriptor_Lists.Last (State.Type_List));
 
          --  There are no children or siblings of this element; we'll
          --  get the components of the record when we process the full
@@ -76,7 +76,7 @@ begin
          case Elements.Type_Kind (Element) is
          when A_Record_Type_Definition =>
 
-            Debug.Put_line ( Processing);
+            Debug.Put_Line ( Processing);
 
             --  The children of this element are the components of the
             --  record, which we want.
@@ -84,21 +84,21 @@ begin
             State.Private_State.Label := In_Record_Type;
 
          when others =>
-            Debug.Put_line ( Skipping);
+            Debug.Put_Line ( Skipping);
             Report_Unsupported (State, Element);
             Control := Abandon_Siblings;
 
          end case;
 
       when others =>
-         Debug.Put_line ( Skipping);
+         Debug.Put_Line ( Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
 
       end case;
 
    when others =>
-      Debug.Put_line ( Skipping);
+      Debug.Put_Line ( Skipping);
       Report_Unsupported (State, Element);
       Control := Abandon_Siblings;
 

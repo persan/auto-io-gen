@@ -20,9 +20,9 @@ with Asis.Elements;
 with Asis.Expressions;
 with Auto_Io_Gen.Build.Process_Element_Utils; use Auto_Io_Gen.Build.Process_Element_Utils;
 procedure Auto_Io_Gen.Build.Process_Element_Do_Component_Definition
-   (Element : in     Asis.Element;
-    Control : in out Asis.Traverse_Control;
-    State   : in out State_Type)
+  (Element : in     Asis.Element;
+   Control : in out Asis.Traverse_Control;
+   State   : in out State_Type)
 is
    use Asis;
 begin
@@ -45,15 +45,15 @@ begin
       case Elements.Expression_Kind (Element) is
       when An_Identifier =>
          --  This is the component type name.
-         Debug.Put_line ( Processing);
+         Debug.Put_Line ( Processing);
 
          State.Private_State.Current_Component.Type_Name := Element;
 
          begin
             Find_Defining_Package
-               (State,
-                Element,
-                Result_Package => State.Private_State.Current_Component.Type_Package);
+              (State,
+               Element,
+               Result_Package => State.Private_State.Current_Component.Type_Package);
 
             State.Private_State.Current_Component.Scalar := Is_Scalar (Element);
 
@@ -66,30 +66,30 @@ begin
               (not State.Private_State.Current_Component.Scalar);
 
             Lists.Component_Lists.Insert_Tail
-               (State.Private_State.Current_Type.Record_Components,
-                State.Private_State.Current_Component);
+              (State.Private_State.Current_Type.Record_Components,
+               State.Private_State.Current_Component);
 
             --  No children of this element. The siblings are
             --  constraints; we don't want to see them.
             Control := Abandon_Siblings;
 
          exception
-         when Not_Supported =>
-            Report_Unsupported (State, Element, "Record components of this type ");
-            Control := Abandon_Siblings;
+            when Not_Supported =>
+               Report_Unsupported (State, Element, "Record components of this type ");
+               Control := Abandon_Siblings;
          end;
 
       when A_Selected_Component =>
          --  This is the component type name.
-         Debug.Put_line ( Processing);
+         Debug.Put_Line ( Processing);
 
          State.Private_State.Current_Component.Type_Name := Expressions.Selector (Element);
 
          begin
             Find_Defining_Package
-               (State,
-                Element,
-                Result_Package  => State.Private_State.Current_Component.Type_Package);
+              (State,
+               Element,
+               Result_Package  => State.Private_State.Current_Component.Type_Package);
 
             State.Private_State.Current_Component.Scalar :=
               Is_Scalar (State.Private_State.Current_Component.Type_Name);
@@ -97,12 +97,12 @@ begin
             State.Private_State.Current_Component.Invisible := False;
 
             State.Private_State.Current_Type.Record_Structured_Components :=
-               State.Private_State.Current_Type.Record_Structured_Components or
-               (not State.Private_State.Current_Component.Scalar);
+              State.Private_State.Current_Type.Record_Structured_Components or
+              (not State.Private_State.Current_Component.Scalar);
 
             Lists.Component_Lists.Insert_Tail
-               (State.Private_State.Current_Type.Record_Components,
-                State.Private_State.Current_Component);
+              (State.Private_State.Current_Type.Record_Components,
+               State.Private_State.Current_Component);
 
             --  The children of this element are the individual
             --  identifiers in the selected component; we don't need
@@ -110,19 +110,19 @@ begin
             --  constraints; we don't want to see them either.
             Control := Abandon_Siblings;
          exception
-         when Not_Supported =>
-            Report_Unsupported (State, Element, "Record components of this type ");
-            Control := Abandon_Siblings;
+            when Not_Supported =>
+               Report_Unsupported (State, Element, "Record components of this type ");
+               Control := Abandon_Siblings;
          end;
 
       when others =>
-         Debug.Put_line ( Skipping);
+         Debug.Put_Line ( Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
       end case;
 
    when others =>
-      Debug.Put_line ( Skipping);
+      Debug.Put_Line ( Skipping);
       Report_Unsupported (State, Element);
       Control := Abandon_Children;
 

@@ -20,9 +20,9 @@ with Asis.Definitions;
 with Asis.Elements;
 with Auto_Io_Gen.Build.Process_Element_Utils; use Auto_Io_Gen.Build.Process_Element_Utils;
 procedure Auto_Io_Gen.Build.Process_Element_Do_Record_Type
-   (Element : in     Asis.Element;
-    Control : in out Asis.Traverse_Control;
-    State   : in out State_Type)
+  (Element : in     Asis.Element;
+   Control : in out Asis.Traverse_Control;
+   State   : in out State_Type)
 is
    use Asis;
 begin
@@ -32,7 +32,7 @@ begin
       case Elements.Declaration_Kind (Element) is
       when A_Component_Declaration =>
 
-         Debug.Put_line ( Processing);
+         Debug.Put_Line ( Processing);
 
          --  The children of components include the component
          --  name and type name, which we want.
@@ -40,7 +40,7 @@ begin
          State.Private_State.Label := In_Component;
 
       when others =>
-         Debug.Put_line ( Skipping);
+         Debug.Put_Line ( Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
       end case;
@@ -49,7 +49,7 @@ begin
       case Elements.Definition_Kind (Element) is
       when A_Record_Definition =>
 
-         Debug.Put_line ( Processing);
+         Debug.Put_Line ( Processing);
 
          --  The children of this element are the components of
          --  the record, which we want.
@@ -57,7 +57,7 @@ begin
 
       when A_Subtype_Indication =>
 
-         Debug.Put_line ( Skipping);
+         Debug.Put_Line ( Skipping);
 
          --  This is a discriminant association for a derived type.
          --  The children of this element are the discriminants, which
@@ -66,7 +66,7 @@ begin
          Control := Abandon_Children;
 
       when A_Variant_Part =>
-         Debug.Put_line ( Processing);
+         Debug.Put_Line ( Processing);
 
          State.Private_State.Current_Type.Record_Variant_Part.Discriminant :=
            Definitions.Discriminant_Direct_Name (Element);
@@ -78,14 +78,14 @@ begin
          State.Private_State.Label := In_Variant_Part;
 
       when others =>
-         Debug.Put_line ( Skipping);
+         Debug.Put_Line ( Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
 
       end case;
 
    when others =>
-      Debug.Put_line ( Skipping);
+      Debug.Put_Line ( Skipping);
       Report_Unsupported (State, Element);
       Control := Abandon_Siblings;
 

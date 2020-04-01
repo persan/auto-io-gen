@@ -28,38 +28,38 @@ package body Auto_Io_Gen.Generate.Get_Body is
    Body_First : Boolean := True; -- Shared between printing discriminants and components.
 
    procedure Generate_Discriminant_Declare
-      (File         : in Ada.Text_IO.File_Type;
-       Discriminant : in Auto_Io_Gen.Lists.Component_Type);
+     (File         : in Ada.Text_IO.File_Type;
+      Discriminant : in Auto_Io_Gen.Lists.Component_Type);
    --  Generate body code to declare a local temp for one discriminant.
 
    procedure Generate_Discriminant_Get
-      (File         : in Ada.Text_IO.File_Type;
-       Discriminant : in Auto_Io_Gen.Lists.Component_Type);
+     (File         : in Ada.Text_IO.File_Type;
+      Discriminant : in Auto_Io_Gen.Lists.Component_Type);
    --  Generate body code to get one discriminant into a local temp.
 
    procedure Generate_Discriminant_Compare
-      (File         : in Ada.Text_IO.File_Type;
-       Discriminant : in Auto_Io_Gen.Lists.Component_Type);
+     (File         : in Ada.Text_IO.File_Type;
+      Discriminant : in Auto_Io_Gen.Lists.Component_Type);
    --  Generate body code to compare one discriminant.
 
    procedure Generate_Component_Temp_Get
-      (File      : in Ada.Text_IO.File_Type;
-       Component : in Auto_Io_Gen.Lists.Component_Type);
+     (File      : in Ada.Text_IO.File_Type;
+      Component : in Auto_Io_Gen.Lists.Component_Type);
    --  Generate body code to get one component into Temp_Item.
 
    procedure Generate_Derived_Array
-      (File            : in Ada.Text_IO.File_Type;
-       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
+     (File            : in Ada.Text_IO.File_Type;
+      Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
    --  Generate body code for all Get subprograms for a derived array type.
 
    procedure Generate_Record
-      (File            : in Ada.Text_IO.File_Type;
-       Type_Descriptor : in Auto_Io_Gen.Lists.Record_Type_Descriptor_Type);
+     (File            : in Ada.Text_IO.File_Type;
+      Type_Descriptor : in Auto_Io_Gen.Lists.Record_Type_Descriptor_Type);
    --  Generate body code for all Get subprograms for a record type.
 
    procedure Generate_Private_Array_Wrapper
-      (File            : in Ada.Text_IO.File_Type;
-       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
+     (File            : in Ada.Text_IO.File_Type;
+      Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
    --  Generate body code for all Put subprograms in the public child
    --  for a private array type.
 
@@ -104,8 +104,8 @@ package body Auto_Io_Gen.Generate.Get_Body is
    end Generate;
 
    procedure Generate_Component_Temp_Get
-      (File      : in Ada.Text_IO.File_Type;
-       Component : in Auto_Io_Gen.Lists.Component_Type)
+     (File      : in Ada.Text_IO.File_Type;
+      Component : in Auto_Io_Gen.Lists.Component_Type)
    is
       use Ada.Characters.Handling;
 
@@ -124,8 +124,8 @@ package body Auto_Io_Gen.Generate.Get_Body is
       end if;
 
       Indent_Line
-         (File,
-          "if Named_Association_Record then Check (File, """ & Component_Name & " => ""); end if;");
+        (File,
+         "if Named_Association_Record then Check (File, """ & Component_Name & " => ""); end if;");
 
       if Asis.Elements.Is_Nil (Component.Type_Package) then
          if Component.Invisible then
@@ -149,8 +149,8 @@ package body Auto_Io_Gen.Generate.Get_Body is
    end Generate_Component_Temp_Get;
 
    procedure Generate_Derived_Array
-      (File            : in Ada.Text_IO.File_Type;
-       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
+     (File            : in Ada.Text_IO.File_Type;
+      Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
    is begin
       Indent_Line (File, "procedure Get");
       Indent_Level := Indent_Level + 1;
@@ -225,8 +225,8 @@ package body Auto_Io_Gen.Generate.Get_Body is
    end Generate_Derived_Array;
 
    procedure Generate_Discriminant_Declare
-      (File         : in Ada.Text_IO.File_Type;
-       Discriminant : in Auto_Io_Gen.Lists.Component_Type)
+     (File         : in Ada.Text_IO.File_Type;
+      Discriminant : in Auto_Io_Gen.Lists.Component_Type)
    is
       use Asis.Aux;
    begin
@@ -242,8 +242,8 @@ package body Auto_Io_Gen.Generate.Get_Body is
    end Generate_Discriminant_Declare;
 
    procedure Generate_Discriminant_Get
-      (File         : in Ada.Text_IO.File_Type;
-       Discriminant : in Auto_Io_Gen.Lists.Component_Type)
+     (File         : in Ada.Text_IO.File_Type;
+      Discriminant : in Auto_Io_Gen.Lists.Component_Type)
    is
       Discriminant_Name : constant String := Asis.Aux.Name (Discriminant.Component_Name);
    begin
@@ -259,8 +259,8 @@ package body Auto_Io_Gen.Generate.Get_Body is
       end if;
 
       Indent_Line
-         (File,
-          "if Named_Association_Record then Check (File, """ & Discriminant_Name & " => ""); end if;");
+        (File,
+         "if Named_Association_Record then Check (File, """ & Discriminant_Name & " => ""); end if;");
 
       if not Asis.Elements.Is_Nil (Discriminant.Type_Package) then
          Indent (File, Text_IO_Child_Name (Discriminant.Type_Package) & '.');
@@ -271,8 +271,8 @@ package body Auto_Io_Gen.Generate.Get_Body is
    end Generate_Discriminant_Get;
 
    procedure Generate_Discriminant_Compare
-      (File         : in Ada.Text_IO.File_Type;
-       Discriminant : in Auto_Io_Gen.Lists.Component_Type)
+     (File         : in Ada.Text_IO.File_Type;
+      Discriminant : in Auto_Io_Gen.Lists.Component_Type)
    is
       use Asis.Aux;
       use type Asis.Element_Kinds;
@@ -301,8 +301,8 @@ package body Auto_Io_Gen.Generate.Get_Body is
    end Generate_Discriminant_Compare;
 
    procedure Generate_Private_Array_Wrapper
-      (File            : in Ada.Text_IO.File_Type;
-       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
+     (File            : in Ada.Text_IO.File_Type;
+      Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
    is
       Package_Name : constant String := Instantiated_Package_Name (Asis.Aux.Name (Type_Descriptor.Type_Name));
    begin
@@ -383,8 +383,8 @@ package body Auto_Io_Gen.Generate.Get_Body is
    end Generate_Private_Array_Wrapper;
 
    procedure Generate_Record
-      (File            : in Ada.Text_IO.File_Type;
-       Type_Descriptor : in Auto_Io_Gen.Lists.Record_Type_Descriptor_Type)
+     (File            : in Ada.Text_IO.File_Type;
+      Type_Descriptor : in Auto_Io_Gen.Lists.Record_Type_Descriptor_Type)
    is
       Separate_Body_Name : constant String := "Get_" & Root_Type_Name (Asis.Aux.Name (Type_Descriptor.Type_Name));
 
@@ -401,8 +401,8 @@ package body Auto_Io_Gen.Generate.Get_Body is
       end Print_Parameter_List;
 
       procedure Print_Discriminant_Declare
-         (Component : in Auto_Io_Gen.Lists.Component_Type;
-          First     : in Boolean                          := True)
+        (Component : in Auto_Io_Gen.Lists.Component_Type;
+         First     : in Boolean                          := True)
       is
          pragma Unreferenced (First);
       begin
@@ -410,11 +410,11 @@ package body Auto_Io_Gen.Generate.Get_Body is
       end Print_Discriminant_Declare;
 
       procedure Print_Discriminant_Declares is new Auto_Io_Gen.Lists.Component_Algs.Process_All_Constant
-         (Process_Item => Print_Discriminant_Declare);
+        (Process_Item => Print_Discriminant_Declare);
 
       procedure Print_Discriminant
-         (Discriminant : in Auto_Io_Gen.Lists.Component_Type;
-          First        : in Boolean                          := True)
+        (Discriminant : in Auto_Io_Gen.Lists.Component_Type;
+         First        : in Boolean                          := True)
       is begin
          if First then
             Put (File, Asis.Aux.Name (Discriminant.Component_Name));
@@ -426,11 +426,11 @@ package body Auto_Io_Gen.Generate.Get_Body is
       end Print_Discriminant;
 
       procedure Print_Discriminants is new Auto_Io_Gen.Lists.Component_Algs.Process_All_Constant
-         (Process_Item => Print_Discriminant);
+        (Process_Item => Print_Discriminant);
 
       procedure Print_Discriminant_Compare
-         (Component : in Auto_Io_Gen.Lists.Component_Type;
-          First     : in Boolean                          := True)
+        (Component : in Auto_Io_Gen.Lists.Component_Type;
+         First     : in Boolean                          := True)
       is
          pragma Unreferenced (First);
       begin
@@ -438,11 +438,11 @@ package body Auto_Io_Gen.Generate.Get_Body is
       end Print_Discriminant_Compare;
 
       procedure Print_Discriminant_Compares is new Auto_Io_Gen.Lists.Component_Algs.Process_All_Constant
-         (Process_Item => Print_Discriminant_Compare);
+        (Process_Item => Print_Discriminant_Compare);
 
       procedure Print_Discriminant_Get
-         (Component : in Auto_Io_Gen.Lists.Component_Type;
-          First     : in Boolean                          := True)
+        (Component : in Auto_Io_Gen.Lists.Component_Type;
+         First     : in Boolean                          := True)
       is
          pragma Unreferenced (First);
       begin
@@ -450,11 +450,11 @@ package body Auto_Io_Gen.Generate.Get_Body is
       end Print_Discriminant_Get;
 
       procedure Print_Discriminant_Gets is new Auto_Io_Gen.Lists.Component_Algs.Process_All_Constant
-         (Process_Item => Print_Discriminant_Get);
+        (Process_Item => Print_Discriminant_Get);
 
       procedure Print_Component_Get
-         (Component : in Auto_Io_Gen.Lists.Component_Type;
-          First     : in Boolean                          := True)
+        (Component : in Auto_Io_Gen.Lists.Component_Type;
+         First     : in Boolean                          := True)
       is
          pragma Unreferenced (First);
       begin
@@ -462,10 +462,10 @@ package body Auto_Io_Gen.Generate.Get_Body is
       end Print_Component_Get;
 
       procedure Print_Component_Gets is new Auto_Io_Gen.Lists.Component_Algs.Process_All_Constant
-         (Process_Item => Print_Component_Get);
+        (Process_Item => Print_Component_Get);
 
       procedure Print_Variant
-        (Variant : in Lists.Variant_Access_Type;
+        (Variant   : in Lists.Variant_Access_Type;
          First     : in Boolean)
       is
          pragma Unreferenced (First);

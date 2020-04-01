@@ -20,9 +20,9 @@ with Asis.Elements;
 with Auto_Io_Gen.Build.Process_Element_Utils; use Auto_Io_Gen.Build.Process_Element_Utils;
 
 procedure Auto_Io_Gen.Build.Process_Element_Do_Component
-   (Element : in     Asis.Element;
-    Control : in out Asis.Traverse_Control;
-    State   : in out State_Type)
+  (Element : in     Asis.Element;
+   Control : in out Asis.Traverse_Control;
+   State   : in out State_Type)
 is
    use Asis;
 begin
@@ -33,7 +33,7 @@ begin
 
       case Elements.Defining_Name_Kind (Element) is
       when A_Defining_Identifier =>
-         Debug.Put_line ( Processing);
+         Debug.Put_Line ( Processing);
 
          State.Private_State.Current_Component.Component_Name := Element;
 
@@ -42,7 +42,7 @@ begin
          Control := Continue;
 
       when others =>
-         Debug.Put_line ( Skipping);
+         Debug.Put_Line ( Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
       end case;
@@ -51,7 +51,7 @@ begin
 
       case Elements.Definition_Kind (Element) is
       when A_Component_Definition =>
-         Debug.Put_line ( Processing);
+         Debug.Put_Line ( Processing);
 
          --  The children of this element include the component
          --  type name, which we want.
@@ -59,13 +59,13 @@ begin
          State.Private_State.Label := In_Component_Definition;
 
       when others =>
-         Debug.Put_line ( Skipping);
+         Debug.Put_Line ( Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
       end case;
 
    when others =>
-      Debug.Put_line ( Skipping);
+      Debug.Put_Line ( Skipping);
       Report_Unsupported (State, Element);
       Control := Abandon_Siblings;
 

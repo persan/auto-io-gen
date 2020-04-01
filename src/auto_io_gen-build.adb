@@ -46,8 +46,8 @@ with Auto_Io_Gen.Build.Process_Element_Do_Variant_Part;
 with Auto_Io_Gen.Build.Process_Element_Do_Component;
 with Auto_Io_Gen.Build.Process_Element_Do_Component_Definition;
 package body Auto_Io_Gen.Build is
-   --------------
-   --  Local declarations
+--------------
+--  Local declarations
 
    procedure Process_Element
      (Element : in     Asis.Element;
@@ -346,7 +346,7 @@ package body Auto_Io_Gen.Build is
       function Image (Action : in Element_Action_Type; Element : in Asis.Element) return String is
       begin
          return "Element => " & Element_Action_Type'Image (Action) & ", Action => " & Asis.Aux.Image (Element);
-      end image;
+      end Image;
 
       function Image (Item : Positive ) return String is
          Ret : constant STring := Item'Img;

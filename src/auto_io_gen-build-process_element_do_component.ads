@@ -17,6 +17,6 @@
 --  330, Boston, MA 02111-1307, USA.
 
 private procedure Auto_Io_Gen.Build.Process_Element_Do_Component
-   (Element : in     Asis.Element;
-    Control : in out Asis.Traverse_Control;
-    State   : in out State_Type);
+  (Element : in     Asis.Element;
+   Control : in out Asis.Traverse_Control;
+   State   : in out State_Type);

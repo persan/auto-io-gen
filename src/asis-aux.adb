@@ -29,7 +29,7 @@ with Asis.Elements;
 with Asis.Exceptions;
 with Asis.Expressions;
 package body Asis.Aux is
-   --  private subprograms
+--  private subprograms
 
    function Selected_Component_Image (Element : in Asis.Element) return String
    is
@@ -81,7 +81,7 @@ package body Asis.Aux is
          end case;
 
       when others =>
-            raise Program_Error with  "Attempt to take ASIS Name of " & Image (El);
+         raise Program_Error with  "Attempt to take ASIS Name of " & Image (El);
       end case;
    end Name;
 
@@ -100,7 +100,7 @@ package body Asis.Aux is
       when A_Definition =>
          declare
             Definition_Kind_Image : constant String := Element_Kind_Image & " " &
-               Definition_Kinds'Image (Definition_Kind (El));
+                                      Definition_Kinds'Image (Definition_Kind (El));
          begin
             case Definition_Kind (El) is
             when A_Type_Definition =>
@@ -114,7 +114,7 @@ package body Asis.Aux is
       when An_Expression =>
          declare
             Expression_Kind_Image : constant String := Element_Kind_Image & " " &
-               Expression_Kinds'Image (Expression_Kind (El));
+                                      Expression_Kinds'Image (Expression_Kind (El));
          begin
             case Expression_Kind (El) is
             when An_Identifier =>

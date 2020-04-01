@@ -20,9 +20,9 @@ with Asis.Elements;
 with Asis.Expressions;
 with Auto_Io_Gen.Build.Process_Element_Utils; use Auto_Io_Gen.Build.Process_Element_Utils;
 procedure Auto_Io_Gen.Build.Process_Element_Do_Array_Type
-   (Element : in     Asis.Element;
-    Control : in out Asis.Traverse_Control;
-    State   : in out State_Type)
+  (Element : in     Asis.Element;
+   Control : in out Asis.Traverse_Control;
+   State   : in out State_Type)
 is
    use Asis;
 begin
@@ -32,20 +32,20 @@ begin
       case Elements.Definition_Kind (Element) is
       when A_Component_Definition =>
 
-         Debug.Put_line ( Processing);
+         Debug.Put_Line ( Processing);
 
          --  The child of this element is the component type.
          Control := Continue;
 
       when A_Discrete_Subtype_Definition |
-         A_Subtype_Indication =>
-         Debug.Put_line ( Processing);
+           A_Subtype_Indication =>
+         Debug.Put_Line ( Processing);
 
          --  The child of this element is the index or component type name.
          Control := Continue;
 
       when others =>
-         Debug.Put_line ( Skipping);
+         Debug.Put_Line ( Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
       end case;
@@ -58,7 +58,7 @@ begin
          when An_Identifier | A_Selected_Component =>
             --  This is the index or component type name
 
-            Debug.Put_line ( Processing);
+            Debug.Put_Line ( Processing);
 
             --  Don't need any children; sibling of index type is
             --  array component type.
@@ -84,9 +84,9 @@ begin
                      Array_Role     => Index,
                      Result_Package => State.Private_State.Current_Type.Array_Index_Package);
                exception
-               when Not_Supported =>
-                  Report_Unsupported (State, Element, "Array index of this type ");
-                  Control := Abandon_Siblings;
+                  when Not_Supported =>
+                     Report_Unsupported (State, Element, "Array index of this type ");
+                     Control := Abandon_Siblings;
                end;
 
             else
@@ -94,28 +94,28 @@ begin
                begin
                   Set_Array_Component (State, Element, State.Private_State.Current_Type.all);
                exception
-               when Not_Supported =>
-                  Report_Unsupported (State, Element, "Array components of this type ");
-                  Control := Abandon_Siblings;
+                  when Not_Supported =>
+                     Report_Unsupported (State, Element, "Array components of this type ");
+                     Control := Abandon_Siblings;
                end;
 
             end if;
 
          when An_Integer_Literal =>
 
-            Debug.Put_line ( Skipping);
+            Debug.Put_Line ( Skipping);
             Report_Unsupported (State, Element, "Arrays with anonymous index type ");
             Control := Abandon_Siblings;
 
          when others =>
-            Debug.Put_line ( Skipping);
+            Debug.Put_Line ( Skipping);
             Report_Unsupported (State, Element);
             Control := Abandon_Siblings;
          end case;
       end;
 
    when others =>
-      Debug.Put_line ( Skipping);
+      Debug.Put_Line ( Skipping);
 
       Report_Unsupported (State, Element);
       Control := Abandon_Siblings;

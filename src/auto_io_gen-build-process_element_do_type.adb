@@ -22,9 +22,9 @@ with Asis.Definitions;
 with Asis.Elements;
 with Auto_Io_Gen.Build.Process_Element_Utils; use Auto_Io_Gen.Build.Process_Element_Utils;
 procedure Auto_Io_Gen.Build.Process_Element_Do_Type
-   (Element : in     Asis.Element;
-    Control : in out Asis.Traverse_Control;
-    State   : in out State_Type)
+  (Element : in     Asis.Element;
+   Control : in out Asis.Traverse_Control;
+   State   : in out State_Type)
 is
    use Asis;
    use type Lists.Type_Descriptor_Access_Type;
@@ -62,33 +62,33 @@ begin
 
          case Elements.Formal_Type_Kind (Element) is
          when A_Formal_Discrete_Type_Definition =>
-            Debug.Put_line ( Processing);
+            Debug.Put_Line ( Processing);
             Add_Descriptor (State, Lists.Enumeration_Label);
             --  We don't need anything more than the name.
             Control := Abandon_Children;
 
          when A_Formal_Floating_Point_Definition =>
-            Debug.Put_line ( Processing);
+            Debug.Put_Line ( Processing);
             Add_Descriptor (State, Lists.Float_Label);
             --  We don't need anything more than the name.
             Control := Abandon_Children;
 
          when A_Formal_Modular_Type_Definition =>
-            Debug.Put_line ( Processing);
+            Debug.Put_Line ( Processing);
             Add_Descriptor (State, Lists.Modular_Integer_Label);
             --  We don't need anything more than the name.
             Control := Abandon_Children;
 
          when A_Formal_Signed_Integer_Type_Definition =>
-            Debug.Put_line ( Processing);
+            Debug.Put_Line ( Processing);
             Add_Descriptor (State, Lists.Signed_Integer_Label);
             --  We don't need anything more than the name.
             Control := Abandon_Children;
---           when A_ASPECT_SPECIFICATION =>
---              Debug.Put_Line ( Skipping);
+            --           when A_ASPECT_SPECIFICATION =>
+            --              Debug.Put_Line ( Skipping);
 
          when others =>
-            Debug.Put_line ( Skipping);
+            Debug.Put_Line ( Skipping);
             Report_Unsupported (State, Element);
             Control := Abandon_Siblings;
 
@@ -98,7 +98,7 @@ begin
          --  Control := Abandon_Siblings;
 
       when A_Known_Discriminant_Part =>
-         Debug.Put_line ( Processing);
+         Debug.Put_Line ( Processing);
 
          if State.Private_State.Private_Type_Completion then
             --  The children of this element include the discriminants
@@ -114,8 +114,8 @@ begin
          end if;
 
       when A_Private_Type_Definition |
-        A_Private_Extension_Definition =>
-         Debug.Put_line ( Processing);
+           A_Private_Extension_Definition =>
+         Debug.Put_Line ( Processing);
 
          --  Add a descriptor now, even though we don't know what the
          --  full type is, so the order of Put and Get declarations in
@@ -133,9 +133,9 @@ begin
 
          case Elements.Type_Kind (Element) is
          when A_Constrained_Array_Definition |
-            An_Unconstrained_Array_Definition =>
+              An_Unconstrained_Array_Definition =>
 
-            Debug.Put_line ( Processing);
+            Debug.Put_Line ( Processing);
 
             if Elements.Type_Kind (Element) = An_Unconstrained_Array_Definition then
                Add_Descriptor (State, Lists.Unconstrained_Array_Label);
@@ -147,7 +147,7 @@ begin
                State.Needs_Body := True;
             end if;
 
-               Add_Spec_With (State, "Auto_Text_Io.Gen_Array_Text_IO", State.Private_State.Current_Type.Invisible);
+            Add_Spec_With (State, "Auto_Text_Io.Gen_Array_Text_IO", State.Private_State.Current_Type.Invisible);
 
             --  The children of this element include the index and
             --  component types of the array, which we want.
@@ -156,7 +156,7 @@ begin
 
          when A_Derived_Record_Extension_Definition =>
 
-            Debug.Put_line ( Processing);
+            Debug.Put_Line ( Processing);
 
             Add_Record_Descriptor (State);
 
@@ -168,7 +168,7 @@ begin
                Parent_Package : constant Asis.Element := Elements.Enclosing_Element (Parent_Type);
             begin
                State.Private_State.Current_Type.Record_Parent_Type_Name    := Declarations.Names (Parent_Type) (1);
-               State.Private_State.Current_Type.Record_Parent_Package_Name := Declarations.Names (Parent_Package)(1);
+               State.Private_State.Current_Type.Record_Parent_Package_Name := Declarations.Names (Parent_Package) (1);
             end;
 
             --  The children of this element include the
@@ -189,8 +189,8 @@ begin
 
                case Elements.Type_Kind (Root_Definition) is
                when A_Constrained_Array_Definition |
-                 An_Unconstrained_Array_Definition =>
-                  Debug.Put_line ( Processing);
+                    An_Unconstrained_Array_Definition =>
+                  Debug.Put_Line ( Processing);
 
                   Add_Descriptor (State, Lists.Derived_Label);
 
@@ -222,7 +222,7 @@ begin
                   end;
 
                when An_Enumeration_Type_Definition =>
-                  Debug.Put_line ( Processing);
+                  Debug.Put_Line ( Processing);
 
                   Add_Descriptor (State, Lists.Enumeration_Label);
 
@@ -230,7 +230,7 @@ begin
                   Control := Abandon_Children;
 
                when A_Floating_Point_Definition =>
-                  Debug.Put_line ( Processing);
+                  Debug.Put_Line ( Processing);
 
                   Add_Descriptor (State, Lists.Float_Label);
 
@@ -238,7 +238,7 @@ begin
                   Control := Abandon_Children;
 
                when A_Signed_Integer_Type_Definition =>
-                  Debug.Put_line ( Processing);
+                  Debug.Put_Line ( Processing);
 
                   Add_Descriptor (State, Lists.Signed_Integer_Label);
 
@@ -246,7 +246,7 @@ begin
                   Control := Abandon_Children;
 
                when others =>
-                  Debug.Put_line ( Skipping);
+                  Debug.Put_Line ( Skipping);
                   Debug_Put ("           Root type " & Aux.Image (Root_Definition));
                   Report_Unsupported (State, Element);
                   Control := Abandon_Siblings;
@@ -256,32 +256,32 @@ begin
             end;
 
          when An_Enumeration_Type_Definition =>
-            Debug.Put_line ( Processing);
+            Debug.Put_Line ( Processing);
             Add_Descriptor (State, Lists.Enumeration_Label);
             --  We don't need anything more than the name.
             Control := Abandon_Children;
 
          when A_Floating_Point_Definition =>
-            Debug.Put_line ( Processing);
+            Debug.Put_Line ( Processing);
             Add_Descriptor (State, Lists.Float_Label);
             --  We don't need anything more than the name.
             Control := Abandon_Children;
 
          when A_Modular_Type_Definition =>
-            Debug.Put_line ( Processing);
+            Debug.Put_Line ( Processing);
             Add_Descriptor (State, Lists.Modular_Integer_Label);
             --  We don't need anything more than the name.
             Control := Abandon_Children;
 
          when An_Ordinary_Fixed_Point_Definition =>
-            Debug.Put_line ( Processing);
+            Debug.Put_Line ( Processing);
             Add_Descriptor (State, Lists.Fixed_Label);
             --  We don't need anything more than the name.
             Control := Abandon_Children;
 
          when A_Record_Type_Definition =>
 
-            Debug.Put_line ( Processing);
+            Debug.Put_Line ( Processing);
 
             Add_Record_Descriptor (State);
 
@@ -291,14 +291,14 @@ begin
             State.Private_State.Label := In_Record_Type;
 
          when A_Signed_Integer_Type_Definition =>
-            Debug.Put_line ( Processing);
+            Debug.Put_Line ( Processing);
             Add_Descriptor (State, Lists.Signed_Integer_Label);
             --  We don't need anything more than the name.
             Control := Abandon_Children;
 
          when A_Tagged_Record_Type_Definition =>
 
-            Debug.Put_line ( Processing);
+            Debug.Put_Line ( Processing);
 
             Add_Record_Descriptor (State);
 
@@ -310,21 +310,21 @@ begin
             State.Private_State.Label := In_Record_Type;
 
          when others =>
-            Debug.Put_line ( Skipping);
+            Debug.Put_Line ( Skipping);
             Report_Unsupported (State, Element);
             Control := Abandon_Siblings;
 
          end case;
 
       when others =>
-         Debug.Put_line (Skipping);
+         Debug.Put_Line (Skipping);
          Report_Unsupported (State, Element);
          Control := Abandon_Siblings;
 
       end case; --  Definition_Kinds
 
    when others =>
-      Debug.Put_line ( Skipping);
+      Debug.Put_Line ( Skipping);
       Report_Unsupported (State, Element);
       Control := Abandon_Siblings;
    end case;

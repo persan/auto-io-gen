@@ -32,7 +32,7 @@ package Auto_Io_Gen.Options is
    Initialized : Boolean := False;
    --  Set to True by Initialize, if initialization is successful
 
-   Indent : aliased integer := 3;
+   Indent : aliased Integer := 3;
    --  Indentation per level in the outputted source
 
    ---------------
@@ -112,7 +112,7 @@ package Auto_Io_Gen.Options is
    --  Remove the tree file, if needed.
 
 
-   type Create_Text_IO_Child_proc is access procedure
+   type Create_Text_IO_Child_Proc is access procedure
      (Type_List           : in Auto_Io_Gen.Lists.Type_Descriptor_Lists.List_Type;
       Spec_With_List      : in Auto_Io_Gen.Lists.Context_Trees.Tree_Type;
       Body_With_List      : in Auto_Io_Gen.Lists.Context_Trees.Tree_Type;
@@ -123,16 +123,16 @@ package Auto_Io_Gen.Options is
       Invisible           : in Boolean;
       Is_Generic          : in Boolean);
 
-   type Standard_IO_Name_proc is access  function  (Type_Name : in String) return String;
+   type Standard_IO_Name_Proc is access  function  (Type_Name : in String) return String;
 
    procedure Register (Option, Language_Name : String;
                        Generator             : Create_Text_IO_Child_Proc;
                        Std_Names             : Standard_IO_Name_Proc);
 
    type Language_Description is record
-      Enabled : aliased Boolean := False;
+      Enabled   : aliased Boolean := False;
       Generator : Create_Text_IO_Child_Proc;
-      Standard  : Standard_IO_Name_proc;
+      Standard  : Standard_IO_Name_Proc;
    end record;
 
    type Language_Description_Access is access Language_Description;

@@ -47,13 +47,13 @@ package Auto_Io_Gen.Build is
 
       --  Public parts of this structure are shared between Build and
       --  Generate. Private parts are used only within Build.
-      Private_State : Private_State_Type;
+      Private_State       : Private_State_Type;
    end record;
 
    procedure Build_Tree
-      (Element : in     Asis.Element;
-       Control : in out Asis.Traverse_Control;
-       State   : in out State_Type);
+     (Element : in     Asis.Element;
+      Control : in out Asis.Traverse_Control;
+      State   : in out State_Type);
    --  Asis context must be initialized and open. Build Tree in state;
    --  Element must be the Unit_Declaration that needs a child Text_IO
    --  package.
@@ -64,17 +64,17 @@ package Auto_Io_Gen.Build is
 private
 
    type State_Label_Type is
-      (Initial,
-       In_Package,
-       In_Formal_Package,
-       In_Type,
-       In_Array_Type,
-       In_Discriminant_Part,
-       In_Discriminant,
-       In_Record_Type,
-       In_Variant_Part,
-       In_Component,
-       In_Component_Definition);
+     (Initial,
+      In_Package,
+      In_Formal_Package,
+      In_Type,
+      In_Array_Type,
+      In_Discriminant_Part,
+      In_Discriminant,
+      In_Record_Type,
+      In_Variant_Part,
+      In_Component,
+      In_Component_Definition);
 
    type Private_State_Type is limited record
       Label         : State_Label_Type := Initial;
@@ -90,25 +90,25 @@ private
       Private_Type_Completion : Boolean;
       --  True if Current_Type is the completion of a private type declaration.
 
-      Private_Type_Iterator : Lists.Type_Descriptor_Lists.Iterator_Type;
+      Private_Type_Iterator   : Lists.Type_Descriptor_Lists.Iterator_Type;
       --  If Private_Type_Completion, points to the private type
       --  descriptor in Type_List, so we can replace it.
 
-      Abandon_Current_Type : Boolean;
+      Abandon_Current_Type    : Boolean;
       --  Used to get back to In_Package state when a type turns out
       --  to be unsupported.
 
-      Current_Formal_Package : Lists.Formal_Package_Lists.Iterator_Type;
+      Current_Formal_Package  : Lists.Formal_Package_Lists.Iterator_Type;
       --  Used to add instantiation arguments
 
-      Private_Type_Tree : Lists.Type_Iterator_Trees.Tree_Type;
+      Private_Type_Tree       : Lists.Type_Iterator_Trees.Tree_Type;
       --  List of private types sorted by name. A Private_Label or
       --  Record_Label descriptor (if the public part has
       --  discriminants) is created in Type_List when the public
       --  declaration is processed, and replaced by the appropriate
       --  descriptor when the full type is processed.
 
-      Invisible_Type_Tree : Lists.Name_Trees.Tree_Type;
+      Invisible_Type_Tree     : Lists.Name_Trees.Tree_Type;
       --  List of types declared in private part.
 
    end record;

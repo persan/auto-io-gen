@@ -33,8 +33,8 @@ begin
    when A_Declaration =>
       case Elements.Declaration_Kind (Element) is
       when A_Package_Declaration |
-        A_Generic_Package_Declaration =>
-         Debug.Put_line (Processing);
+           A_Generic_Package_Declaration =>
+         Debug.Put_Line (Processing);
 
          State.Parent_Package                := Element;
          State.Needs_Body                    := False;

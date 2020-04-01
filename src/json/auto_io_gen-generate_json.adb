@@ -77,8 +77,8 @@ package body Auto_Io_Gen.Generate_JSON is
    procedure Create_File
      (File : in out Ada.Text_IO.File_Type;
       Name : in     String)
-   --  Create File with Name, deleting an existing one if necessary
-   --  and permitted by Options.
+     --  Create File with Name, deleting an existing one if necessary
+     --  and permitted by Options.
    is
       use Ada.Text_IO;
    begin
@@ -309,7 +309,7 @@ package body Auto_Io_Gen.Generate_JSON is
    function Component_Type_Name
      (Type_Element         : in Asis.Element;
       Type_Package_Element : in Asis.Element)
-       return String
+      return String
    is
       use Asis;
    begin

@@ -32,8 +32,8 @@ begin
 
    case Elements.Element_Kind (Element) is
    when
-     A_Clause |
-     A_Pragma =>
+        A_Clause |
+        A_Pragma =>
       --  don't need Text_IO
 
       Debug.Put_Line (Skipping);
@@ -52,25 +52,25 @@ begin
          --  List in alphabetical order (ignore a_, an_), except all
          --  that are skipped are in this first case.
          when
-           A_Constant_Declaration |
-           A_Deferred_Constant_Declaration |
-           An_Exception_Declaration |
-           A_Formal_Function_Declaration |
-           A_Function_Declaration |
-           A_Function_Instantiation |
-           A_Function_Renaming_Declaration |
-           A_Generic_Procedure_Declaration |
-           An_Integer_Number_Declaration |
-           A_Package_Instantiation |
-           A_Package_Renaming_Declaration |
-           A_Procedure_Declaration |
-           A_Procedure_Instantiation |
-           A_Procedure_Renaming_Declaration |
-           A_Real_Number_Declaration |
+              A_Constant_Declaration |
+              A_Deferred_Constant_Declaration |
+              An_Exception_Declaration |
+              A_Formal_Function_Declaration |
+              A_Function_Declaration |
+              A_Function_Instantiation |
+              A_Function_Renaming_Declaration |
+              A_Generic_Procedure_Declaration |
+              An_Integer_Number_Declaration |
+              A_Package_Instantiation |
+              A_Package_Renaming_Declaration |
+              A_Procedure_Declaration |
+              A_Procedure_Instantiation |
+              A_Procedure_Renaming_Declaration |
+              A_Real_Number_Declaration |
 
-           A_Subtype_Declaration | -- Text_IO for full type will be created or with'ed
+              A_Subtype_Declaration | -- Text_IO for full type will be created or with'ed
 
-           A_Variable_Declaration =>
+              A_Variable_Declaration =>
 
             --  These don't need Text_IO
 
@@ -93,7 +93,7 @@ begin
             declare
                use Lists.Formal_Package_Lists;
                Arguments : Lists.Element_Lists.List_Type renames
-                 Current (State.Private_State.Current_Formal_Package).Arguments;
+                             Current (State.Private_State.Current_Formal_Package).Arguments;
 
                I : Iterator_Type := First (State.Formal_Package_List);
             begin
@@ -114,9 +114,9 @@ begin
             State.Private_State.Label := In_Formal_Package;
 
          when A_Formal_Type_Declaration |
-           An_Ordinary_Type_Declaration |
-           A_Private_Type_Declaration |
-           A_Private_Extension_Declaration =>
+              An_Ordinary_Type_Declaration |
+              A_Private_Type_Declaration |
+              A_Private_Extension_Declaration =>
 
             Debug.Put_Line ( Processing);
 
