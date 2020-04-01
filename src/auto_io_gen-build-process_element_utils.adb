@@ -707,7 +707,7 @@ package body Auto_Io_Gen.Build.Process_Element_Utils is
            Trim (Character_Position_Positive'Image (El_Span.First_Column), Left) & ": " &
            Program_Name & ": " &
            Message &
-           "not supported");
+           " not supported");
 
       if Options.Error_On_Warn then
          State.Error_Count := State.Error_Count + 1;

@@ -42,7 +42,7 @@ package Auto_Io_Gen is
    --  How text_io child package name is used; in an expression with
    --  Put or Get, as a generic formal parameter, as a generic unit in
    --  a generic formal package declaration, or in a with clause. This
-   --  affects the naming convetion used by Text_IO_Child_Name.
+   --  affects the naming convention used by Text_IO_Child_Name.
 
    function Text_IO_Child_Name
      (Package_Declaration : in Asis.Element;
@@ -64,10 +64,14 @@ package Auto_Io_Gen is
    --  do "with, use" for the private children, and they never appear
    --  as a generic formal parameter, so no "Label" parameter is
    --  needed.
+
    Not_Implemented : exception;
    Not_Found       : exception;
+
    procedure Set_Indent (File : in Ada.Text_IO.File_Type);
    Indent_Level : Ada.Text_IO.Positive_Count := 1;
    --  1 is no indentation.
+
    function Ada2file (Folder, Name , Suffix : String) return String;
+
 end Auto_Io_Gen;

@@ -146,8 +146,10 @@ package body Auto_Io_Gen.Options is
       Define_Switch (Command_Line_Parser, Project_Arg'Access, "-P", "", "Use project file");
       Define_Switch (Command_Line_Parser, Overwrite_Child'Access, "-t", "", "overwrite the existing tree file");
       Define_Switch (Command_Line_Parser, Delete_Tree'Access, "-k", "", "do not remove the GNAT tree file", Value => False);
-      Define_Switch (Command_Line_Parser, Reuse_Tree'Access, "-r", "", "reuse the GNAT tree file instead of re-creating it (-r also implies -k)");
-      Define_Switch (Command_Line_Parser, Indent'Access, "-i=", "", "(N in 1 .. 9) number of spaces used for indentation in generated code.");
+      Define_Switch (Command_Line_Parser, Reuse_Tree'Access, "-r", "",
+                     "reuse the GNAT tree file instead of re-creating it (-r also implies -k)");
+      Define_Switch (Command_Line_Parser, Indent'Access, "-i=", "",
+                     "(N in 1 .. 9) number of spaces used for indentation in generated code.", Initial => Indent);
       Define_Switch (Command_Line_Parser, Trace_Exceptions'Access, "-T", "", "Trace all exceptions.");
       Define_Switch (Command_Line_Parser, Create_Output_Folders'Access, "-p", "", "Create Output Folders.");
 
