@@ -356,6 +356,7 @@ package body Auto_Io_Gen.Build.Process_Element_Utils is
       Original_Declaration : in     Asis.Element;
       Array_Role           : in     Array_Role_Type := None)
    is
+      pragma Unreferenced (Original_Declaration);
       use Asis, Asis.Elements;
 
       function To_Lower (Item : in String) return String renames Ada.Characters.Handling.To_Lower;

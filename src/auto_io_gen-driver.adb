@@ -29,7 +29,6 @@ with Asis.Ada_Environments;
 with Asis.Aux;
 with Asis.Compilation_Units;
 with Asis.Elements;
-with Asis.Errors;
 with Asis.Exceptions;
 with Asis.Extensions;
 with Asis.Implementation;
@@ -72,7 +71,6 @@ begin
       use Asis;
       use Asis.Ada_Environments;
       use Asis.Compilation_Units;
-      use type Asis.Errors.Error_Kinds;
 
       Asis_Context   : Context;
       CU             : Compilation_Unit; -- The input package

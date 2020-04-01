@@ -24,8 +24,6 @@ procedure Auto_Io_Gen.Build.Process_Element_Do_Package
    State   : in out State_Type)
 is
    use Asis;
-   use GNAT;
-   use GNAT.Source_Info;
    Ignore : Boolean;
 begin
    Debug.Put_Line ("Element =>" & Elements.Element_Kind (Element)'Img & ", State => " & State.Private_State.Label'Img);

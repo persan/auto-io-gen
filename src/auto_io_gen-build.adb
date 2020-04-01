@@ -46,8 +46,6 @@ with Auto_Io_Gen.Build.Process_Element_Do_Variant_Part;
 with Auto_Io_Gen.Build.Process_Element_Do_Component;
 with Auto_Io_Gen.Build.Process_Element_Do_Component_Definition;
 package body Auto_Io_Gen.Build is
-   use GNAT;
-   use GNAT.Source_Info;
    --------------
    --  Local declarations
 

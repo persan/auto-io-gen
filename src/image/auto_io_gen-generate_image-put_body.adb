@@ -382,7 +382,7 @@ package body Auto_Io_Gen.Generate_Image.Put_Body is
          Discriminants      : in Boolean;
          Separate_Body      : in Boolean)
       is
-         Need_Single_Line_Record : Boolean;
+         pragma Unreferenced (Is_Item, With_File, Check_Unreferenced, Separate_Body, Discriminants);
       begin
          Indent_Level := Indent_Level + 1;
 

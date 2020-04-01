@@ -26,8 +26,6 @@ procedure Auto_Io_Gen.Build.Process_Element_Do_Formal_Package
    State   : in out State_Type)
 is
    use Asis;
-   use GNAT.Source_Info;
-   use GNAT;
    Ignore        : Boolean;
    Separate_Body : Boolean;
 begin

@@ -87,7 +87,7 @@ package body Asis.Aux is
 
    function Image (El : in Asis.Element) return String
    is
-      use Asis.Elements, Ada.Characters.Handling;
+      use Asis.Elements;
       Element_Kind_Image : constant String := Element_Kinds'Image (Element_Kind (El));
    begin
       case Element_Kind (El) is

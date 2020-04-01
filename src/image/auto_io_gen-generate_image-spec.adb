@@ -361,8 +361,8 @@ package body Auto_Io_Gen.Generate_Image.Spec is
       Label     : in Auto_Io_Gen.Lists.Array_Component_Labels_Type;
       Type_Name : in Asis.Element)
    is
-      use Auto_Io_Gen.Lists;
-      Package_Name : constant String := Instantiated_Package_Name (Asis.Aux.Name (Type_Name));
+      pragma Unreferenced (Label);
+      -- Package_Name : constant String := Instantiated_Package_Name (Asis.Aux.Name (Type_Name));
    begin
       Indent_Line (File, "function I_Image (  Item : in " &  Asis.Aux.Name (Type_Name) & ") return String;");
 
