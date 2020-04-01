@@ -128,7 +128,13 @@ begin
 
          when others =>
             Debug.Put_Line (Processing);
-            Report_Unsupported (State, Element);
+            declare
+               D_Kind : constant Asis.Declaration_Kinds
+                      := Elements.Declaration_Kind (Element);
+            begin
+               Report_Unsupported
+                 (State, Element, Asis.Declaration_Kinds'Image (D_Kind));
+            end;
             Control := Abandon_Children;
          end case;
       end if;

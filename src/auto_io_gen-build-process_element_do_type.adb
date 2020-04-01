@@ -27,7 +27,6 @@ procedure Auto_Io_Gen.Build.Process_Element_Do_Type
    State   : in out State_Type)
 is
    use Asis;
-   use type Lists.Type_Descriptor_Access_Type;
 begin
    Debug.Put_Line ("Element =>" & Elements.Element_Kind (Element)'Img & ", State => " & State.Private_State.Label'Img);
 
@@ -311,14 +310,22 @@ begin
 
          when others =>
             Debug.Put_Line ( Skipping);
-            Report_Unsupported (State, Element);
+            declare
+               Kind : constant Asis.Type_Kinds := Elements.Type_Kind (Element);
+            begin
+               Report_Unsupported (State, Element, Asis.Type_Kinds'Image (Kind));
+            end;
             Control := Abandon_Siblings;
 
          end case;
 
       when others =>
          Debug.Put_Line (Skipping);
-         Report_Unsupported (State, Element);
+         declare
+            Kind : constant Definition_Kinds := Elements.Definition_Kind (Element);
+         begin
+            Report_Unsupported (State, Element, Definition_Kinds'Image (Kind));
+         end;
          Control := Abandon_Siblings;
 
       end case; --  Definition_Kinds
