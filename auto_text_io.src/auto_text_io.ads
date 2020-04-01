@@ -1,2 +1,2 @@
-package auto_text_io is
-end auto_text_io;
+package Auto_Text_Io is
+end Auto_Text_Io;

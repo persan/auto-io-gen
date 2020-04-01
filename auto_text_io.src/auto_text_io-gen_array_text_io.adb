@@ -31,12 +31,12 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
    package body Integer_1D is
 
       procedure Put
-         (File              : in File_Type;
-          Item              : in Index_Array_Element_Type;
-          Width             : in Field                    := Default_Width;
-          Base              : in Field                    := Default_Base;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (File              : in File_Type;
+         Item              : in Index_Array_Element_Type;
+         Width             : in Field                    := Default_Width;
+         Base              : in Field                    := Default_Base;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is
       begin
          Put (File, '(');
@@ -78,21 +78,21 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Put;
 
       procedure Put
-         (Item              : in Index_Array_Element_Type;
-          Width             : in Field                    := Default_Width;
-          Base              : in Field                    := Default_Base;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (Item              : in Index_Array_Element_Type;
+         Width             : in Field                    := Default_Width;
+         Base              : in Field                    := Default_Base;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is
       begin
          Put (Current_Output, Item, Width, Base, Single_Line, Named_Association);
       end Put;
 
       procedure Put_Item
-         (File              : in File_Type;
-          Item              : in Index_Array_Element_Type;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (File              : in File_Type;
+         Item              : in Index_Array_Element_Type;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is begin
          Put (File, Item, Default_Width, Default_Base, Single_Line, Named_Association);
       end Put_Item;
@@ -134,9 +134,9 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Get;
 
       procedure Get_Item
-         (File              : in     File_Type;
-          Item              :    out Index_Array_Element_Type;
-          Named_Association : in     Boolean                  := Default_Named_Association)
+        (File              : in     File_Type;
+         Item              :    out Index_Array_Element_Type;
+         Named_Association : in     Boolean                  := Default_Named_Association)
       is begin
          Get (File, Item, 0, Named_Association);
       end Get_Item;
@@ -146,12 +146,12 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
    package body Unconstrained_Integer_1D is
 
       procedure Put
-         (File              : in File_Type;
-          Item              : in Index_Array_Element_Type;
-          Width             : in Field                    := Default_Width;
-          Base              : in Field                    := Default_Base;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (File              : in File_Type;
+         Item              : in Index_Array_Element_Type;
+         Width             : in Field                    := Default_Width;
+         Base              : in Field                    := Default_Base;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is
       begin
          Put (File, '(');
@@ -196,21 +196,21 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Put;
 
       procedure Put
-         (Item              : in Index_Array_Element_Type;
-          Width             : in Field                    := Default_Width;
-          Base              : in Field                    := Default_Base;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (Item              : in Index_Array_Element_Type;
+         Width             : in Field                    := Default_Width;
+         Base              : in Field                    := Default_Base;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is
       begin
          Put (Current_Output, Item, Width, Base, Single_Line, Named_Association);
       end Put;
 
       procedure Put_Item
-         (File              : in File_Type;
-          Item              : in Index_Array_Element_Type;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (File              : in File_Type;
+         Item              : in Index_Array_Element_Type;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is begin
          Put (File, Item, Default_Width, Default_Base, Single_Line, Named_Association);
       end Put_Item;
@@ -253,9 +253,9 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Get;
 
       procedure Get_Item
-         (File              : in     File_Type;
-          Item              :    out Index_Array_Element_Type;
-          Named_Association : in     Boolean                  := Default_Named_Association)
+        (File              : in     File_Type;
+         Item              :    out Index_Array_Element_Type;
+         Named_Association : in     Boolean                  := Default_Named_Association)
       is begin
          Get (File, Item, 0, Named_Association);
       end Get_Item;
@@ -265,20 +265,20 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
    package body Modular_1D is
 
       procedure Put
-         (File              : in File_Type;
-          Item              : in Index_Array_Element_Type;
-          Width             : in Field                    := Default_Width;
-          Base              : in Field                    := Default_Base;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (File              : in File_Type;
+         Item              : in Index_Array_Element_Type;
+         Width             : in Field                    := Default_Width;
+         Base              : in Field                    := Default_Base;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is
       begin
          Put (File, '(');
          if Item'Length > 1 then
             for I in Index_Type'First .. Index_Type'Pred (Index_Type'Last) loop
-                  if I > Index_Type'First then
-                     Put (File, ' ');
-                  end if;
+               if I > Index_Type'First then
+                  Put (File, ' ');
+               end if;
 
                if Named_Association then
                   Put (File, Index_Type'Image (I) & " => ");
@@ -312,21 +312,21 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Put;
 
       procedure Put
-         (Item              : in Index_Array_Element_Type;
-          Width             : in Field                    := Default_Width;
-          Base              : in Field                    := Default_Base;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (Item              : in Index_Array_Element_Type;
+         Width             : in Field                    := Default_Width;
+         Base              : in Field                    := Default_Base;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is
       begin
          Put (Current_Output, Item, Width, Base, Single_Line, Named_Association);
       end Put;
 
       procedure Put_Item
-         (File              : in File_Type;
-          Item              : in Index_Array_Element_Type;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (File              : in File_Type;
+         Item              : in Index_Array_Element_Type;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is begin
          Put (File, Item, Default_Width, Default_Base, Single_Line, Named_Association);
       end Put_Item;
@@ -368,9 +368,9 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Get;
 
       procedure Get_Item
-         (File              : in     File_Type;
-          Item              :    out Index_Array_Element_Type;
-          Named_Association : in     Boolean                  := Default_Named_Association)
+        (File              : in     File_Type;
+         Item              :    out Index_Array_Element_Type;
+         Named_Association : in     Boolean                  := Default_Named_Association)
       is begin
          Get (File, Item, 0, Named_Association);
       end Get_Item;
@@ -380,12 +380,12 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
    package body Unconstrained_Modular_1D is
 
       procedure Put
-         (File              : in File_Type;
-          Item              : in Index_Array_Element_Type;
-          Width             : in Field                    := Default_Width;
-          Base              : in Field                    := Default_Base;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (File              : in File_Type;
+         Item              : in Index_Array_Element_Type;
+         Width             : in Field                    := Default_Width;
+         Base              : in Field                    := Default_Base;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is
       begin
          Put (File, '(');
@@ -430,21 +430,21 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Put;
 
       procedure Put
-         (Item              : in Index_Array_Element_Type;
-          Width             : in Field                    := Default_Width;
-          Base              : in Field                    := Default_Base;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (Item              : in Index_Array_Element_Type;
+         Width             : in Field                    := Default_Width;
+         Base              : in Field                    := Default_Base;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is
       begin
          Put (Current_Output, Item, Width, Base, Single_Line, Named_Association);
       end Put;
 
       procedure Put_Item
-         (File              : in File_Type;
-          Item              : in Index_Array_Element_Type;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (File              : in File_Type;
+         Item              : in Index_Array_Element_Type;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is begin
          Put (File, Item, Default_Width, Default_Base, Single_Line, Named_Association);
       end Put_Item;
@@ -487,9 +487,9 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Get;
 
       procedure Get_Item
-         (File              : in     File_Type;
-          Item              :    out Index_Array_Element_Type;
-          Named_Association : in     Boolean                  := Default_Named_Association)
+        (File              : in     File_Type;
+         Item              :    out Index_Array_Element_Type;
+         Named_Association : in     Boolean                  := Default_Named_Association)
       is begin
          Get (File, Item, 0, Named_Association);
       end Get_Item;
@@ -499,12 +499,12 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
    package body Enumeration_1D is
 
       procedure Put
-         (File              : in File_Type;
-          Item              : in Index_Array_Element_Type;
-          Width             : in Field                    := Default_Width;
-          Setting           : in Type_Set                 := Default_Setting;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (File              : in File_Type;
+         Item              : in Index_Array_Element_Type;
+         Width             : in Field                    := Default_Width;
+         Setting           : in Type_Set                 := Default_Setting;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is begin
          Put (File, '(');
          if Item'Length > 1 then
@@ -544,29 +544,29 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Put;
 
       procedure Put
-         (Item              : in Index_Array_Element_Type;
-          Width             : in Field                    := Default_Width;
-          Setting           : in Type_Set                 := Default_Setting;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (Item              : in Index_Array_Element_Type;
+         Width             : in Field                    := Default_Width;
+         Setting           : in Type_Set                 := Default_Setting;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is
       begin
          Put (Current_Output, Item, Width, Setting, Single_Line, Named_Association);
       end Put;
 
       procedure Put_Item
-         (File              : in File_Type;
-          Item              : in Index_Array_Element_Type;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (File              : in File_Type;
+         Item              : in Index_Array_Element_Type;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is begin
          Put (File, Item, Default_Width, Default_Setting, Single_Line, Named_Association);
       end Put_Item;
 
       procedure Get_Item
-         (File              : in     File_Type;
-          Item              :    out Index_Array_Element_Type;
-          Named_Association : in     Boolean                  := Default_Named_Association)
+        (File              : in     File_Type;
+         Item              :    out Index_Array_Element_Type;
+         Named_Association : in     Boolean                  := Default_Named_Association)
       is begin
          Check (File, "(");
          if Item'Length > 1 then
@@ -589,8 +589,8 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Get_Item;
 
       procedure Get
-         (Item              :    out Index_Array_Element_Type;
-          Named_Association : in     Boolean                  := Default_Named_Association)
+        (Item              :    out Index_Array_Element_Type;
+         Named_Association : in     Boolean                  := Default_Named_Association)
       is
       begin
          Get (Current_Input, Item, Named_Association);
@@ -601,12 +601,12 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
    package body Unconstrained_Enumeration_1D is
 
       procedure Put
-         (File              : in File_Type;
-          Item              : in Index_Array_Element_Type;
-          Width             : in Field                    := Default_Width;
-          Setting           : in Type_Set                 := Default_Setting;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (File              : in File_Type;
+         Item              : in Index_Array_Element_Type;
+         Width             : in Field                    := Default_Width;
+         Setting           : in Type_Set                 := Default_Setting;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is begin
          Put (File, '(');
          if Item'Length > 0 then
@@ -649,29 +649,29 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Put;
 
       procedure Put
-         (Item              : in Index_Array_Element_Type;
-          Width             : in Field                    := Default_Width;
-          Setting           : in Type_Set                 := Default_Setting;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (Item              : in Index_Array_Element_Type;
+         Width             : in Field                    := Default_Width;
+         Setting           : in Type_Set                 := Default_Setting;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is
       begin
          Put (Current_Output, Item, Width, Setting, Single_Line, Named_Association);
       end Put;
 
       procedure Put_Item
-         (File              : in File_Type;
-          Item              : in Index_Array_Element_Type;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (File              : in File_Type;
+         Item              : in Index_Array_Element_Type;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is begin
          Put (File, Item, Default_Width, Default_Setting, Single_Line, Named_Association);
       end Put_Item;
 
       procedure Get_Item
-         (File              : in     File_Type;
-          Item              :    out Index_Array_Element_Type;
-          Named_Association : in     Boolean                  := Default_Named_Association)
+        (File              : in     File_Type;
+         Item              :    out Index_Array_Element_Type;
+         Named_Association : in     Boolean                  := Default_Named_Association)
       is begin
          Check (File, "(");
          if Item'Length > 0 then
@@ -697,8 +697,8 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Get_Item;
 
       procedure Get
-         (Item              :    out Index_Array_Element_Type;
-          Named_Association : in     Boolean                  := Default_Named_Association)
+        (Item              :    out Index_Array_Element_Type;
+         Named_Association : in     Boolean                  := Default_Named_Association)
       is
       begin
          Get (Current_Input, Item, Named_Association);
@@ -709,13 +709,13 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
    package body Float_1D is
 
       procedure Put
-         (File              : in File_Type;
-          Item              : in Index_Array_Element_Type;
-          Fore              : in Field                    := Default_Fore;
-          Aft               : in Field                    := Default_Aft;
-          Exp               : in Field                    := Default_Exp;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (File              : in File_Type;
+         Item              : in Index_Array_Element_Type;
+         Fore              : in Field                    := Default_Fore;
+         Aft               : in Field                    := Default_Aft;
+         Exp               : in Field                    := Default_Exp;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is begin
          Put (File, '(');
          if Item'Length > 1 then
@@ -756,21 +756,21 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Put;
 
       procedure Put
-         (Item              : in Index_Array_Element_Type;
-          Fore              : in Field                    := Default_Fore;
-          Aft               : in Field                    := Default_Aft;
-          Exp               : in Field                    := Default_Exp;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (Item              : in Index_Array_Element_Type;
+         Fore              : in Field                    := Default_Fore;
+         Aft               : in Field                    := Default_Aft;
+         Exp               : in Field                    := Default_Exp;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is begin
          Put (Current_Output, Item, Fore, Aft, Exp, Single_Line, Named_Association);
       end Put;
 
       procedure Put_Item
-         (File              : in File_Type;
-          Item              : in Index_Array_Element_Type;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (File              : in File_Type;
+         Item              : in Index_Array_Element_Type;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is begin
          Put (File, Item, Default_Fore, Default_Aft, Default_Exp, Single_Line, Named_Association);
       end Put_Item;
@@ -810,9 +810,9 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Get;
 
       procedure Get_Item
-         (File              : in     File_Type;
-          Item              :    out Index_Array_Element_Type;
-          Named_Association : in     Boolean                  := Default_Named_Association)
+        (File              : in     File_Type;
+         Item              :    out Index_Array_Element_Type;
+         Named_Association : in     Boolean                  := Default_Named_Association)
       is begin
          Get (File, Item, 0, Named_Association);
       end Get_Item;
@@ -822,13 +822,13 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
    package body Unconstrained_Float_1D is
 
       procedure Put
-         (File              : in File_Type;
-          Item              : in Index_Array_Element_Type;
-          Fore              : in Field                    := Default_Fore;
-          Aft               : in Field                    := Default_Aft;
-          Exp               : in Field                    := Default_Exp;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (File              : in File_Type;
+         Item              : in Index_Array_Element_Type;
+         Fore              : in Field                    := Default_Fore;
+         Aft               : in Field                    := Default_Aft;
+         Exp               : in Field                    := Default_Exp;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is begin
          Put (File, '(');
          if Item'Length > 0 then
@@ -872,21 +872,21 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Put;
 
       procedure Put
-         (Item              : in Index_Array_Element_Type;
-          Fore              : in Field                    := Default_Fore;
-          Aft               : in Field                    := Default_Aft;
-          Exp               : in Field                    := Default_Exp;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (Item              : in Index_Array_Element_Type;
+         Fore              : in Field                    := Default_Fore;
+         Aft               : in Field                    := Default_Aft;
+         Exp               : in Field                    := Default_Exp;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is begin
          Put (Current_Output, Item, Fore, Aft, Exp, Single_Line, Named_Association);
       end Put;
 
       procedure Put_Item
-         (File              : in File_Type;
-          Item              : in Index_Array_Element_Type;
-          Single_Line       : in Boolean                  := Default_Single_Line;
-          Named_Association : in Boolean                  := Default_Named_Association)
+        (File              : in File_Type;
+         Item              : in Index_Array_Element_Type;
+         Single_Line       : in Boolean                  := Default_Single_Line;
+         Named_Association : in Boolean                  := Default_Named_Association)
       is begin
          Put (File, Item, Default_Fore, Default_Aft, Default_Exp, Single_Line, Named_Association);
       end Put_Item;
@@ -928,9 +928,9 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Get;
 
       procedure Get_Item
-         (File              : in     File_Type;
-          Item              :    out Index_Array_Element_Type;
-          Named_Association : in     Boolean                  := Default_Named_Association)
+        (File              : in     File_Type;
+         Item              :    out Index_Array_Element_Type;
+         Named_Association : in     Boolean                  := Default_Named_Association)
       is begin
          Get (File, Item, 0, Named_Association);
       end Get_Item;
@@ -940,12 +940,12 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
    package body Private_1D is
 
       procedure Put
-         (File                      : in File_Type;
-          Item                      : in Index_Array_Element_Type;
-          Single_Line_Array         : in Boolean                  := Default_Single_Line_Array;
-          Named_Association_Array   : in Boolean                  := Default_Named_Association_Array;
-          Single_Line_Element       : in Boolean                  := Default_Single_Line_Element;
-          Named_Association_Element : in Boolean                  := Default_Named_Association_Element)
+        (File                      : in File_Type;
+         Item                      : in Index_Array_Element_Type;
+         Single_Line_Array         : in Boolean                  := Default_Single_Line_Array;
+         Named_Association_Array   : in Boolean                  := Default_Named_Association_Array;
+         Single_Line_Element       : in Boolean                  := Default_Single_Line_Element;
+         Named_Association_Element : in Boolean                  := Default_Named_Association_Element)
       is begin
          Put (File, '(');
 
@@ -990,32 +990,32 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Put;
 
       procedure Put
-         (Item                      : in Index_Array_Element_Type;
-          Single_Line_Array         : in Boolean                  := Default_Single_Line_Array;
-          Named_Association_Array   : in Boolean                  := Default_Named_Association_Array;
-          Single_Line_Element       : in Boolean                  := Default_Single_Line_Element;
-          Named_Association_Element : in Boolean                  := Default_Named_Association_Element)
+        (Item                      : in Index_Array_Element_Type;
+         Single_Line_Array         : in Boolean                  := Default_Single_Line_Array;
+         Named_Association_Array   : in Boolean                  := Default_Named_Association_Array;
+         Single_Line_Element       : in Boolean                  := Default_Single_Line_Element;
+         Named_Association_Element : in Boolean                  := Default_Named_Association_Element)
       is begin
          Put
-            (Current_Output, Item,
-             Single_Line_Array, Named_Association_Array,
-             Single_Line_Element, Named_Association_Element);
+           (Current_Output, Item,
+            Single_Line_Array, Named_Association_Array,
+            Single_Line_Element, Named_Association_Element);
       end Put;
 
       procedure Put_Item
-         (File              : in File_Type;
-          Item              : in Index_Array_Element_Type;
-          Single_Line       : in Boolean := Default_Single_Line_Array;
-          Named_Association : in Boolean := Default_Named_Association_Array)
+        (File              : in File_Type;
+         Item              : in Index_Array_Element_Type;
+         Single_Line       : in Boolean := Default_Single_Line_Array;
+         Named_Association : in Boolean := Default_Named_Association_Array)
       is begin
          Put (File, Item, Single_Line, Named_Association, Single_Line, Named_Association);
       end Put_Item;
 
       procedure Get
-         (File                      : in     File_Type;
-          Item                      :    out Index_Array_Element_Type;
-          Named_Association_Array   : in     Boolean                  := Default_Named_Association_Array;
-          Named_Association_Element : in     Boolean                  := Default_Named_Association_Element)
+        (File                      : in     File_Type;
+         Item                      :    out Index_Array_Element_Type;
+         Named_Association_Array   : in     Boolean                  := Default_Named_Association_Array;
+         Named_Association_Element : in     Boolean                  := Default_Named_Association_Element)
       is begin
          Check (File, "(");
 
@@ -1040,17 +1040,17 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Get;
 
       procedure Get
-         (Item                      :    out Index_Array_Element_Type;
-          Named_Association_Array   : in     Boolean                  := Default_Named_Association_Array;
-          Named_Association_Element : in     Boolean                  := Default_Named_Association_Element)
+        (Item                      :    out Index_Array_Element_Type;
+         Named_Association_Array   : in     Boolean                  := Default_Named_Association_Array;
+         Named_Association_Element : in     Boolean                  := Default_Named_Association_Element)
       is begin
          Get (Current_Input, Item, Named_Association_Array, Named_Association_Element);
       end Get;
 
       procedure Get_Item
-         (File              : in     File_Type;
-          Item              :    out Index_Array_Element_Type;
-          Named_Association : in     Boolean                  := Default_Named_Association_Array)
+        (File              : in     File_Type;
+         Item              :    out Index_Array_Element_Type;
+         Named_Association : in     Boolean                  := Default_Named_Association_Array)
       is begin
          Get (File, Item, Named_Association, Named_Association);
       end Get_Item;
@@ -1060,12 +1060,12 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
    package body Unconstrained_Private_1D is
 
       procedure Put
-         (File                      : in File_Type;
-          Item                      : in Index_Array_Element_Type;
-          Single_Line_Array         : in Boolean                  := Default_Single_Line_Array;
-          Named_Association_Array   : in Boolean                  := Default_Named_Association_Array;
-          Single_Line_Element       : in Boolean                  := Default_Single_Line_Element;
-          Named_Association_Element : in Boolean                  := Default_Named_Association_Element)
+        (File                      : in File_Type;
+         Item                      : in Index_Array_Element_Type;
+         Single_Line_Array         : in Boolean                  := Default_Single_Line_Array;
+         Named_Association_Array   : in Boolean                  := Default_Named_Association_Array;
+         Single_Line_Element       : in Boolean                  := Default_Single_Line_Element;
+         Named_Association_Element : in Boolean                  := Default_Named_Association_Element)
       is begin
          Put (File, '(');
 
@@ -1112,31 +1112,31 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Put;
 
       procedure Put
-         (Item                      : in Index_Array_Element_Type;
-          Single_Line_Array         : in Boolean                  := Default_Single_Line_Array;
-          Named_Association_Array   : in Boolean                  := Default_Named_Association_Array;
-          Single_Line_Element       : in Boolean                  := Default_Single_Line_Element;
-          Named_Association_Element : in Boolean                  := Default_Named_Association_Element)
+        (Item                      : in Index_Array_Element_Type;
+         Single_Line_Array         : in Boolean                  := Default_Single_Line_Array;
+         Named_Association_Array   : in Boolean                  := Default_Named_Association_Array;
+         Single_Line_Element       : in Boolean                  := Default_Single_Line_Element;
+         Named_Association_Element : in Boolean                  := Default_Named_Association_Element)
       is begin
          Put
-            (Current_Output, Item, Single_Line_Array, Named_Association_Array,
-             Single_Line_Element, Named_Association_Element);
+           (Current_Output, Item, Single_Line_Array, Named_Association_Array,
+            Single_Line_Element, Named_Association_Element);
       end Put;
 
       procedure Put_Item
-         (File              : in File_Type;
-          Item              : in Index_Array_Element_Type;
-          Single_Line       : in Boolean                  := Default_Single_Line_Array;
-          Named_Association : in Boolean                  := Default_Named_Association_Array)
+        (File              : in File_Type;
+         Item              : in Index_Array_Element_Type;
+         Single_Line       : in Boolean                  := Default_Single_Line_Array;
+         Named_Association : in Boolean                  := Default_Named_Association_Array)
       is begin
          Put (File, Item, Single_Line, Named_Association, Single_Line, Named_Association);
       end Put_Item;
 
       procedure Get
-         (File                      : in     File_Type;
-          Item                      :    out Index_Array_Element_Type;
-          Named_Association_Array   : in     Boolean                  := Default_Named_Association_Array;
-          Named_Association_Element : in     Boolean                  := Default_Named_Association_Element)
+        (File                      : in     File_Type;
+         Item                      :    out Index_Array_Element_Type;
+         Named_Association_Array   : in     Boolean                  := Default_Named_Association_Array;
+         Named_Association_Element : in     Boolean                  := Default_Named_Association_Element)
       is begin
          Check (File, "(");
 
@@ -1163,17 +1163,17 @@ package body Auto_Text_Io.Gen_Array_Text_IO is
       end Get;
 
       procedure Get
-         (Item                      :    out Index_Array_Element_Type;
-          Named_Association_Array   : in     Boolean                  := Default_Named_Association_Array;
-          Named_Association_Element : in     Boolean                  := Default_Named_Association_Element)
+        (Item                      :    out Index_Array_Element_Type;
+         Named_Association_Array   : in     Boolean                  := Default_Named_Association_Array;
+         Named_Association_Element : in     Boolean                  := Default_Named_Association_Element)
       is begin
          Get (Current_Input, Item, Named_Association_Array, Named_Association_Element);
       end Get;
 
       procedure Get_Item
-         (File              : in     File_Type;
-          Item              :    out Index_Array_Element_Type;
-          Named_Association : in     Boolean                  := Default_Named_Association_Array)
+        (File              : in     File_Type;
+         Item              :    out Index_Array_Element_Type;
+         Named_Association : in     Boolean                  := Default_Named_Association_Array)
       is begin
          Get (File, Item, Named_Association, Named_Association);
       end Get_Item;

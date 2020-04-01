@@ -24,7 +24,7 @@
 --  executable file might be covered by the GNU Public License.
 
 with Ada.Text_IO;
-package auto_text_io.Text_IO_Utils is
+package Auto_Text_Io.Text_IO_Utils is
 
    Syntax_Error       : exception;
    Discriminant_Error : exception;
@@ -50,4 +50,4 @@ package auto_text_io.Text_IO_Utils is
    function Peek (File : in Ada.Text_IO.File_Type) return Character;
    --  Skip leading whitespace, return next character without consuming it.
 
-end auto_text_io.Text_IO_Utils;
+end Auto_Text_Io.Text_IO_Utils;

@@ -12,7 +12,7 @@ package body Auto_Text_Io.Text_IO is
    is
       pragma Unreferenced (Single_Line, Named_Association);
    begin
-      Ada.Text_IO.Put (file , '"' & Item & '"');
+      Ada.Text_IO.Put (File , '"' & Item & '"');
    end Put_Item;
 
    --------------
@@ -31,7 +31,7 @@ package body Auto_Text_Io.Text_IO is
 
    begin
 
-      while not End_Of_File (File) and then (Buffer(cursor) not  in ASCII.HT | ASCII.VT | ASCII.CR | ASCII.LF | ' ')loop
+      while not End_Of_File (File) and then (Buffer (Cursor) not  in ASCII.HT | ASCII.VT | ASCII.CR | ASCII.LF | ' ')loop
          Ada.Text_IO.Get (File, Buffer (Cursor));
       end loop;
       if Buffer (Cursor) = '"' then

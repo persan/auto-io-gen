@@ -25,7 +25,7 @@
 
 with Ada.Exceptions;
 with Ada.Strings.Fixed;
-package body auto_text_io.Text_IO_Utils is
+package body Auto_Text_Io.Text_IO_Utils is
    use Ada.Text_IO;
 
    procedure Skip_Whitespace
@@ -85,11 +85,11 @@ package body auto_text_io.Text_IO_Utils is
       Get (File, Temp);
       if Temp /= Trimmed_Item then
          Ada.Exceptions.Raise_Exception
-            (Syntax_Error'Identity,
-             Name (File) & ":" &
-             Ada.Strings.Fixed.Trim (Count'Image (Line (File)), Ada.Strings.Both) & ":" &
-             Ada.Strings.Fixed.Trim (Count'Image (Col (File)), Ada.Strings.Both) &
-             ": Expecting """ & Item & """, found """ & Temp & """.");
+           (Syntax_Error'Identity,
+            Name (File) & ":" &
+              Ada.Strings.Fixed.Trim (Count'Image (Line (File)), Ada.Strings.Both) & ":" &
+              Ada.Strings.Fixed.Trim (Count'Image (Col (File)), Ada.Strings.Both) &
+              ": Expecting """ & Item & """, found """ & Temp & """.");
       end if;
       Skip_Whitespace (File);
    end Check;
@@ -105,4 +105,4 @@ package body auto_text_io.Text_IO_Utils is
       return Item;
    end Peek;
 
-end auto_text_io.Text_IO_Utils;
+end Auto_Text_Io.Text_IO_Utils;

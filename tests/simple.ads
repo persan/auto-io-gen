@@ -8,17 +8,17 @@ package Simple is
    type Float_Type is digits 5 range 1.0 .. 60.0;
 
    type Fixed_Type is delta 0.1 range 0.0 .. 1.0;
---     type Integer_Type is range 0 .. 10 with Default_Value => 0;
---
---     type Mod_Type is mod 8 with Default_Value => 0;
---
---     type Enum_Type is (E1, E2, E3) with
---       Default_Value => E1,
---       Annotate => Auto_Io_Ignore;
---
---     type Float_Type is digits 5 range 1.0 .. 60.0 with Default_Value => 5.0;
---
---     type Fixed_Type is delta 0.1 range 0.0 .. 1.0 with Default_Value => 0.0;
+   --     type Integer_Type is range 0 .. 10 with Default_Value => 0;
+   --
+   --     type Mod_Type is mod 8 with Default_Value => 0;
+   --
+   --     type Enum_Type is (E1, E2, E3) with
+   --       Default_Value => E1,
+   --       Annotate => Auto_Io_Ignore;
+   --
+   --     type Float_Type is digits 5 range 1.0 .. 60.0 with Default_Value => 5.0;
+   --
+   --     type Fixed_Type is delta 0.1 range 0.0 .. 1.0 with Default_Value => 0.0;
 
 
    type Simple_Struct is record
@@ -66,8 +66,8 @@ package Simple is
       Long_Float_Field      : Long_Float := 0.0;
       Long_Long_Float_Field : Long_Long_Float := 0.0;
 
-      Character_Field : Character := ' ';
-      Wide_Character_Field : Wide_Character := ' ';
+      Character_Field           : Character := ' ';
+      Wide_Character_Field      : Wide_Character := ' ';
       Wide_Wide_Character_Field : Wide_Wide_Character := ' ';
 
       String_Field    : String (1 .. 5) := (others => '1');

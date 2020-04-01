@@ -380,7 +380,7 @@ package Auto_Text_Io.Gen_Array_Text_IO is
         (File              : in     Ada.Text_IO.File_Type;
          Item              :    out Index_Array_Element_Type;
          Named_Association : in     Boolean                  := Default_Named_Association)
-        renames Get_Item;
+         renames Get_Item;
 
       procedure Get
         (Item              :    out Index_Array_Element_Type;
@@ -410,8 +410,8 @@ package Auto_Text_Io.Gen_Array_Text_IO is
 
    package Unconstrained_Enumeration_1D is
 
-      Default_Width : Ada.Text_IO.Field := Init_Default_Width;
-      Default_Setting : Ada.Text_IO.Type_Set := Init_Default_Setting;
+      Default_Width             : Ada.Text_IO.Field := Init_Default_Width;
+      Default_Setting           : Ada.Text_IO.Type_Set := Init_Default_Setting;
       Default_Single_Line       : Boolean              := Init_Default_Single_Line;
       Default_Named_Association : Boolean              := Init_Default_Named_Association;
 
@@ -445,7 +445,7 @@ package Auto_Text_Io.Gen_Array_Text_IO is
         (File              : in     Ada.Text_IO.File_Type;
          Item              :    out Index_Array_Element_Type;
          Named_Association : in     Boolean                  := Default_Named_Association)
-        renames Get_Item;
+         renames Get_Item;
 
       procedure Get
         (Item              :    out Index_Array_Element_Type;
