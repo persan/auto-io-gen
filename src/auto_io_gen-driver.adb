@@ -45,26 +45,26 @@ procedure Auto_Io_Gen.Driver
 is
 begin
 
-   OPtions.Read_Command_Line;
+   Options.Read_Command_Line;
 
 
-   if OPtions.Verbose then
+   if Options.Verbose then
       Put_Line (Version);
       Put_Line ("GNAT version (from ASIS) " & Gnatvsn.Gnat_Version_String);
       New_Line;
    end if;
 
    --  Compile the Asis context if necessary.
-   OPtions.Initialize;
+   Options.Initialize;
 
-   if not OPtions.Initialized then
+   if not Options.Initialized then
       --  Error message already output.
       Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
       return;
    end if;
 
-   if OPtions.Verbose then
-      Put_Line ("Package_File_Name => " & OPtions.Package_File_Name.all);
+   if Options.Verbose then
+      Put_Line ("Package_File_Name => " & Options.Package_File_Name.all);
    end if;
 
    declare
@@ -105,14 +105,14 @@ begin
       CU_Kind := Asis.Compilation_Units.Unit_Kind (CU);
 
       if Is_Nil (CU) then
-         Put_Line ("file " & OPtions.Package_File_Name.all & " does not contain a unit to create a Text_IO child for");
+         Put_Line ("file " & Options.Package_File_Name.all & " does not contain a unit to create a Text_IO child for");
          Asis_Clean_Up;
 
       elsif not (CU_Kind = A_Package or else
                  CU_Kind = A_Generic_Package)
       then
 
-         if not OPtions.Quiet then
+         if not Options.Quiet then
             Ada.Wide_Text_IO.Put ("Auto_Io_Gen: Compilation unit " & Unit_Full_Name (CU));
             Put_Line (" does not require a Text_IO child");
             Put_Line (" Unit Kind: " & Unit_Kinds'Image (CU_Kind));

@@ -217,10 +217,10 @@ package body Auto_Io_Gen is
    is
       use Ada.Text_IO;
    begin
-
       --  Indent 0 means column 1
       Set_Col (File, 1 + Count (Auto_Io_Gen.Options.Indent) * (Count (Indent_Level) - 1));
    end Set_Indent;
+
    function Ada2file (Name : String) return String is
       Map : constant Ada.Strings.Maps.Character_Mapping :=
               Ada.Strings.Maps.To_Mapping ("ABCDEFGHIJKLMNOPQRSTUVWXYZ.",
