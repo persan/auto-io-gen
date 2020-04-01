@@ -33,7 +33,7 @@
 --  3) Record types declared in the private part: generate
 --     Private_Text_IO child package.
 --
---  4) Record types with discriminants, with no defaults. Here we call
+--  4) Record types with discriminants, with defaults. Here we call
 --     these "Constrained_Discriminants". Since the Item parameter is
 --     constrained, we can just compare the discriminants read from the
 --     file with the constraints, and raise Discriminant_Error for a
@@ -322,10 +322,56 @@ package body Auto_Io_Gen.Generate is
       Ada.Text_IO.Put (File, Text);
    end Indent;
 
-   procedure Indent_Line (File : in Ada.Text_IO.File_Type; Text : in String)
+   procedure Indent_Line (File : in Ada.Text_IO.File_Type;
+                          Text  : in String;
+                          Text1 : in String := "";
+                          Text2 : in String := "";
+                          Text3 : in String := "";
+                          Text4 : in String := "";
+                          Text5 : in String := "";
+                          Text6 : in String := "";
+                          Text7 : in String := "";
+                          Text8 : in String := "";
+                          Text9 : in String := "")
    is begin
       Set_Indent (File);
       Ada.Text_IO.Put_Line (File, Text);
+      if Text1 /= "" then
+      Set_Indent (File);
+         Ada.Text_IO.Put_Line (File, Text1);
+         if Text2 /= "" then
+            Set_Indent (File);
+            Ada.Text_IO.Put_Line (File, Text2);
+            if Text3 /= "" then
+               Set_Indent (File);
+               Ada.Text_IO.Put_Line (File, Text3);
+               if Text4 /= "" then
+                  Set_Indent (File);
+                  Ada.Text_IO.Put_Line (File, Text4);
+                  if Text5 /= "" then
+                     Set_Indent (File);
+                     Ada.Text_IO.Put_Line (File, Text5);
+                     if Text6 /= "" then
+                        Set_Indent (File);
+                        Ada.Text_IO.Put_Line (File, Text6);
+                        if Text7 /= "" then
+                           Set_Indent (File);
+                           Ada.Text_IO.Put_Line (File, Text7);
+                           if Text8 /= "" then
+                              Set_Indent (File);
+                              Ada.Text_IO.Put_Line (File, Text8);
+                              if Text9 /= "" then
+                                 Set_Indent (File);
+                                 Ada.Text_IO.Put_Line (File, Text9);
+                              end if;
+                           end if;
+                        end if;
+                     end if;
+                  end if;
+               end if;
+            end if;
+         end if;
+      end if;
    end Indent_Line;
 
    function Instantiated_Package_Name (Type_Name : in String) return String
@@ -451,6 +497,7 @@ package body Auto_Io_Gen.Generate is
       return Type_Name (Type_Name'First .. Root_Name_Index);
 
    end Root_Type_Name;
+
    function Standard_Text_IO_Name (Type_Name : in String) return String
    is begin
       if Type_Name = "boolean" then
@@ -497,7 +544,7 @@ package body Auto_Io_Gen.Generate is
       elsif Type_Name = "wide_wide_character" then
          return "Auto_Text_Io.Wide_Wide_Text_IO";
       else
-         Ada.Text_IO.Put_Line (Ada.Text_IO.Standard_Error, "Unsuported type:  " & Type_Name);
+         Ada.Text_IO.Put_Line (Ada.Text_IO.Standard_Error, "Unsupported type:  " & Type_Name);
          raise Not_Supported with Type_Name;
       end if;
 
