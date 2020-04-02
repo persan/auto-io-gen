@@ -1,0 +1,31 @@
+(F1 =>          12, F2 => "1111111111111111111")
+(D => TRUE, F1 =>          12, F2 => "1111111111111111111", DT => FALSE)
+(D => FALSE, F1 =>          12, F2 => "1111111111111111111", FD =>           1)
+(D => TRUE,
+ F1 =>          -1,
+ F2 => "F6                 ",
+ DT => TRUE)
+(V1 => (         -1, "F2                 "),
+ V2 => (         -1, "F2                 "),
+ V3 => (FALSE,          -1, "F6                 ",           0),
+ V4 => (TRUE,          -1, "F6                 ", TRUE),
+ Extra => -1.00000E+00)
+(Boolean_Field => FALSE,
+ Integer_Field =>           0,
+ Natural_Field =>           1,
+ Positive_Field =>           2,
+ Short_Short_Integer_Field =>    3,
+ Short_Integer_Field =>      4,
+ Long_Integer_Field =>                    5,
+ Long_Long_Integer_Field =>                    6,
+ Float_Field =>  0.00000E+00,
+ Long_Float_Field =>  0.00000000000000E+00,
+ Long_Long_Float_Field =>  0.00000000000000000E+00,
+ Character_Field =>  ,
+ Wide_Character_Field => " ",
+ Wide_Wide_Character_Field => " ",
+ String_Field => "11111",
+ Wide_String_Field => "2222222222",
+ Wide_Wide_String_Field => "11111111111111111111",
+ Duration_Field =>  ,
+ Integer_Type_Field =>   0)
