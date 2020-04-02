@@ -214,6 +214,7 @@ package body Auto_Io_Gen.Generate.Spec is
       is
          pragma Unreferenced (Type_List);
       begin
+         Indent_Level := 1;
          Put_Line (File, "end " & Child_Package_Name & ";");
       end Print_Footer;
 
@@ -405,14 +406,14 @@ package body Auto_Io_Gen.Generate.Spec is
 
          Indent_Line (File, "procedure Put");
          Indent_Level := Indent_Level + 1;
-         Indent_Line (File, "(File                      : in " & Ada_Text_IO & ".File_Type;");
-         Indent_Line (File, " Item                      : in " & Type_Name & ";");
-         Indent_Line (File, " Single_Line_Array         : in Boolean := " &
-                        Package_Name & ".Default_Single_Line_Array;");
-         Indent_Line (File, " Named_Association_Array   : in Boolean := " &
-                        Package_Name & ".Default_Named_Association_Array;");
-         Indent_Line (File, " Single_Line_Element       : in Boolean := " &
-                        Package_Name & ".Default_Single_Line_Element;");
+         Indent_Line (File, "(File                      : in " & Ada_Text_IO & ".File_Type;",
+                            " Item                      : in " & Type_Name & ";",
+                            " Single_Line_Array         : in Boolean := " &
+                                                Package_Name & ".Default_Single_Line_Array;",
+                            " Named_Association_Array   : in Boolean := " &
+                                                Package_Name & ".Default_Named_Association_Array;",
+                            " Single_Line_Element       : in Boolean := " &
+                                                Package_Name & ".Default_Single_Line_Element;");
 
          --  This line gets too long for the GNAT style check.
          --  Need a general wrap mechanism, but this works for
@@ -427,13 +428,13 @@ package body Auto_Io_Gen.Generate.Spec is
 
          Indent_Line (File, "procedure Put");
          Indent_Level := Indent_Level + 1;
-         Indent_Line (File, "(Item                : in " & Type_Name & ";");
-         Indent_Line (File, " Single_Line_Array         : in Boolean := " &
-                        Package_Name & ".Default_Single_Line_Array;");
-         Indent_Line (File, " Named_Association_Array   : in Boolean := " &
-                        Package_Name & ".Default_Named_Association_Array;");
-         Indent_Line (File, " Single_Line_Element       : in Boolean := " &
-                        Package_Name & ".Default_Single_Line_Element;");
+         Indent_Line (File, "(Item                : in " & Type_Name & ";",
+                            " Single_Line_Array         : in Boolean := " &
+                                                Package_Name & ".Default_Single_Line_Array;",
+                            " Named_Association_Array   : in Boolean := " &
+                                                Package_Name & ".Default_Named_Association_Array;",
+                            " Single_Line_Element       : in Boolean := " &
+                                                Package_Name & ".Default_Single_Line_Element;");
 
          --  This line gets too long for the GNAT style check.
          --  Need a general wrap mechanism, but this works for
@@ -448,20 +449,20 @@ package body Auto_Io_Gen.Generate.Spec is
 
          Indent_Line (File, "procedure Put_Item");
          Indent_Level := Indent_Level + 1;
-         Indent_Line (File, "(File                 : in " & Ada_Text_IO & ".File_Type;");
-         Indent_Line (File, " Item                 : in " & Type_Name & ";");
-         Indent_Line (File, " Single_Line          : in Boolean := " &
-                        Package_Name & ".Default_Single_Line_Array;");
-         Indent_Line (File, " Named_Association    : in Boolean := " &
-                        Package_Name & ".Default_Named_Association_Array)");
-         Indent_Line (File, "renames " & Package_Name & ".Put_Item;");
+         Indent_Line (File, "(File                 : in " & Ada_Text_IO & ".File_Type;",
+                            " Item                 : in " & Type_Name & ";",
+                            " Single_Line          : in Boolean := " &
+                                                Package_Name & ".Default_Single_Line_Array;",
+                            " Named_Association    : in Boolean := " &
+                                                Package_Name & ".Default_Named_Association_Array)",
+                            "renames " & Package_Name & ".Put_Item;");
          Indent_Level := Indent_Level - 1;
 
          Indent_Line (File, "procedure Get");
          Indent_Level := Indent_Level + 1;
-         Indent_Line (File, "(File                      : in     " & Ada_Text_IO & ".File_Type;");
-         Indent_Line (File, " Item                      :    out " & Type_Name & ";");
-         Indent_Line (File, " Named_Association_Array   : in     Boolean :=");
+         Indent_Line (File, "(File                      : in     " & Ada_Text_IO & ".File_Type;",
+                            " Item                      :    out " & Type_Name & ";",
+                            " Named_Association_Array   : in     Boolean :=");
          Indent_Level := Indent_Level + 1;
          Indent_Line (File, Package_Name & ".Default_Named_Association_Array;");
          Indent_Level := Indent_Level - 1;
@@ -474,8 +475,8 @@ package body Auto_Io_Gen.Generate.Spec is
 
          Indent_Line (File, "procedure Get");
          Indent_Level := Indent_Level + 1;
-         Indent_Line (File, "(Item                      :    out " & Type_Name & ";");
-         Indent_Line (File, " Named_Association_Array   : in     Boolean :=");
+         Indent_Line (File, "(Item                      :    out " & Type_Name & ";",
+                            " Named_Association_Array   : in     Boolean :=");
          Indent_Level := Indent_Level + 1;
          Indent_Line (File, Package_Name & ".Default_Named_Association_Array;");
          Indent_Level := Indent_Level - 1;
@@ -488,10 +489,10 @@ package body Auto_Io_Gen.Generate.Spec is
 
          Indent_Line (File, "procedure Get_Item");
          Indent_Level := Indent_Level + 1;
-         Indent_Line (File, "(File              : in " & Ada_Text_IO & ".File_Type;");
-         Indent_Line (File, " Item              :    out " & Type_Name & ";");
-         Indent_Line (File, " Named_Association : in     Boolean := False)");
-         Indent_Line (File, "renames " & Package_Name & ".Get_Item;");
+         Indent_Line (File, "(File              : in " & Ada_Text_IO & ".File_Type;",
+                            " Item              :    out " & Type_Name & ";",
+                            " Named_Association : in     Boolean := False)",
+                            "renames " & Package_Name & ".Get_Item;");
          Indent_Level := Indent_Level - 1;
 
       when Lists.Enumeration_Label =>
@@ -528,31 +529,31 @@ package body Auto_Io_Gen.Generate.Spec is
       Indent_Line (File, "procedure Put");
       Indent_Level := Indent_Level + 1;
 
-      Indent_Line (File, "(File                      : in " & Ada_Text_IO & ".File_Type;");
-      Indent_Line (File, " Item                      : in " & Type_Name & ";");
-      Indent_Line (File, " Single_Line_Array         : in Boolean := False;");
-      Indent_Line (File, " Named_Association_Array   : in Boolean := False;");
-      Indent_Line (File, " Single_Line_Element       : in Boolean := True;");
-      Indent_Line (File, " Named_Association_Element : in Boolean := False);");
+      Indent_Line (File, "(File                      : in " & Ada_Text_IO & ".File_Type;",
+                         " Item                      : in " & Type_Name & ";",
+                         " Single_Line_Array         : in Boolean := False;",
+                         " Named_Association_Array   : in Boolean := False;",
+                         " Single_Line_Element       : in Boolean := True;",
+                         " Named_Association_Element : in Boolean := False);");
 
       Indent_Level := Indent_Level - 1;
       Indent_Line (File, "procedure Put");
       Indent_Level := Indent_Level + 1;
 
-      Indent_Line (File, "(Item                      : in " & Type_Name & ";");
-      Indent_Line (File, " Single_Line_Array         : in Boolean := False;");
-      Indent_Line (File, " Named_Association_Array   : in Boolean := False;");
-      Indent_Line (File, " Single_Line_Element       : in Boolean := True;");
-      Indent_Line (File, " Named_Association_Element : in Boolean := False);");
+      Indent_Line (File, "(Item                      : in " & Type_Name & ";",
+                         " Single_Line_Array         : in Boolean := False;",
+                         " Named_Association_Array   : in Boolean := False;",
+                         " Single_Line_Element       : in Boolean := True;",
+                         " Named_Association_Element : in Boolean := False);");
 
       Indent_Level := Indent_Level - 1;
       Indent_Line (File, "procedure Put_Item");
       Indent_Level := Indent_Level + 1;
 
-      Indent_Line (File, "(File              : in " & Ada_Text_IO & ".File_Type;");
-      Indent_Line (File, " Item              : in " & Type_Name & ";");
-      Indent_Line (File, " Single_Line       : in Boolean := False;");
-      Indent_Line (File, " Named_Association : in Boolean := False);");
+      Indent_Line (File, "(File              : in " & Ada_Text_IO & ".File_Type;",
+                         " Item              : in " & Type_Name & ";",
+                         " Single_Line       : in Boolean := False;",
+                         " Named_Association : in Boolean := False);");
 
       Indent_Level := Indent_Level - 1;
       New_Line (File);
@@ -560,24 +561,24 @@ package body Auto_Io_Gen.Generate.Spec is
       Indent_Line (File, "procedure Get");
       Indent_Level := Indent_Level + 1;
 
-      Indent_Line (File, "(File                      : in     " & Ada_Text_IO & ".File_Type;");
-      Indent_Line (File, " Item                      :    out " & Type_Name & ";");
-      Indent_Line (File, " Named_Association_Array   : in     Boolean := False;");
-      Indent_Line (File, " Named_Association_Element : in     Boolean := False);");
+      Indent_Line (File, "(File                      : in     " & Ada_Text_IO & ".File_Type;",
+                         " Item                      :    out " & Type_Name & ";",
+                         " Named_Association_Array   : in     Boolean := False;",
+                         " Named_Association_Element : in     Boolean := False);");
       Indent_Level := Indent_Level - 1;
       Indent_Line (File, "procedure Get");
       Indent_Level := Indent_Level + 1;
-      Indent_Line (File, "(Item                      :    out " & Type_Name & ";");
-      Indent_Line (File, " Named_Association_Array   : in     Boolean := False;");
-      Indent_Line (File, " Named_Association_Element : in     Boolean := False);");
+      Indent_Line (File, "(Item                      :    out " & Type_Name & ";",
+                         " Named_Association_Array   : in     Boolean := False;",
+                         " Named_Association_Element : in     Boolean := False);");
 
       Indent_Level := Indent_Level - 1;
       Indent_Line (File, "procedure Get_Item");
       Indent_Level := Indent_Level + 1;
 
-      Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;");
-      Indent_Line (File, " Item              :    out " & Type_Name & ";");
-      Indent_Line (File, " Named_Association : in     Boolean := False);");
+      Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;",
+                         " Item              :    out " & Type_Name & ";",
+                         " Named_Association : in     Boolean := False);");
       Indent_Level := Indent_Level - 1;
 
       New_Line (File);
@@ -632,30 +633,30 @@ package body Auto_Io_Gen.Generate.Spec is
 
       --  We should use structured comments to get the defaults for
       --  Single_Line etc.
-      Indent_Line (File, " Item                        : in " & Type_Name & ";");
-      Indent_Line (File, " Single_Line_Record          : in Boolean := True;");
-      Indent_Line (File, " Named_Association_Record    : in Boolean := False;");
-      Indent_Line (File, " Single_Line_Component       : in Boolean := True;");
-      Indent_Line (File, " Named_Association_Component : in Boolean := False);");
+      Indent_Line (File, " Item                        : in " & Type_Name & ";",
+                         " Single_Line_Record          : in Boolean := True;",
+                         " Named_Association_Record    : in Boolean := False;",
+                         " Single_Line_Component       : in Boolean := True;",
+                         " Named_Association_Component : in Boolean := False);");
 
       Indent_Level := Indent_Level - 1;
       Indent_Line (File, "procedure Put");
       Indent_Level := Indent_Level + 1;
 
-      Indent_Line (File, "(Item                        : in " & Type_Name & ";");
-      Indent_Line (File, " Single_Line_Record          : in Boolean := True;");
-      Indent_Line (File, " Named_Association_Record    : in Boolean := False;");
-      Indent_Line (File, " Single_Line_Component       : in Boolean := True;");
-      Indent_Line (File, " Named_Association_Component : in Boolean := False);");
+      Indent_Line (File, "(Item                        : in " & Type_Name & ";",
+                         " Single_Line_Record          : in Boolean := True;",
+                         " Named_Association_Record    : in Boolean := False;",
+                         " Single_Line_Component       : in Boolean := True;",
+                         " Named_Association_Component : in Boolean := False);");
 
       Indent_Level := Indent_Level - 1;
       Indent_Line (File, "procedure Put_Item");
       Indent_Level := Indent_Level + 1;
 
-      Indent_Line (File, "(File              : in " & Ada_Text_IO & ".File_Type;");
-      Indent_Line (File, " Item              : in " & Type_Name & ";");
-      Indent_Line (File, " Single_Line       : in Boolean := False;");
-      Indent_Line (File, " Named_Association : in Boolean := False);");
+      Indent_Line (File, "(File              : in " & Ada_Text_IO & ".File_Type;",
+                         " Item              : in " & Type_Name & ";",
+                         " Single_Line       : in Boolean := False;",
+                         " Named_Association : in Boolean := False);");
 
       Indent_Level := Indent_Level - 1;
       New_Line (File);
@@ -663,24 +664,24 @@ package body Auto_Io_Gen.Generate.Spec is
       Indent_Line (File, "procedure Get");
       Indent_Level := Indent_Level + 1;
 
-      Indent_Line (File, "(File                        : in     " & Ada_Text_IO & ".File_Type;");
-      Indent_Line (File, " Item                        :    out " & Type_Name & ";");
-      Indent_Line (File, " Named_Association_Record    : in     Boolean := False;");
-      Indent_Line (File, " Named_Association_Component : in     Boolean := False);");
+      Indent_Line (File, "(File                        : in     " & Ada_Text_IO & ".File_Type;",
+                         " Item                        :    out " & Type_Name & ";",
+                         " Named_Association_Record    : in     Boolean := False;",
+                         " Named_Association_Component : in     Boolean := False);");
       Indent_Level := Indent_Level - 1;
       Indent_Line (File, "procedure Get");
       Indent_Level := Indent_Level + 1;
-      Indent_Line (File, "(Item                        :    out " & Type_Name & ";");
-      Indent_Line (File, " Named_Association_Record    : in     Boolean := False;");
-      Indent_Line (File, " Named_Association_Component : in     Boolean := False);");
+      Indent_Line (File, "(Item                        :    out " & Type_Name & ";",
+                         " Named_Association_Record    : in     Boolean := False;",
+                         " Named_Association_Component : in     Boolean := False);");
 
       Indent_Level := Indent_Level - 1;
       Indent_Line (File, "procedure Get_Item");
       Indent_Level := Indent_Level + 1;
 
-      Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;");
-      Indent_Line (File, " Item              :    out " & Type_Name & ";");
-      Indent_Line (File, " Named_Association : in     Boolean := False);");
+      Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;",
+                         " Item              :    out " & Type_Name & ";",
+                         " Named_Association : in     Boolean := False);");
       Indent_Level := Indent_Level - 1;
 
       New_Line (File);
@@ -706,42 +707,42 @@ package body Auto_Io_Gen.Generate.Spec is
 
       --  We should use structured comments to get the defaults for
       --  Single_Line etc.
-      Indent_Line (File, " Item                        : in " & Type_Name & ";");
-      Indent_Line (File, " Single_Line_Record          : in Boolean := True;");
-      Indent_Line (File, " Named_Association_Record    : in Boolean := False;");
-      Indent_Line (File, " Single_Line_Component       : in Boolean := True;");
-      Indent_Line (File, " Named_Association_Component : in Boolean := False);");
+      Indent_Line (File, " Item                        : in " & Type_Name & ";",
+                         " Single_Line_Record          : in Boolean := True;",
+                         " Named_Association_Record    : in Boolean := False;",
+                         " Single_Line_Component       : in Boolean := True;",
+                         " Named_Association_Component : in Boolean := False);");
 
       Indent_Level := Indent_Level - 1;
       Indent_Line (File, "procedure Put");
       Indent_Level := Indent_Level + 1;
 
-      Indent_Line (File, "(Item                        : in " & Type_Name & ";");
-      Indent_Line (File, " Single_Line_Record          : in Boolean := True;");
-      Indent_Line (File, " Named_Association_Record    : in Boolean := False;");
-      Indent_Line (File, " Single_Line_Component       : in Boolean := True;");
-      Indent_Line (File, " Named_Association_Component : in Boolean := False);");
+      Indent_Line (File, "(Item                        : in " & Type_Name & ";",
+                         " Single_Line_Record          : in Boolean := True;",
+                         " Named_Association_Record    : in Boolean := False;",
+                         " Single_Line_Component       : in Boolean := True;",
+                         " Named_Association_Component : in Boolean := False);");
 
       Indent_Level := Indent_Level - 1;
       Indent_Line (File, "procedure Put_Item");
       Indent_Level := Indent_Level + 1;
 
-      Indent_Line (File, "(File              : in " & Ada_Text_IO & ".File_Type;");
-      Indent_Line (File, " Item              : in " & Type_Name & ";");
-      Indent_Line (File, " Single_Line       : in Boolean := False;");
-      Indent_Line (File, " Named_Association : in Boolean := False);");
+      Indent_Line (File, "(File              : in " & Ada_Text_IO & ".File_Type;",
+                         " Item              : in " & Type_Name & ";",
+                         " Single_Line       : in Boolean := False;",
+                         " Named_Association : in Boolean := False);");
 
       if Type_Descriptor.Record_Tagged then
          Indent_Level := Indent_Level - 1;
          Indent_Line (File, "procedure Put_Components");
          Indent_Level := Indent_Level + 1;
 
-         Indent_Line (File, "(File                        : in " & Ada_Text_IO & ".File_Type;");
-         Indent_Line (File, " Item                        : in " & Type_Name & ";");
-         Indent_Line (File, " Single_Line_Record          : in Boolean := True;");
-         Indent_Line (File, " Named_Association_Record    : in Boolean := False;");
-         Indent_Line (File, " Single_Line_Component       : in Boolean := True;");
-         Indent_Line (File, " Named_Association_Component : in Boolean := False);");
+         Indent_Line (File, "(File                        : in " & Ada_Text_IO & ".File_Type;",
+                            " Item                        : in " & Type_Name & ";",
+                            " Single_Line_Record          : in Boolean := True;",
+                            " Named_Association_Record    : in Boolean := False;",
+                            " Single_Line_Component       : in Boolean := True;",
+                            " Named_Association_Component : in Boolean := False);");
 
       end if;
 
@@ -751,34 +752,34 @@ package body Auto_Io_Gen.Generate.Spec is
       Indent_Line (File, "procedure Get");
       Indent_Level := Indent_Level + 1;
 
-      Indent_Line (File, "(File                        : in     " & Ada_Text_IO & ".File_Type;");
-      Indent_Line (File, " Item                        :    out " & Type_Name & ";");
-      Indent_Line (File, " Named_Association_Record    : in     Boolean := False;");
-      Indent_Line (File, " Named_Association_Component : in     Boolean := False);");
+      Indent_Line (File, "(File                        : in     " & Ada_Text_IO & ".File_Type;",
+                         " Item                        :    out " & Type_Name & ";",
+                         " Named_Association_Record    : in     Boolean := False;",
+                         " Named_Association_Component : in     Boolean := False);");
       Indent_Level := Indent_Level - 1;
       Indent_Line (File, "procedure Get");
       Indent_Level := Indent_Level + 1;
-      Indent_Line (File, "(Item                        :    out " & Type_Name & ";");
-      Indent_Line (File, " Named_Association_Record    : in     Boolean := False;");
-      Indent_Line (File, " Named_Association_Component : in     Boolean := False);");
+      Indent_Line (File, "(Item                        :    out " & Type_Name & ";",
+                         " Named_Association_Record    : in     Boolean := False;",
+                         " Named_Association_Component : in     Boolean := False);");
 
       Indent_Level := Indent_Level - 1;
       Indent_Line (File, "procedure Get_Item");
       Indent_Level := Indent_Level + 1;
 
-      Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;");
-      Indent_Line (File, " Item              :    out " & Type_Name & ";");
-      Indent_Line (File, " Named_Association : in     Boolean := False);");
+      Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;",
+                         " Item              :    out " & Type_Name & ";",
+                         " Named_Association : in     Boolean := False);");
       Indent_Level := Indent_Level - 1;
 
       if Type_Descriptor.Record_Tagged then
          Indent_Line (File, "procedure Get_Components");
          Indent_Level := Indent_Level + 1;
 
-         Indent_Line (File, "(File                        : in     " & Ada_Text_IO & ".File_Type;");
-         Indent_Line (File, " Item                        :    out " & Type_Name & ";");
-         Indent_Line (File, " Named_Association_Record    : in     Boolean := False;");
-         Indent_Line (File, " Named_Association_Component : in     Boolean := False);");
+         Indent_Line (File, "(File                        : in     " & Ada_Text_IO & ".File_Type;",
+                            " Item                        :    out " & Type_Name & ";",
+                            " Named_Association_Record    : in     Boolean := False;",
+                            " Named_Association_Component : in     Boolean := False);");
          Indent_Level := Indent_Level - 1;
       end if;
 
