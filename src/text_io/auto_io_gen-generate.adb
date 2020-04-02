@@ -374,6 +374,40 @@ package body Auto_Io_Gen.Generate is
       end if;
    end Indent_Line;
 
+   procedure Indent_Incr (File : in Ada.Text_IO.File_Type; Text  : in String)
+   is
+      use type Ada.Text_Io.Count;
+   begin
+      Indent_Line (File, Text);
+      Indent_Level := Indent_Level + 1;
+   end Indent_Incr;
+
+   procedure Indent_Decr (File : in Ada.Text_IO.File_Type; Text  : in String)
+   is
+      use type Ada.Text_Io.Count;
+   begin
+      Indent_Level := Indent_Level - 1;
+      Indent_Line (File, Text);
+   end Indent_Decr;
+
+   procedure Indent_Less (File : in Ada.Text_IO.File_Type; Text : in String)
+   is
+      use type Ada.Text_Io.Count;
+   begin
+      Indent_Level := Indent_Level - 1;
+      Indent_Line (File, Text);
+      Indent_Level := Indent_Level + 1;
+   end Indent_Less;
+
+   procedure Indent_More (File : in Ada.Text_IO.File_Type; Text : in String)
+   is
+      use type Ada.Text_Io.Count;
+   begin
+      Indent_Level := Indent_Level + 1;
+      Indent_Line (File, Text);
+      Indent_Level := Indent_Level - 1;
+   end Indent_More;
+
    function Instantiated_Package_Name (Type_Name : in String) return String
    is
       Root_Name_Index : Natural := Ada.Strings.Fixed.Index (Type_Name, "_Type");

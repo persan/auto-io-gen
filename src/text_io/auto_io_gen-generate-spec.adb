@@ -282,9 +282,7 @@ package body Auto_Io_Gen.Generate.Spec is
          --  This line gets too long for the GNAT style check. Need
          --  a general wrap mechanism, but this works for now.
          Indent_Line (File, " Named_Association : in Boolean :=");
-         Indent_Level := Indent_Level + 1;
-         Indent_Line (File, Package_Name & ".Default_Named_Association)");
-         Indent_Level := Indent_Level - 1;
+         Indent_More (File, Package_Name & ".Default_Named_Association)");
       else
          Put_Line (File, ")");
       end if;
@@ -348,9 +346,7 @@ package body Auto_Io_Gen.Generate.Spec is
          --  This line gets too long for the GNAT style check. Need
          --  a general wrap mechanism, but this works for now.
          Indent_Line (File, " Named_Association : in Boolean :=");
-         Indent_Level := Indent_Level + 1;
-         Indent_Line (File, Package_Name & ".Default_Named_Association)");
-         Indent_Level := Indent_Level - 1;
+         Indent_More (File, Package_Name & ".Default_Named_Association)");
       else
          Put_Line (File, ")");
       end if;
@@ -419,9 +415,7 @@ package body Auto_Io_Gen.Generate.Spec is
          --  Need a general wrap mechanism, but this works for
          --  now.
          Indent_Line (File, " Named_Association_Element : in Boolean :=");
-         Indent_Level := Indent_Level + 1;
-         Indent_Line (File, Package_Name & ".Default_Named_Association_Element)");
-         Indent_Level := Indent_Level - 1;
+         Indent_More (File, Package_Name & ".Default_Named_Association_Element)");
 
          Indent_Line (File, "renames " & Package_Name & ".Put;");
          Indent_Level := Indent_Level - 1;
@@ -440,9 +434,7 @@ package body Auto_Io_Gen.Generate.Spec is
          --  Need a general wrap mechanism, but this works for
          --  now.
          Indent_Line (File, " Named_Association_Element : in Boolean :=");
-         Indent_Level := Indent_Level + 1;
-         Indent_Line (File, Package_Name & ".Default_Named_Association_Element)");
-         Indent_Level := Indent_Level - 1;
+         Indent_More (File, Package_Name & ".Default_Named_Association_Element)");
 
          Indent_Line (File, "renames " & Package_Name & ".Put;");
          Indent_Level := Indent_Level - 1;
@@ -463,13 +455,9 @@ package body Auto_Io_Gen.Generate.Spec is
          Indent_Line (File, "(File                      : in     " & Ada_Text_IO & ".File_Type;",
                             " Item                      :    out " & Type_Name & ";",
                             " Named_Association_Array   : in     Boolean :=");
-         Indent_Level := Indent_Level + 1;
-         Indent_Line (File, Package_Name & ".Default_Named_Association_Array;");
-         Indent_Level := Indent_Level - 1;
+         Indent_More (File, Package_Name & ".Default_Named_Association_Array;");
          Indent_Line (File, " Named_Association_Element : in     Boolean :=");
-         Indent_Level := Indent_Level + 1;
-         Indent_Line (File, Package_Name & ".Default_Named_Association_Element)");
-         Indent_Level := Indent_Level - 1;
+         Indent_More (File, Package_Name & ".Default_Named_Association_Element)");
          Indent_Line (File, "renames " & Package_Name & ".Get;");
          Indent_Level := Indent_Level - 1;
 
@@ -477,13 +465,9 @@ package body Auto_Io_Gen.Generate.Spec is
          Indent_Level := Indent_Level + 1;
          Indent_Line (File, "(Item                      :    out " & Type_Name & ";",
                             " Named_Association_Array   : in     Boolean :=");
-         Indent_Level := Indent_Level + 1;
-         Indent_Line (File, Package_Name & ".Default_Named_Association_Array;");
-         Indent_Level := Indent_Level - 1;
+         Indent_More (File, Package_Name & ".Default_Named_Association_Array;");
          Indent_Line (File, " Named_Association_Element : in     Boolean :=");
-         Indent_Level := Indent_Level + 1;
-         Indent_Line (File, Package_Name & ".Default_Named_Association_Element)");
-         Indent_Level := Indent_Level - 1;
+         Indent_More (File, Package_Name & ".Default_Named_Association_Element)");
          Indent_Line (File, "renames " & Package_Name & ".Get;");
          Indent_Level := Indent_Level - 1;
 
