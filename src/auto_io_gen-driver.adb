@@ -37,17 +37,16 @@ with Auto_Io_Gen.Build;
 with Auto_Io_Gen.Options;
 with Gnatvsn;
 
-with Auto_Io_Gen.Generate; pragma Warnings(off,Auto_Io_Gen.Generate);
-with Auto_Io_Gen.Generate_Image;pragma Warnings(off,Auto_Io_Gen.Generate_Image);
-with Auto_Io_Gen.Generate_JSON;pragma Warnings(off,Auto_Io_Gen.Generate_JSON);
-
+with Auto_Io_Gen.Generate; pragma Warnings (Off, Auto_Io_Gen.Generate);
+with Auto_Io_Gen.Generate_Image; pragma Warnings (Off, Auto_Io_Gen.Generate_Image);
+with Auto_Io_Gen.Generate_JSON; pragma Warnings (Off, Auto_Io_Gen.Generate_JSON);
+with A4G.A_Opt;
 procedure Auto_Io_Gen.Driver
 is
 begin
-
    Options.Read_Command_Line;
 
-
+   A4G.A_Opt.Strong_Version_Check := False;
    if Options.Verbose then
       Put_Line (Version);
       Put_Line ("GNAT version (from ASIS) " & Gnatvsn.Gnat_Version_String);
