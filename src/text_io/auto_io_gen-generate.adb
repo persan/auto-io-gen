@@ -322,7 +322,7 @@ package body Auto_Io_Gen.Generate is
       Ada.Text_IO.Put (File, Text);
    end Indent;
 
-   procedure Indent_Line (File : in Ada.Text_IO.File_Type;
+   procedure Indent_Line (File  : in Ada.Text_IO.File_Type;
                           Text  : in String;
                           Text1 : in String := "";
                           Text2 : in String := "";
@@ -337,7 +337,7 @@ package body Auto_Io_Gen.Generate is
       Set_Indent (File);
       Ada.Text_IO.Put_Line (File, Text);
       if Text1 /= "" then
-      Set_Indent (File);
+         Set_Indent (File);
          Ada.Text_IO.Put_Line (File, Text1);
          if Text2 /= "" then
             Set_Indent (File);

@@ -36,42 +36,42 @@ package body Auto_Io_Gen.Options is
    use GNAT.Strings;
 
    Create_Output_Folders : aliased Boolean := False;
-   Trace_Exceptions : aliased Boolean := False;
-   I_Options : Ada.Strings.Unbounded.Unbounded_String;
+   Trace_Exceptions      : aliased Boolean := False;
+   I_Options             : Ada.Strings.Unbounded.Unbounded_String;
    --  Temporary storage for "-Idir" options; read by Scan_Arg, used
    --  by Check_Parameters.
 
-   Project_Arg : aliased GNAT.Strings.String_Access;
+   Project_Arg           : aliased GNAT.Strings.String_Access;
    --  "-Pfile" option; read by Scan_Arg, used by Create_Tree.
 
-   Gnatmake_User_Args : Ada.Strings.Unbounded.Unbounded_String;
+   Gnatmake_User_Args    : Ada.Strings.Unbounded.Unbounded_String;
    --  from -g option
 
-   Delete_Tree : aliased Boolean := True;
+   Delete_Tree           : aliased Boolean := True;
    --  Should the tree file be deleted when processing is complete
 
-   Overwrite_Tree : aliased Boolean := True;
+   Overwrite_Tree        : aliased Boolean := True;
    --  Should an existing tree file be overwritten
 
-   Parser_Was_Set_Up : Boolean := False;
+   Parser_Was_Set_Up     : Boolean := False;
    -- Auxiliary flag for avoiding double execution of Setup_Parser
 
-   Reuse_Tree : aliased Boolean := False;
+   Reuse_Tree            : aliased Boolean := False;
    --  Should an existing tree file be reused
 
-   Search_Dir_List  : GNAT.OS_Lib.Argument_List_Access;
---     Search_Dir_Count : Natural := 0;
+   Search_Dir_List       : GNAT.OS_Lib.Argument_List_Access;
+   --     Search_Dir_Count : Natural := 0;
    --  -I options from the command line transformed into the form
    --  appropriate for calling gcc to create the tree file
 
-   Tree_File : File_Type;
+   Tree_File             : File_Type;
    --  The input tree file
 
-   Tree_Exists : Boolean := False;
+   Tree_Exists           : Boolean := False;
    --  True if the tree file has been created or has been found as
    --  existing during the initialization
 
-   Tree_Name : GNAT.Strings.String_Access;
+   Tree_Name             : GNAT.Strings.String_Access;
 
    -------------
    --  Local operation declarations (alphabetical)
@@ -211,7 +211,7 @@ package body Auto_Io_Gen.Options is
       --  after we know what the name is (generic or not).
 
       --  Check the tree file. It is created in the current directory, where gcc is run.
-      Tree_Name := new String'(Base_Name(Root_File_Name.all) & ".adt");
+      Tree_Name := new String'(Base_Name (Root_File_Name.all) & ".adt");
 
       if Exists (Tree_Name.all) then
          Tree_Exists := True;
@@ -248,7 +248,7 @@ package body Auto_Io_Gen.Options is
    procedure Clean_Up
    is
 
-      Ali_Name : constant String := Base_Name(Root_File_Name.all) & ".ali";
+      Ali_Name : constant String := Base_Name (Root_File_Name.all) & ".ali";
    begin
       if Delete_Tree and then Tree_Exists then
          Delete_File (Tree_Name.all);
@@ -264,7 +264,7 @@ package body Auto_Io_Gen.Options is
       Success                : Boolean;
       Temp_Package_File_Name : constant String := Package_File_Name.all;
 
-      Command             : Gnat.Strings.String_Access := OS_Lib.Locate_Exec_On_Path ("gnatmake");
+      Command             : Gnat.Strings.String_Access := OS_Lib.Locate_Exec_On_Path ("gprbuild");
       Command_Args_List   : String_List_Access;
    begin
       if Tree_Exists and Reuse_Tree then
@@ -279,7 +279,7 @@ package body Auto_Io_Gen.Options is
          Command := OS_Lib.Locate_Exec_On_Path ("gprbuild");
          declare
             Gnatmake_Args_String : constant String :=
-                                     "-c -gnatc -gnatt " &
+                                     "-XAUTO_IO_GEN=True " &
                                      To_String (Gnatmake_User_Args) & " " &
                                      Temp_Package_File_Name & " " &
                                      "-P" & Project_Arg.all;
@@ -287,7 +287,12 @@ package body Auto_Io_Gen.Options is
             Command_Args_List := OS_Lib.Argument_String_To_List (Gnatmake_Args_String);
          end;
       else
-         Command := OS_Lib.Locate_Exec_On_Path ("gcc");
+         Command := OS_Lib.Locate_Exec_On_Path ("asis-gcc");
+         if Command = null then
+            Command := OS_Lib.Locate_Exec_On_Path ("gcc");
+         end if;
+
+
          declare
             Gcc_Args_String : constant String := "-c -gnatc -gnatt " & Temp_Package_File_Name;
          begin
