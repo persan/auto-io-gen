@@ -67,6 +67,18 @@ private
                           Text9 : in String := "");
    --  Do Set_Indent (File), then Put_Line (File, Text).
 
+   procedure Indent_Incr (File : in Ada.Text_IO.File_Type; Text : in String);
+   --  Call Indent_Line, then increment Indent_Level.
+
+   procedure Indent_Decr (File : in Ada.Text_IO.File_Type; Text : in String);
+   --  Decrement Indent_Level, then call Indent_Line.
+
+   procedure Indent_Less (File : in Ada.Text_IO.File_Type; Text : in String);
+   --  Decrement Indent_Level, call Indent_Line, increment Indent_Level.
+
+   procedure Indent_More (File : in Ada.Text_IO.File_Type; Text : in String);
+   --  Increment Indent_Level, call Indent_Line, decrement Indent_Level.
+
    procedure Instantiate_Generic_Array_Text_IO
      (File            : in Ada.Text_IO.File_Type;
       Type_Descriptor : in Lists.Type_Descriptor_Type);
