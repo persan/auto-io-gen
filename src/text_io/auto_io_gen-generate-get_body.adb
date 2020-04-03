@@ -63,6 +63,11 @@ package body Auto_Io_Gen.Generate.Get_Body is
    --  Generate body code for all Put subprograms in the public child
    --  for a private array type.
 
+   procedure Generate_Access
+      (File            : in Ada.Text_IO.File_Type;
+       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
+   --  Generate body code for all Get subprograms for an access type.
+
    procedure Generate
      (File            : in Ada.Text_IO.File_Type;
       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
@@ -102,7 +107,7 @@ package body Auto_Io_Gen.Generate.Get_Body is
          raise Program_Error;
 
       when Lists.Access_Label =>
-         Indent (File, "-- Access_Label TODO");
+         Generate_Access (File, Type_Descriptor);
       end case;
    end Generate;
 
@@ -617,5 +622,40 @@ package body Auto_Io_Gen.Generate.Get_Body is
       end if;
 
    end Generate_Record;
+
+   procedure Generate_Access
+      (File            : in Ada.Text_IO.File_Type;
+       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
+   is
+      Type_Name : constant String := Lists.Type_Name (Type_Descriptor);
+   begin
+      Indent_Incr (File, "procedure Get");
+      Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;",
+                         " Item              :    out " & Type_Name & ";",
+                         " Named_Association : in     Boolean := False)");
+      Indent_Less (File, "is");
+      Indent_Less (File, "begin");
+      Indent_Line (File, "null;   -- TODO");
+      Indent_Decr (File, "end Get;");
+
+      Indent_Incr (File, "procedure Get");
+      Indent_Line (File, "(Item              :    out " & Type_Name & ";",
+                         " Named_Association : in     Boolean := False)");
+      Indent_Less (File, "is");
+      Indent_Less (File, "begin");
+      Indent_Line (File, "null;   -- TODO");
+      Indent_Decr (File, "end Get;");
+
+      Indent_Incr (File, "procedure Get_Item");
+      Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;",
+                         " Item              :    out " & Type_Name & ";",
+                         " Named_Association : in     Boolean := False)");
+      Indent_Less (File, "is");
+      Indent_Less (File, "begin");
+      Indent_Line (File, "null;   -- TODO");
+      Indent_Decr (File, "end Get_Item;");
+
+      New_Line (File);
+   end Generate_Access;
 
 end Auto_Io_Gen.Generate.Get_Body;

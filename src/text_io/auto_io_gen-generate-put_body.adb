@@ -599,6 +599,26 @@ package body Auto_Io_Gen.Generate.Put_Body is
                          Ada_Text_IO & ".Put_Line (File, '#' & Str & ""' (...values...)"");");
       Indent_Decr (File, "end if;");
       Indent_Decr (File, "end Put;");
+
+      New_Line (File);
+
+      Indent_Incr (File, "procedure Put");
+      Indent_Line (File, "(Item              : in " & Type_Name & ";",
+                         " Named_Association : in Boolean := False)");
+      Indent_Less (File, "is");
+      Indent_Less (File, "begin");
+      Indent_Line (File, "null;   -- TODO");
+      Indent_Decr (File, "end Put;");
+
+      Indent_Incr (File, "procedure Put_Item");
+      Indent_Line (File, "(File              : in " & Ada_Text_IO & ".File_Type;",
+                         " Item              : in " & Type_Name & ";",
+                         " Named_Association : in Boolean := False)");
+      Indent_Less (File, "is");
+      Indent_Less (File, "begin");
+      Indent_Line (File, "null;   -- TODO");
+      Indent_Decr (File, "end Put_Item;");
+
       New_Line (File);
    end Generate_Access;
 
