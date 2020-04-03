@@ -590,13 +590,15 @@ package body Auto_Io_Gen.Generate.Put_Body is
       Indent_Line (File, "Str  : constant Auto_Text_IO.Access_IO.Address_String := " & Type_Name & "_Aux.To_String (Item);");
       Indent_Less (File, "begin");
       Indent_Incr (File, "if Item = null then");
-      Indent_Line (File, Ada_Text_IO & ".Put_Line (File, ""null"");");
+      Indent_Line (File, Ada_Text_IO & ".Put (File, ""null"");");
       Indent_Less (File, "elsif Auto_Text_IO.Access_IO.Addr2Id_Map.Contains (Addr) then");
-      Indent_Line (File, Ada_Text_IO & ".Put_Line (File, '^' & Str);");
+      Indent_Line (File, Ada_Text_IO & ".Put (File, '^' & Str);");
       Indent_Less (File, "else");
       Indent_Line (File, "Auto_Text_IO.Access_IO.Id2Addr_Map.Insert (ID, Addr);",
                          "Auto_Text_IO.Access_IO.Addr2Id_Map.Insert (Addr, ID);",
-                         Ada_Text_IO & ".Put_Line (File, '#' & Str & ""' (...values...)"");");
+                         Ada_Text_IO & ".Put (File, '#' & Str & ""' "");",
+                         "Put (File, Item.all);");
+                         -- Ada_Text_IO & ".New_Line (File);"
       Indent_Decr (File, "end if;");
       Indent_Decr (File, "end Put;");
 
