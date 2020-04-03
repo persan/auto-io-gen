@@ -68,6 +68,7 @@ begin
               A_Procedure_Renaming_Declaration |
               A_Real_Number_Declaration |
 
+              An_Incomplete_Type_Declaration |
               A_Subtype_Declaration | -- Text_IO for full type will be created or with'ed
 
               A_Variable_Declaration =>

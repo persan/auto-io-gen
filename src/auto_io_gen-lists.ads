@@ -35,6 +35,7 @@ package Auto_Io_Gen.Lists is
       Record_Label,
       Derived_Label,
       Private_Label,
+      Access_Label,
       Enumeration_Label,
       Float_Label,
       Fixed_Label,
@@ -208,6 +209,9 @@ package Auto_Io_Gen.Lists is
          Derived_Root_Label               : Non_Scalar_Labels_Type;
          Derived_Root_Type_Declaration    : Asis.Element;
          Derived_Root_Package_Declaration : Asis.Element;
+
+      when Access_Label =>
+         Accessed_Subtype_Ident : Asis.Element;
 
       when Private_Label |
         Scalar_Labels_Type =>

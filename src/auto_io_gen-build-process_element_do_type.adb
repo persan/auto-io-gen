@@ -131,6 +131,30 @@ begin
       when A_Type_Definition =>
 
          case Elements.Type_Kind (Element) is
+         when An_Access_Type_Definition =>
+
+            declare
+               A_Kind : constant Asis.Access_Type_Kinds
+                     := Elements.Access_Type_Kind (Element);
+            begin
+               if A_Kind in Asis.Access_To_Object_Definition then
+                  Debug.Put_line ("Access_To_Object_Definition : TODO");
+                  Add_Descriptor (State, Lists.Access_Label);
+                  State.Private_State.Current_Type.Accessed_Subtype_Ident :=
+                     Definitions.Subtype_Mark (Definitions.Access_To_Object_Definition (Element));
+                  -- JPR adalog-asiscomps thick_queries :
+                  -- Type_Declaration_View (Ultimate_Type_Declaration (Enclosing_Element (Element)))
+                  Process_Element_Utils.Add_Body_With (State, "System.Storage_Elements");
+                  Process_Element_Utils.Add_Body_With (State, "Auto_Text_IO.Access_IO");
+                  Control := Abandon_Siblings;
+                  -- State.Private_State.Label := In_Access_Type;
+               else
+                  Report_Unsupported
+                    (State, Element, Access_Type_Kinds'Image (A_Kind));
+                  Control := Abandon_Siblings;
+               end if;
+            end;
+
          when A_Constrained_Array_Definition |
               An_Unconstrained_Array_Definition =>
 

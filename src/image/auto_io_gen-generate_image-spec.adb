@@ -202,6 +202,9 @@ package body Auto_Io_Gen.Generate_Image.Spec is
                 "Private_Label " & Lists.Type_Name (Type_Descriptor.all) &
               " should have been replaced; perhaps add 'ignore' to public part";
 
+         when Lists.Access_Label =>
+            null;         --  TODO
+
          when Auto_Io_Gen.Lists.Scalar_Labels_Type =>
             Generate_Put_Get_Scalar_Spec (File, Type_Descriptor.all);
 

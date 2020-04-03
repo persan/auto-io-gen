@@ -659,6 +659,9 @@ package body Auto_Io_Gen.Build.Process_Element_Utils is
                  A_Modular_Type_Definition =>
                return True;
 
+            when An_Access_Type_Definition =>
+               return True;
+
             when A_Record_Type_Definition |
                  A_Tagged_Record_Type_Definition =>
 

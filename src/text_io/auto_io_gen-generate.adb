@@ -185,6 +185,7 @@ package body Auto_Io_Gen.Generate is
          First           : in Boolean                                       := True)
       is
          pragma Unreferenced (First);
+         use type Lists.Type_Labels_Type;
       begin
          if (Invisible and not Type_Descriptor.Invisible) or
            (not Invisible and Type_Descriptor.Invisible)
@@ -192,6 +193,17 @@ package body Auto_Io_Gen.Generate is
             --  This type belongs in the other Text_IO child
             --  (invisible types in private child).
             return;
+         end if;
+
+         if Type_Descriptor.Label = Lists.Access_Label then
+            declare
+               Base_Name : constant String := Asis.Aux.Name (Type_Descriptor.Accessed_Subtype_Ident);
+               Type_Name : constant String := Asis.Aux.Name (Type_Descriptor.Type_Name);
+            begin
+               Indent_Line (File, "package " & Type_Name & "_Aux is new Auto_Text_Io.Access_IO.Conversions",
+                                  "            (" & Base_Name & ", " & Type_Name & ");");
+               New_Line (File);
+            end;
          end if;
 
          Put_Body.Generate (File, Type_Descriptor.all);

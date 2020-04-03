@@ -100,6 +100,9 @@ package body Auto_Io_Gen.Generate.Get_Body is
          --  These should have been replaced by a specific label when
          --  the full type declaration was processed.
          raise Program_Error;
+
+      when Lists.Access_Label =>
+         Indent (File, "-- Access_Label TODO");
       end case;
    end Generate;
 
