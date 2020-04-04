@@ -1,2 +1,3 @@
-simple-main.result.txt
-Auto.*
+simple-*.result.txt
+/src/*/gen
+

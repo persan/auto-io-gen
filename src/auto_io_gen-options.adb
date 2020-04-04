@@ -64,7 +64,7 @@ package body Auto_Io_Gen.Options is
    --  -I options from the command line transformed into the form
    --  appropriate for calling gcc to create the tree file
 
-   Tree_File             : File_Type;
+   -- Tree_File             : File_Type;
    --  The input tree file
 
    Tree_Exists           : Boolean := False;
@@ -97,7 +97,9 @@ package body Auto_Io_Gen.Options is
       Temp : constant Language_Description_Access := new Language_Description;
       use GNAT.Command_Line;
    begin
-      Put_Line (GNAT.Source_Info.Enclosing_Entity & "(""" & Option & """, """ & Language_Name & """)");
+      if Verbose then
+         Put_Line (GNAT.Source_Info.Enclosing_Entity & "(""" & Option & """, """ & Language_Name & """)");
+      end if;
       Temp.Generator := Generator;
       Temp.Standard  := Std_Names;
       Languages.Append (Temp);
@@ -138,20 +140,19 @@ package body Auto_Io_Gen.Options is
          return;
       end if;
 
-      Define_Switch (Command_Line_Parser, Debug'Access, "-d", "--debug", "debug output");
-      Define_Switch (Command_Line_Parser, Verbose'Access, "-v", "--verbose", "verbose output");
-      Define_Switch (Command_Line_Parser, Overwrite_Child'Access, "-f", "", "Replace existing files");
-      Define_Switch (Command_Line_Parser, Quiet'Access, "-q", "", "Quiet mode");
-      Define_Switch (Command_Line_Parser, Create_Output_Folders'Access, "-o", "", "Set Output Directory");
-      Define_Switch (Command_Line_Parser, Project_Arg'Access, "-P", "", "Use project file");
-      Define_Switch (Command_Line_Parser, Overwrite_Child'Access, "-t", "", "overwrite the existing tree file");
-      Define_Switch (Command_Line_Parser, Delete_Tree'Access, "-k", "", "do not remove the GNAT tree file", Value => False);
-      Define_Switch (Command_Line_Parser, Reuse_Tree'Access, "-r", "",
-                     "reuse the GNAT tree file instead of re-creating it (-r also implies -k)");
-      Define_Switch (Command_Line_Parser, Indent'Access, "-i=", "",
-                     "(N in 1 .. 9) number of spaces used for indentation in generated code.", Initial => Indent);
-      Define_Switch (Command_Line_Parser, Trace_Exceptions'Access, "-T", "", "Trace all exceptions.");
-      Define_Switch (Command_Line_Parser, Create_Output_Folders'Access, "-p", "", "Create Output Folders.");
+      Define_Switch (Command_Line_Parser, Debug'Access,                 "-d",  "--debug",   "Debug output.");
+      Define_Switch (Command_Line_Parser, Verbose'Access,               "-v",  "--verbose", "Verbose output.");
+      Define_Switch (Command_Line_Parser, Overwrite_Child'Access,       "-f",  "",          "Replace existing files.");
+      Define_Switch (Command_Line_Parser, Quiet'Access,                 "-q",  "",          "Quiet mode.");
+      Define_Switch (Command_Line_Parser, Create_Output_Folders'Access, "-o",  "",          "Set Output Directory.");
+      Define_Switch (Command_Line_Parser, Project_Arg'Access,           "-P",  "",          "Use project file.");
+      Define_Switch (Command_Line_Parser, Overwrite_Child'Access,       "-t",  "",          "Overwrite the existing tree file.");
+      Define_Switch (Command_Line_Parser, Delete_Tree'Access,           "-k",  "",          "Do not remove the GNAT tree file", Value => False);
+      Define_Switch (Command_Line_Parser, Reuse_Tree'Access,            "-r",  "",          "Reuse the GNAT tree file instead of re-creating it (-r also implies -k).");
+      Define_Switch (Command_Line_Parser, Indent'Access,                "-i=", "",          "(N in 1 .. 9) number of spaces used for indentation in generated code.", Initial => Indent);
+      Define_Switch (Command_Line_Parser, Trace_Exceptions'Access,      "-T",  "",          "Trace all exceptions.");
+      Define_Switch (Command_Line_Parser, Create_Output_Folders'Access, "-p",  "",          "Create Output Folders.");
+      Define_Switch (Command_Line_Parser, Print_Help'Access,            "-h",  "--help",    "Print this text.");
 
       Parser_Was_Set_Up := True;
    end;
@@ -188,7 +189,7 @@ package body Auto_Io_Gen.Options is
          if Full_Name (Destination_Dir.all) = Destination_Dir.all then
             null;
          else
-            Destination_Dir := new String'(Compose (Root_Directory.all, Destination_Dir.all));
+            Destination_Dir := new String'(Ada.Directories.Current_Directory & GNAT.OS_Lib.Directory_Separator & Destination_Dir.all);
          end if;
       end if;
 
@@ -248,11 +249,13 @@ package body Auto_Io_Gen.Options is
    procedure Clean_Up
    is
 
-      Ali_Name : constant String := Base_Name (Root_File_Name.all) & ".ali";
+      --      Ali_Name : constant String  := Base_Name (Root_File_Name.all) & ".ali";
    begin
       if Delete_Tree and then Tree_Exists then
-         Delete_File (Tree_Name.all);
-         Open (Tree_File, In_File, Ali_Name);
+         if Tree_Name /= null then
+            Delete_File (Tree_Name.all);
+         end if;
+         --       Open (Tree_File, In_File, Ali_Name);
 
       end if;
    end Clean_Up;
@@ -331,6 +334,10 @@ package body Auto_Io_Gen.Options is
    begin
       Setup_Parser;
       GNAT.Command_Line.Getopt (Command_Line_Parser);
+      if Print_Help then
+         GNAT.Command_Line.Display_Help (Command_Line_Parser);
+         GNAT.OS_Lib.OS_Exit (0);
+      end if;
       if Debug then
          Verbose := True;
       end if;
