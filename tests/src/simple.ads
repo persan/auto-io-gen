@@ -4,13 +4,18 @@ package Simple is
    type Mod_Type is mod 8;
 
    type Enum_Type is (E1, E2, E3);
+   type Derived_Enum_Type is new Enum_Type;
 
    type Float_Type is digits 5 range 1.0 .. 60.0;
+   type Derived_Float_Type is new Float_Type;
 
    type Fixed_Type is delta 0.1 range 0.0 .. 1.0;
-   --     type Integer_Type is range 0 .. 10 with Default_Value => 0;
-   --
-   --     type Mod_Type is mod 8 with Default_Value => 0;
+   -- type Derived_Fixed_Type is new Fixed_Type;
+
+   type Integer_Type_2 is range 0 .. 10 with Default_Value => 0;
+   -- type Derived_Integer_Type is new Integer_Type;
+
+   -- type Mod_Type is mod 8 with Default_Value => 0;
    --
    --     type Enum_Type is (E1, E2, E3) with
    --       Default_Value => E1,

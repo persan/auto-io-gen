@@ -7,7 +7,8 @@ all: text_io
 json text_io image:
 	@rm -rf src/$@/gen
 	mkdir -p results
-	auto_io_gen -T -p src/simple.ads src/$@/gen --$@
+	auto_io_gen  -d -v -T -p src/simple.ads src/$@/gen --$@ | tee generate-$@.txt
 	gprbuild -p -P  simple.gpr -XLANGUAGE=$@ -j0 -k
 	bin/simple-$@-main > results/simple-$@.result.txt
 	diff results/simple-$@.result.txt results/simple-$@.golden.txt
+

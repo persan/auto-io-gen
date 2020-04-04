@@ -233,7 +233,7 @@ package body Auto_Io_Gen.Generate_Image.Spec is
       Is_Array     : in Boolean                 := False;
       Is_Item      : in Boolean                 := False)
    is
-      pragma Unreferenced (Label);
+      pragma Unreferenced (Label, File_Param, Is_Array, Is_Item);
       use Ada.Text_IO;
    begin
       Put_Line (Enclosing_Entity & "(" & Type_Name & ", " & Package_Name & ")");

@@ -410,18 +410,8 @@ package body Auto_Io_Gen.Generate is
 
    function Instantiated_Package_Name (Type_Name : in String) return String
    is
-      Root_Name_Index : Natural := Ada.Strings.Fixed.Index (Type_Name, "_Type");
    begin
-      if Root_Name_Index = 0 then
-         --  Name does not end in "_Type", so use all of it.
-         Root_Name_Index := Type_Name'Last;
-      else
-         --  Point Root_Index to just before "_Type"
-         Root_Name_Index := Root_Name_Index - 1;
-      end if;
-
-      return Type_Name (Type_Name'First .. Root_Name_Index) & "_Text_IO";
-
+      return Type_Name & "_Impl";
    end Instantiated_Package_Name;
 
    procedure Instantiate_Generic_Array_Text_IO

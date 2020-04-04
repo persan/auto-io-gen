@@ -92,7 +92,7 @@ package Auto_Io_Gen.Options is
    Generate_Text_Io : aliased Boolean := False;
    Project_File     : aliased GNAT.Strings.String_Access;
    Print_Help       : aliased Boolean := False;
-
+   Print_Version    : aliased Boolean := False;
    ------------
    --  Procedures
 

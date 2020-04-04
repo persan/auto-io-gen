@@ -152,6 +152,7 @@ package body Auto_Io_Gen.Options is
       Define_Switch (Command_Line_Parser, Indent'Access,                "-i=", "",          "(N in 1 .. 9) number of spaces used for indentation in generated code.", Initial => Indent);
       Define_Switch (Command_Line_Parser, Trace_Exceptions'Access,      "-T",  "",          "Trace all exceptions.");
       Define_Switch (Command_Line_Parser, Create_Output_Folders'Access, "-p",  "",          "Create Output Folders.");
+      Define_Switch (Command_Line_Parser, Print_Version'Access,         "",    "--version", "Print version.");
       Define_Switch (Command_Line_Parser, Print_Help'Access,            "-h",  "--help",    "Print this text.");
 
       Parser_Was_Set_Up := True;
@@ -336,6 +337,10 @@ package body Auto_Io_Gen.Options is
       GNAT.Command_Line.Getopt (Command_Line_Parser);
       if Print_Help then
          GNAT.Command_Line.Display_Help (Command_Line_Parser);
+         GNAT.OS_Lib.OS_Exit (0);
+      end if;
+      if Print_Version then
+         Put_Line (Version);
          GNAT.OS_Lib.OS_Exit (0);
       end if;
       if Debug then
