@@ -63,7 +63,6 @@ with Ada.IO_Exceptions;
 with Ada.Strings.Fixed;
 with Asis.Aux;
 with Asis.Elements;
-with Auto_Io_Gen.Generate_Image.Get_Body;
 with Auto_Io_Gen.Generate_Image.Put_Body;
 with Auto_Io_Gen.Generate_Image.Spec;
 with Auto_Io_Gen.Options;
@@ -77,8 +76,8 @@ package body Auto_Io_Gen.Generate_Image is
    procedure Create_File
      (File : in out Ada.Text_IO.File_Type;
       Name : in     String)
-   --  Create File with Name, deleting an existing one if necessary
-   --  and permitted by Options.
+     --  Create File with Name, deleting an existing one if necessary
+     --  and permitted by Options.
    is
       use Ada.Text_IO;
    begin
@@ -184,7 +183,6 @@ package body Auto_Io_Gen.Generate_Image is
          end if;
 
          Put_Body.Generate (File, Type_Descriptor.all);
-         Get_Body.Generate (File, Type_Descriptor.all);
       end Print_Type;
 
       procedure Print_Footer (Type_List : in Auto_Io_Gen.Lists.Type_Descriptor_Lists.List_Type)
@@ -290,7 +288,7 @@ package body Auto_Io_Gen.Generate_Image is
    function Component_Type_Name
      (Type_Element         : in Asis.Element;
       Type_Package_Element : in Asis.Element)
-       return String
+      return String
    is
       use Asis;
    begin
