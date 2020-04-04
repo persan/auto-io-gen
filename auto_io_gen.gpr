@@ -1,7 +1,7 @@
 with "sal/sal";
 with "asis";
 project Auto_Io_Gen is
-   VERSION := "3.0.6";
+   VERSION := "3.1.0";
    for Languages use ("Ada", "Python", "Md");
    for Source_Dirs use ("src/**", ".");
    for Main use ("auto_io_gen-driver.adb");
