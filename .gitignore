@@ -1,10 +1,20 @@
-# Object file
-*.o
 
-# Ada Library Information
+*.cswi
+*.a
+*.so
+*.stdout
+*.stderr
+*.o
 *.ali
-.obj
-lib
-bin
+b__*
+*-loc.xml
+*.cgpr
+*.bexch
+*.lexch
 tests/Auto
 _/
+messages.txt
+*.dg
+.#*#
+*-main
+auto_io_gen
