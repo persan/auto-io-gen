@@ -637,20 +637,24 @@ package body Auto_Io_Gen.Generate.Get_Body is
                          " Item              :    out " & Type_Name & ";",
                          " Named_Association : in     Boolean := False)");
       Indent_Less (File, "is");
-      Indent_Line (File, "S  : String (1 .. 17) := (others => ' ');");
+      Indent_Line (File, "C : Character;");
+      Indent_Line (File, "S  : " & Acc_Pkg & ".Address_String := (others => ' ');");
       Indent_Line (File, "ID : System.Storage_Elements.Integer_Address := 0;");
       Indent_Line (File, "Is_Reference : Boolean := False;");
       Indent_Less (File, "begin");
-      Indent_Line (File, Ada_Text_IO & ".Get (File, S);");
-      Indent_Incr (File, "if S (1 .. 4) = ""null"" then");
+      Indent_Line (File, Ada_Text_IO & ".Get (File, C);");
+      Indent_Incr (File, "if C = 'n' then");
+      Indent_Line (File, Ada_Text_IO & ".Get (File, S (1 .. 3));");
+      Indent_Line (File, "Check (File, S (1 .. 3) = ""ull"", "": Expecting 'null'"");");
       Indent_Line (File, "Item := null;");
       Indent_Line (File, "return;");
       Indent_Decr (File, "end if;");
-      Indent_Line (File, "Is_Reference := S (1) = '^';");
-      Indent_Line (File, "Check (File, S (1) = '#' or Is_Reference, "": Expecting # or ^"");");
-      Indent_Line (File, "Check (File, " & Acc_Pkg & ".Is_Valid_Hex_String (S (2 .. S'Last))," &
+      Indent_Line (File, "Is_Reference := C = '^';");
+      Indent_Line (File, "Check (File, C = '#' or Is_Reference, "": Expecting # or ^"");");
+      Indent_Line (File, Ada_Text_IO & ".Get (File, S);");
+      Indent_Line (File, "Check (File, " & Acc_Pkg & ".Is_Valid_Hex_String (S)," &
                          " "": Expecting hex number"");");
-      Indent_Line (File, "ID := " & Acc_Pkg & ".Hex_Str_to_Unsigned (S (2 .. 9));");
+      Indent_Line (File, "ID := " & Acc_Pkg & ".Hex_Str_to_Unsigned (S);");
       Indent_Incr (File, "if Is_Reference then");
       Indent_Line (File, "Check (File, " & Acc_Pkg & ".Id2Addr_Map.Contains (ID)," &
                          " "": Unknown reference "" & S);");
@@ -668,6 +672,8 @@ package body Auto_Io_Gen.Generate.Get_Body is
       Indent_Line (File, Acc_Pkg & ".Id2Addr_Map.Insert (ID, Addr);",
                          Acc_Pkg & ".Addr2Id_Map.Insert (Addr, ID);");
       Indent_Decr (File, "end;");
+      Indent_Line (File, Ada_Text_IO & ".Get (File, C);");
+      Indent_Line (File, "Check (File, C = ''', "": Expecting Tic (')"");");
       -- Call the generated Get procedure for Item.all
       Indent_Line (File, "Get (File, Item.all);   -- TODO consider optional parameters");
       Indent_Decr (File, "end Get;");
