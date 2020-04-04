@@ -1,9 +1,14 @@
 # auto-io-gen
 Generate io Ada packages for tex JSON,XML,Simple Image, .....
 
-### Version: 
-	
-To build, type "make".
+### Version:
+#### #.#.#-YYYYmmdd 
+ 
+### To build
+```
+ make
+ sudo make install
+```
 
 ### Release number / Tag semantics:
 vA.B.C-date
@@ -11,4 +16,4 @@ vA.B.C-date
 * B = Minor (No breaking changes New functions)
 * C = Patch (Error corrections, no new API:s) 0 = Working
 * date = Date of patch
- 
+
