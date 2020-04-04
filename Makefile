@@ -19,6 +19,7 @@ tag:compile test
 	@if [ -n "`git status --porcelain`" ] ; then\
 		echo "Folder is not clean";\
 		git status;\
+		exit 1;\
 	fi
 	
 	@bin/check v`bin/auto_io_gen --version`-`date +%Y%m%d`

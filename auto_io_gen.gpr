@@ -9,7 +9,7 @@ project Auto_Io_Gen is
    for Object_Dir use ".obj/" & project'Name;
 
    package Builder is
-      for Default_Switches ("ada") use ("-g", "-j0");
+      for Default_Switches ("ada") use ("-g", "-j0", "-k", "-s");
       for Executable ("auto_io_gen-driver.adb") use "auto_io_gen";
    end Builder;
 
