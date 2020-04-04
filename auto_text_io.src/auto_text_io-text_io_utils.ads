@@ -37,6 +37,11 @@ package Auto_Text_Io.Text_IO_Utils is
    procedure Skip_Past (File : in Ada.Text_IO.File_Type; Delimiter : in Character);
    --  Skip past next Delimiter in File.
 
+   procedure Check (Cond : in Boolean; Detail : in String := "");
+   procedure Check (File : in Ada.Text_IO.File_Type;
+                    Cond : in Boolean; Detail : in String := "");
+   --  If Cond is False then raise Syntax_Error with optional Detail message.
+
    procedure Check (Item : in String);
    procedure Check (File : in Ada.Text_IO.File_Type; Item : in String);
    --  Skip leading whitespace. Trim leading and trailing whitespace

@@ -40,6 +40,8 @@ package Auto_Text_IO.Access_IO is
    function Hex_Str_to_Unsigned (S : in String)
             return System.Storage_Elements.Integer_Address;
 
+   function Is_Valid_Hex_String (S : in String) return Boolean;
+
    use type System.Storage_Elements.Integer_Address;
    use type System.Address;
 

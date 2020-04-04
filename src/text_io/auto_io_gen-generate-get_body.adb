@@ -628,14 +628,48 @@ package body Auto_Io_Gen.Generate.Get_Body is
        Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
    is
       Type_Name : constant String := Lists.Type_Name (Type_Descriptor);
+      Base_Name : constant String := Asis.Aux.Name (Type_Descriptor.Accessed_Subtype_Ident);
+      Aux_Pkg   : constant String := Type_Name & "_Aux";
+      Acc_Pkg   : constant String := "Auto_Text_IO.Access_IO";
    begin
       Indent_Incr (File, "procedure Get");
       Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;",
                          " Item              :    out " & Type_Name & ";",
                          " Named_Association : in     Boolean := False)");
       Indent_Less (File, "is");
+      Indent_Line (File, "S  : String (1 .. 17) := (others => ' ');");
+      Indent_Line (File, "ID : System.Storage_Elements.Integer_Address := 0;");
+      Indent_Line (File, "Is_Reference : Boolean := False;");
       Indent_Less (File, "begin");
-      Indent_Line (File, "null;   -- TODO");
+      Indent_Line (File, Ada_Text_IO & ".Get (File, S);");
+      Indent_Incr (File, "if S (1 .. 4) = ""null"" then");
+      Indent_Line (File, "Item := null;");
+      Indent_Line (File, "return;");
+      Indent_Decr (File, "end if;");
+      Indent_Line (File, "Is_Reference := S (1) = '^';");
+      Indent_Line (File, "Check (File, S (1) = '#' or Is_Reference, "": Expecting # or ^"");");
+      Indent_Line (File, "Check (File, " & Acc_Pkg & ".Is_Valid_Hex_String (S (2 .. S'Last))," &
+                         " "": Expecting hex number"");");
+      Indent_Line (File, "ID := " & Acc_Pkg & ".Hex_Str_to_Unsigned (S (2 .. 9));");
+      Indent_Incr (File, "if Is_Reference then");
+      Indent_Line (File, "Check (File, " & Acc_Pkg & ".Id2Addr_Map.Contains (ID)," &
+                         " "": Unknown reference "" & S);");
+      Indent_Line (File, "Item := " & Aux_Pkg & ".To_Access" &
+                         " (" & Acc_Pkg & ".Id2Addr_Map.Element (ID));");
+      Indent_Line (File, "return;");
+      Indent_Decr (File, "end if;");
+      -- Not null and not a reference: Create new instance
+      Indent_Line (File, "Item := new " & Base_Name & ";");
+      -- Enter it into the address maps
+      Indent_Line (File, "ID := " & Aux_Pkg & ".To_Integer (Item);");
+      Indent_Incr (File, "declare");
+      Indent_Line (File, "Addr : constant System.Address := " & Aux_Pkg & ".To_Address (Item);");
+      Indent_Less (File, "begin");
+      Indent_Line (File, Acc_Pkg & ".Id2Addr_Map.Insert (ID, Addr);",
+                         Acc_Pkg & ".Addr2Id_Map.Insert (Addr, ID);");
+      Indent_Decr (File, "end;");
+      -- Call the generated Get procedure for Item.all
+      Indent_Line (File, "Get (File, Item.all);   -- TODO consider optional parameters");
       Indent_Decr (File, "end Get;");
 
       Indent_Incr (File, "procedure Get");

@@ -71,6 +71,24 @@ package body Auto_Text_Io.Text_IO_Utils is
       end loop;
    end Skip_Past;
 
+   procedure Check (Cond : in Boolean; Detail : in String := "")
+   is begin
+      Check (Current_Input, Cond, Detail);
+   end Check;
+
+   procedure Check (File : in File_Type; Cond : in Boolean; Detail : in String := "")
+   is
+   begin
+      if not Cond then
+         Ada.Exceptions.Raise_Exception
+           (Syntax_Error'Identity,
+            Name (File) & ":" &
+              Ada.Strings.Fixed.Trim (Count'Image (Line (File)), Ada.Strings.Both) & ":" &
+              Ada.Strings.Fixed.Trim (Count'Image (Col (File)), Ada.Strings.Both) &
+              Detail);
+      end if;
+   end Check;
+
    procedure Check (Item : in String)
    is begin
       Check (Current_Input, Item);
@@ -83,14 +101,8 @@ package body Auto_Text_Io.Text_IO_Utils is
    begin
       Skip_Whitespace (File);
       Get (File, Temp);
-      if Temp /= Trimmed_Item then
-         Ada.Exceptions.Raise_Exception
-           (Syntax_Error'Identity,
-            Name (File) & ":" &
-              Ada.Strings.Fixed.Trim (Count'Image (Line (File)), Ada.Strings.Both) & ":" &
-              Ada.Strings.Fixed.Trim (Count'Image (Col (File)), Ada.Strings.Both) &
-              ": Expecting """ & Item & """, found """ & Temp & """.");
-      end if;
+      Check (File, Temp = Trimmed_Item,
+             ": Expecting """ & Item & """, found """ & Temp & """.");
       Skip_Whitespace (File);
    end Check;
 

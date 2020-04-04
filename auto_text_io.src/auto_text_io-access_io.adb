@@ -65,6 +65,18 @@ package body Auto_Text_IO.Access_IO is
       return System.Storage_Elements.Integer_Address (Fried_Bits);
    end Hex_Str_to_Unsigned;
 
+   function Is_Valid_Hex_String (S : String) return Boolean is
+   begin
+      for I in S'Range loop
+         if S (I) not in '0' .. '9' and then
+             S (I) not in 'A' .. 'F' and then
+              S (I) not in 'a' .. 'f' then
+            return False;
+         end if;
+      end loop;
+      return True;
+   end Is_Valid_Hex_String;
+
 
    package body Conversions is
 
