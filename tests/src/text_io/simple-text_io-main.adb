@@ -1,7 +1,5 @@
-with Simple.Text_Io;
 with Ada.Text_IO;
-procedure Simple.Main is
-   use Simple.Text_Io;
+procedure Simple.Text_Io.Main is
    use Ada.Text_IO;
 
    F : constant Simple_Struct := (12, (others => '1'));
@@ -24,4 +22,4 @@ begin
    Put (Item => F6,
         Single_Line_Record => False ,
         Named_Association_Record => True); New_Line;
-end Simple.Main;
+end Simple.Text_Io.Main;

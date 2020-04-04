@@ -1,0 +1,12 @@
+#!/bin/bash
+if ( grep $1 README.md>/dev/null ) then
+	true
+else
+	echo "README.md does not contain target tag $1"
+	exit -1
+fi
+
+if ( git tag -l | grep $1 >/dev/null) then
+	echo "Tag $1 exists"
+	exit -1
+fi

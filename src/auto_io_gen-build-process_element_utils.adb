@@ -703,6 +703,7 @@ package body Auto_Io_Gen.Build.Process_Element_Utils is
       --  what we want in error messages.
       First_Line : constant Asis.Text.Line_Number := Asis.Extensions.Original_Line_Number (El, El_Span.First_Line);
    begin
+      Traceback;
       Put_Line
         (Standard_Error,
          Options.Report_File_Name.all & ":" &

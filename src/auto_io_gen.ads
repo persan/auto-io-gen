@@ -35,8 +35,8 @@ package Auto_Io_Gen is
    Not_Supported   : exception; --  Some Ada type is not supported.
    Parameter_Error : exception; --  Bad user parameter.
 
-   Program_Name : constant String := "Auto_Io_Gen";
    function Version return String;
+   function Program_Name return String;
 
    type Child_Name_Label_Type is (Expression, Generic_Formal, Generic_Unit, With_Clause);
    --  How text_io child package name is used; in an expression with
@@ -73,5 +73,5 @@ package Auto_Io_Gen is
    --  1 is no indentation.
 
    function Ada2file (Folder, Name , Suffix : String) return String;
-
+   procedure Traceback;
 end Auto_Io_Gen;

@@ -1,2 +1,4 @@
-simple-main.result.txt
-Auto.*
+simple-*.result.txt
+generate-*.txt
+/src/*/gen
+

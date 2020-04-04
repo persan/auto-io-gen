@@ -236,49 +236,11 @@ package body Auto_Io_Gen.Generate_Image.Spec is
       Is_Array     : in Boolean                 := False;
       Is_Item      : in Boolean                 := False)
    is
-      pragma Unreferenced (Label);
+      pragma Unreferenced (Label, File_Param, Is_Array, Is_Item);
       use Ada.Text_IO;
    begin
       Put_Line (Enclosing_Entity & "(" & Type_Name & ", " & Package_Name & ")");
-      if Is_Item then
-         Indent_Line (File, "procedure Put_Item");
-      else
-         Indent_Line (File, "procedure Put");
-      end if;
-
-      Indent_Level := Indent_Level + 1;
-
-      if File_Param then
-         Indent_Line (File, " Item  : in " & Type_Name & ";");
-      else
-         Indent_Line (File, "(Item  : in " & Type_Name & ";");
-      end if;
-
-
-      if Is_Array then
-         if not Is_Item then
-            Put_Line (File, ";");
-         end if;
-         Indent_Line (File, " Single_Line       : in Boolean := " & Package_Name & ".Default_Single_Line;");
-
-         --  This line gets too long for the GNAT style check. Need
-         --  a general wrap mechanism, but this works for now.
-         Indent_Line (File, " Named_Association : in Boolean :=");
-         Indent_Level := Indent_Level + 1;
-         Indent_Line (File, Package_Name & ".Default_Named_Association)");
-         Indent_Level := Indent_Level - 1;
-      else
-         Put_Line (File, ")");
-      end if;
-
-      if Is_Item and Is_Array then
-         Indent_Line (File, "renames " & Package_Name & ".Put_Item;");
-      else
-         Indent_Line (File, "renames " & Package_Name & ".Put;");
-      end if;
-
-      Indent_Level := Indent_Level - 1;
-
+      Indent_Line (File, "function Image (Item  : in " & Type_Name & ") return String renames " & Package_Name & ".Image;");
    end Do_Put_Rename;
 
 
@@ -305,10 +267,6 @@ package body Auto_Io_Gen.Generate_Image.Spec is
       procedure Do_Renames (Element_Label : in Lists.Type_Labels_Type)
       is begin
          Do_Rename (File, Type_Name, Package_Name, Element_Label, File_Param => True, Is_Array => True);
-         Do_Rename (File, Type_Name, Package_Name, Element_Label, File_Param => False, Is_Array => True);
-         Do_Rename (File, Type_Name, Package_Name, Element_Label,
-                    File_Param => True, Is_Item => True, Is_Array => True);
-
       end Do_Renames;
    begin
       if Options.Debug then

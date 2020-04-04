@@ -17,6 +17,7 @@
 --  330, Boston, MA 02111-1307, USA.
 
 with Ada.Characters.Handling;
+with Ada.Command_Line;
 with Ada.Exceptions;
 with Asis.Aux;
 with Asis.Declarations;
@@ -26,12 +27,18 @@ with Auto_Io_Gen.Options;
 with Ada.Strings.Fixed;
 with Ada.Strings.Maps;
 with Ada.Directories;
+with GNAT.Traceback.Symbolic;
 package body Auto_Io_Gen is
 
    function Version return String
    is begin
-      return Program_Name & " version 3.05";
+      return $VERSION;
    end Version;
+
+   function Program_Name return String
+   is begin
+      return Ada.Directories.Base_Name (Ada.Directories.Simple_Name (Ada.Command_Line.Command_Name));
+   end Program_Name;
 
    function Private_Text_IO_Child_Name (Package_Declaration : in Asis.Element) return String
    is
@@ -232,6 +239,12 @@ package body Auto_Io_Gen is
    function Ada2file (Folder, Name , Suffix : String) return String is
    begin
       return Ada.Directories.Compose (Folder, Ada2file (Name), Suffix);
+   end;
+   procedure Traceback is
+   begin
+      if Auto_Io_Gen.Options.Debug then
+         Ada.Text_IO.Put_Line (GNAT.Traceback.Symbolic.Symbolic_Traceback_No_Hex (GNAT.Traceback.Call_Chain (6, 3)));
+      end if;
    end;
 
 end Auto_Io_Gen;

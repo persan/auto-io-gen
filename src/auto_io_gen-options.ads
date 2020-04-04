@@ -87,10 +87,12 @@ package Auto_Io_Gen.Options is
    Asis_Init_String : Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
    --  Parameter for Asis.Ada_Environments.Associate.
 
-   Generate_JSON : aliased Boolean := False;
-   Generate_Image :  aliased Boolean := False;
+   Generate_JSON    : aliased Boolean := False;
+   Generate_Image   : aliased Boolean := False;
    Generate_Text_Io : aliased Boolean := False;
-   Project_File : aliased GNAT.Strings.String_Access;
+   Project_File     : aliased GNAT.Strings.String_Access;
+   Print_Help       : aliased Boolean := False;
+   Print_Version    : aliased Boolean := False;
    ------------
    --  Procedures
 
