@@ -18,6 +18,7 @@
 
 with Asis.Elements;
 with Asis.Expressions;
+with Asis.Aux;
 with Auto_Io_Gen.Build.Process_Element_Utils; use Auto_Io_Gen.Build.Process_Element_Utils;
 procedure Auto_Io_Gen.Build.Process_Element_Do_Component_Definition
   (Element : in     Asis.Element;
@@ -75,7 +76,7 @@ begin
 
          exception
             when Not_Supported =>
-               Report_Unsupported (State, Element, "Record components of this type ");
+               Report_Unsupported (State, Element, "Record components of type " & Asis.Aux.Name (Element));
                Control := Abandon_Siblings;
          end;
 
@@ -111,7 +112,8 @@ begin
             Control := Abandon_Siblings;
          exception
             when Not_Supported =>
-               Report_Unsupported (State, Element, "Record components of this type ");
+               Report_Unsupported (State, Element, "Record components of type " &
+                                   Asis.Aux.Name (State.Private_State.Current_Component.Type_Name));
                Control := Abandon_Siblings;
          end;
 

@@ -583,7 +583,10 @@ package body Auto_Io_Gen.Generate.Put_Body is
       Indent_Incr (File, "procedure Put");
       Indent_Line (File, "(File              : in " & Ada_Text_IO & ".File_Type;",
                          " Item              : in " & Type_Name & ";",
-                         " Named_Association : in Boolean := False)");
+                         " Single_Line_Item       : in Boolean := True;",
+                         " Named_Association_Item : in Boolean := False;",
+                         " Single_Line_Part       : in Boolean := True;",
+                         " Named_Association_Part : in Boolean := False)");
       Indent_Less (File, "is");
       Indent_Line (File, "Addr : constant System.Address := " & Aux_Pkg & ".To_Address (Item);");
       Indent_Line (File, "ID   : constant System.Storage_Elements.Integer_Address",
@@ -598,8 +601,13 @@ package body Auto_Io_Gen.Generate.Put_Body is
       Indent_Less (File, "else");
       Indent_Line (File, "Auto_Text_IO.Access_IO.Id2Addr_Map.Insert (ID, Addr);",
                          "Auto_Text_IO.Access_IO.Addr2Id_Map.Insert (Addr, ID);",
-                         Ada_Text_IO & ".Put (File, '#' & Str & ""' "");",  -- Def
-                         "Put (File, Item.all);");
+                         Ada_Text_IO & ".Put (File, '#' & Str & ""' "");"); -- Def
+      if Type_Descriptor.Is_Scalar then
+         Indent_Line (File, "Put (File, Item.all);");
+      else
+         Indent_Line (File, "Put (File, Item.all, Single_Line_Item, Named_Association_Item,",
+                            "                     Single_Line_Part, Named_Association_Part);");
+      end if;
       Indent_Decr (File, "end if;");
       Indent_Decr (File, "end Put;");
 
@@ -607,19 +615,25 @@ package body Auto_Io_Gen.Generate.Put_Body is
 
       Indent_Incr (File, "procedure Put");
       Indent_Line (File, "(Item              : in " & Type_Name & ";",
-                         " Named_Association : in Boolean := False)");
+                         " Single_Line_Item       : in Boolean := True;",
+                         " Named_Association_Item : in Boolean := False;",
+                         " Single_Line_Part       : in Boolean := True;",
+                         " Named_Association_Part : in Boolean := False)");
       Indent_Less (File, "is");
       Indent_Less (File, "begin");
-      Indent_Line (File, "null;   -- TODO");
+      Indent_Line (File, "Put (Current_Output, Item, Single_Line_Item, Named_Association_Item,",
+                         "                           Single_Line_Part, Named_Association_Part);");
       Indent_Decr (File, "end Put;");
 
       Indent_Incr (File, "procedure Put_Item");
       Indent_Line (File, "(File              : in " & Ada_Text_IO & ".File_Type;",
                          " Item              : in " & Type_Name & ";",
+                         " Single_Line       : in Boolean := False;",
                          " Named_Association : in Boolean := False)");
       Indent_Less (File, "is");
       Indent_Less (File, "begin");
-      Indent_Line (File, "null;   -- TODO");
+      Indent_Line (File, "Put (File, Item, Single_Line, Named_Association,",
+                         "                 Single_Line, Named_Association);");
       Indent_Decr (File, "end Put_Item;");
 
       New_Line (File);

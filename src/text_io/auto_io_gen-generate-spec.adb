@@ -836,15 +836,22 @@ package body Auto_Io_Gen.Generate.Spec is
       Indent_Incr (File, "procedure Put");
       Indent_Line (File, "(File              : in " & Ada_Text_IO & ".File_Type;",
                          " Item              : in " & Type_Name & ";",
-                         " Named_Association : in Boolean := False);");
+                         " Single_Line_Item       : in Boolean := True;",
+                         " Named_Association_Item : in Boolean := False;",
+                         " Single_Line_Part       : in Boolean := True;",
+                         " Named_Association_Part : in Boolean := False);");
 
       Indent_Less (File, "procedure Put");
       Indent_Line (File, "(Item              : in " & Type_Name & ";",
-                         " Named_Association : in Boolean := False);");
+                         " Single_Line_Item       : in Boolean := True;",
+                         " Named_Association_Item : in Boolean := False;",
+                         " Single_Line_Part       : in Boolean := True;",
+                         " Named_Association_Part : in Boolean := False);");
 
       Indent_Less (File, "procedure Put_Item");
       Indent_Line (File, "(File              : in " & Ada_Text_IO & ".File_Type;",
                          " Item              : in " & Type_Name & ";",
+                         " Single_Line       : in Boolean := False;",
                          " Named_Association : in Boolean := False);");
 
       New_Line (File);

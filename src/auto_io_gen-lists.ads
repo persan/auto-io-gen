@@ -212,6 +212,7 @@ package Auto_Io_Gen.Lists is
 
       when Access_Label =>
          Accessed_Subtype_Ident : Asis.Element;
+         Is_Scalar              : Boolean;
 
       when Private_Label |
         Scalar_Labels_Type =>
