@@ -633,9 +633,10 @@ package body Auto_Io_Gen.Generate.Get_Body is
       Acc_Pkg   : constant String := "Auto_Text_IO.Access_IO";
    begin
       Indent_Incr (File, "procedure Get");
-      Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;",
-                         " Item              :    out " & Type_Name & ";",
-                         " Named_Association : in     Boolean := False)");
+      Indent_Line (File, "(File                   : in     " & Ada_Text_IO & ".File_Type;",
+                         " Item                   :    out " & Type_Name & ";",
+                         " Named_Association_Item : in     Boolean := False;",
+                         " Named_Association_Part : in     Boolean := False)");
       Indent_Less (File, "is");
       Indent_Line (File, "C : Character;");
       Indent_Line (File, "S  : " & Acc_Pkg & ".Address_String := (others => ' ');");
@@ -675,15 +676,20 @@ package body Auto_Io_Gen.Generate.Get_Body is
       Indent_Line (File, Ada_Text_IO & ".Get (File, C);");
       Indent_Line (File, "Check (File, C = ''', "": Expecting Tic (')"");");
       -- Call the generated Get procedure for Item.all
-      Indent_Line (File, "Get (File, Item.all);   -- TODO consider optional parameters");
+      -- if Type_Descriptor.Is_Scalar then
+      --    Indent_Line (File, Text_IO_Child_Name (Type_Descriptor.Type_Package) & "Get (File, Item.all);");
+      -- else
+      Indent_Line (File, "Get (File, Item.all, Named_Association_Item, Named_Association_Part);");
+      -- end if;
       Indent_Decr (File, "end Get;");
 
       Indent_Incr (File, "procedure Get");
-      Indent_Line (File, "(Item              :    out " & Type_Name & ";",
-                         " Named_Association : in     Boolean := False)");
+      Indent_Line (File, "(Item                   :    out " & Type_Name & ";",
+                         " Named_Association_Item : in     Boolean := False;",
+                         " Named_Association_Part : in     Boolean := False)");
       Indent_Less (File, "is");
       Indent_Less (File, "begin");
-      Indent_Line (File, "null;   -- TODO");
+      Indent_Line (File, "Get (Current_Input, Item, Named_Association_Item, Named_Association_Part);");
       Indent_Decr (File, "end Get;");
 
       Indent_Incr (File, "procedure Get_Item");
@@ -692,7 +698,7 @@ package body Auto_Io_Gen.Generate.Get_Body is
                          " Named_Association : in     Boolean := False)");
       Indent_Less (File, "is");
       Indent_Less (File, "begin");
-      Indent_Line (File, "null;   -- TODO");
+      Indent_Line (File, "Get (File, Item, Named_Association, Named_Association);");
       Indent_Decr (File, "end Get_Item;");
 
       New_Line (File);

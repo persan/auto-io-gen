@@ -857,13 +857,15 @@ package body Auto_Io_Gen.Generate.Spec is
       New_Line (File);
 
       Indent_Less (File, "procedure Get");
-      Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;",
-                         " Item              :    out " & Type_Name & ";",
-                         " Named_Association : in     Boolean := False);");
+      Indent_Line (File, "(File                   : in     " & Ada_Text_IO & ".File_Type;",
+                         " Item                   :    out " & Type_Name & ";",
+                         " Named_Association_Item : in     Boolean := False;",
+                         " Named_Association_Part : in     Boolean := False);");
 
       Indent_Less (File, "procedure Get");
-      Indent_Line (File, "(Item              :    out " & Type_Name & ";",
-                         " Named_Association : in     Boolean := False);");
+      Indent_Line (File, "(Item                   :    out " & Type_Name & ";",
+                         " Named_Association_Item : in     Boolean := False;",
+                         " Named_Association_Part : in     Boolean := False);");
 
       Indent_Less (File, "procedure Get_Item");
       Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;",
