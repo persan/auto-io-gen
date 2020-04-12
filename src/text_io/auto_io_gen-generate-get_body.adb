@@ -666,7 +666,6 @@ package body Auto_Io_Gen.Generate.Get_Body is
       -- Not null and not a reference: Create new instance
       Indent_Line (File, "Item := new " & Base_Name & ";");
       -- Enter it into the address maps
-      Indent_Line (File, "ID := " & Aux_Pkg & ".To_Integer (Item);");
       Indent_Incr (File, "declare");
       Indent_Line (File, "Addr : constant System.Address := " & Aux_Pkg & ".To_Address (Item);");
       Indent_Less (File, "begin");
