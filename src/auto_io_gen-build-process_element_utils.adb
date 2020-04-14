@@ -389,9 +389,7 @@ package body Auto_Io_Gen.Build.Process_Element_Utils is
 
    begin
       if Is_Equal (Package_Declaration, State.Parent_Package) then
-         --  In Ada 95, El is directly visible; no with clauses
-         --  needed. In Ada 83, we've already added a "with ; use ;"
-         --  clause.
+         --  El is directly visible; no with clauses needed.
          Package_Declaration := Nil_Element;
 
       else
@@ -399,15 +397,15 @@ package body Auto_Io_Gen.Build.Process_Element_Utils is
          --  Add appropriate package to context clauses.
          --
          --  In Ada 95, the Text_IO child has visibility of the parent
-         --  package and it's context clauses, but not in Ada 83.
+         --  package and it's context clauses (but not in Ada 83).
          --
          --  If El is an array component, it will be instantiated with
          --  SAL.Gen_Array_Text_IO, and we need visibility of the Put
          --  and Get for the component in the spec.
          --
          --  If El is an array index, we need visibility of the type
-         --  for instantiation. In Ada 83, this requires a "with"
-         --  clause.
+         --  for instantiation. (In Ada 83, this would require a "with"
+         --  clause.)
          --
          --  For other elements, we only need visibility of Put
          --  and Get in the body.

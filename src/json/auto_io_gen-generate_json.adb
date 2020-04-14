@@ -320,18 +320,6 @@ package body Auto_Io_Gen.Generate_JSON is
       end if;
    end Component_Type_Name;
 
-   procedure Indent (File : in Ada.Text_IO.File_Type; Text : in String)
-   is begin
-      Set_Indent (File);
-      Ada.Text_IO.Put (File, Text);
-   end Indent;
-
-   procedure Indent_Line (File : in Ada.Text_IO.File_Type; Text : in String)
-   is begin
-      Set_Indent (File);
-      Ada.Text_IO.Put_Line (File, Text);
-   end Indent_Line;
-
    function Instantiated_Package_Name (Type_Name : in String) return String
    is
       Root_Name_Index : Natural := Ada.Strings.Fixed.Index (Type_Name, "_Type");
