@@ -51,12 +51,6 @@ private
    --  just the type identifier if package name is nil and element
    --  name is An_Identifier, otherwise package name.type name.
 
-   procedure Indent (File : in Ada.Text_IO.File_Type; Text : in String);
-   --  Do Set_Indent (File), then Put (File, Text).
-
-   procedure Indent_Line (File : in Ada.Text_IO.File_Type; Text : in String);
-   --  Do Set_Indent (File), then Put_Line (File, Text).
-
    procedure Instantiate_Generic_Array_Text_IO
      (File            : in Ada.Text_IO.File_Type;
       Type_Descriptor : in Lists.Type_Descriptor_Type);

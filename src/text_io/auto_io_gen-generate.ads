@@ -51,34 +51,6 @@ private
    --  just the type identifier if package name is nil and element
    --  name is An_Identifier, otherwise package name.type name.
 
-   procedure Indent (File : in Ada.Text_IO.File_Type; Text : in String);
-   --  Do Set_Indent (File), then Put (File, Text).
-
-   procedure Indent_Line (File : in Ada.Text_IO.File_Type;
-                          Text  : in String;
-                          Text1 : in String := "";
-                          Text2 : in String := "";
-                          Text3 : in String := "";
-                          Text4 : in String := "";
-                          Text5 : in String := "";
-                          Text6 : in String := "";
-                          Text7 : in String := "";
-                          Text8 : in String := "";
-                          Text9 : in String := "");
-   --  Do Set_Indent (File), then Put_Line (File, Text).
-
-   procedure Indent_Incr (File : in Ada.Text_IO.File_Type; Text : in String);
-   --  Call Indent_Line, then increment Indent_Level.
-
-   procedure Indent_Decr (File : in Ada.Text_IO.File_Type; Text : in String);
-   --  Decrement Indent_Level, then call Indent_Line.
-
-   procedure Indent_Less (File : in Ada.Text_IO.File_Type; Text : in String);
-   --  Decrement Indent_Level, call Indent_Line, increment Indent_Level.
-
-   procedure Indent_More (File : in Ada.Text_IO.File_Type; Text : in String);
-   --  Increment Indent_Level, call Indent_Line, decrement Indent_Level.
-
    procedure Instantiate_Generic_Array_Text_IO
      (File            : in Ada.Text_IO.File_Type;
       Type_Descriptor : in Lists.Type_Descriptor_Type);
