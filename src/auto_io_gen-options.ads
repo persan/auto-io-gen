@@ -59,8 +59,8 @@ package Auto_Io_Gen.Options is
    ------------------------------
    --  File and Directory names
 
-   Package_Separator : Character := '.';
-   --  '.' for Ada_83 False, '_' for True.
+   Package_Separator : constant Character := '.';
+   --  TBC: Ada_83 mode was removed - candidate for removal.
 
    File_Package_Separator : constant Character := '-';
 

@@ -38,8 +38,8 @@ private
    --  Visible for child packages.
 
    function Ada_Text_IO return String;
-   --  Return package name appropriate for Ada 83 or Ada 95, as
-   --  determined by Options.Ada_83.
+   --  Return "Ada.Text_IO".
+   --  TBC: Ada_83 mode was removed - candidate for removal.
 
    function Component_Type_Name
      (Type_Element         : in Asis.Element;

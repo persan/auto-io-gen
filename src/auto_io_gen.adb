@@ -198,8 +198,7 @@ package body Auto_Io_Gen is
 
       when A_Generic_Package_Declaration =>
          --  Don't need Check_Name here; the generic package can't
-         --  be a predefined one, and we assume we aren't doing
-         --  this with Ada 83.
+         --  be a predefined one.
 
          case Label is
          when Expression | Generic_Formal =>
