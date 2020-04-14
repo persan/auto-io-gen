@@ -8,7 +8,7 @@
 
 <h1>Auto_Text_IO</h1>
 
-<p>Current version is 3.05</p>
+<p>Last updated: 2020-04-14 UNRELEASED</p>
 
 <p>Auto_Text_IO is a tool for automatically generating a Text_IO
 package for an Ada package. The generated package contains Put and Get
@@ -40,15 +40,13 @@ named notation. For fully private types (that are not visible in the
 public part of the parent spec), it generates a separate private child
 package. The Get routine can read what Put outputs.</p>
 
-<p>By default, Auto_Text_IO generates Ada 2005 code. There is an
-optional Ada 83 mode; the generated Text_IO package can be used with
-an Ada 83 compiler. In Ada 83 mode, no Get routines are generated.
-This is because Ada 83 Standard.Text_IO does not provide the
-Look_Ahead function, which is essential in a Get routine. </p>
+<p>Auto_Text_IO generates Ada 2005 code.
+However, an Ada 2012 capable compiler is required due to internal use of
+Ada2012 features.</p>
 
 <p>Most Ada types are supported. If you find one that isn't, it can
-probably be added. A notable exception is access types; it's not at
-all clear what to output in that case.</p>
+probably be added.
+</p>
 
 <p><a href="auto_text_io-3.05.tar.gz">Download the source</a> in tar.gz
 format. Then follow the simple <a
@@ -63,66 +61,59 @@ one that covers the supported GNAT run time libraries). </p>
 <hr>
 <p>Auto_Text_IO is a command-line application. Here is a description
 of the command line: <br>
-<tt> auto_text_io [options] filename [directory]</tt><br>
+<tt> auto_text_io [options] filename</tt><br>
 <dl>
   <dt>filename
   <dd>Parent package source file
 
-  <dt>directory
-  <dd>Optional directory in which to place generated Text_IO child
-      package (default is '.'). This specifies a path relative to the
-      parent package source directory, or it may be an absolute
-      path.
-
-  <dt>-83
-  <dd>Use Ada 83 syntax (_Text_IO instead of .Text_IO, etc). Don't
-      generate Get routines.
-
-  <dt>-05
-  <dd>Allow Ada 2005 syntax in source file.
-
-  <dt>-d
+  <dt>-d, --debug
   <dd>Output debug information
-
-  <dt>-f
-  <dd>Replace an existing Text_IO child (if any)
-
-  <dt>-g arg
-  <dd>Specify additional argument for running gnatmake.
-
-  <dt>-Idir
-  <dd>Source search dir, has the same meaning as for gnatmake
-
-  <dt>-I-
-  <dd>same as gnatmake
-
-  <dt>-iN
-  <dd>(N in 1 .. 9) Number of spaces used for identation in generated
-      code
-
-  <dt>-k
-  <dd>Do not remove the GNAT tree file
-
-  <dt>-Pfile
-  <dd>Specify a GNAT project file for the source code.
-
-  <dt>-q
-  <dd>Quiet mode - do not output some messages
-
-  <dt>-r
-  <dd>Reuse the GNAT tree file instead of re-creating it. -r also implies -k
-
-  <dt>-sfile
-  <dd>Read the list of source search directories from a file. For use with GPS.
-
-  <dt>-t
-  <dd>Overwrite the existing GNAT tree file
 
   <dt>-v
   <dd>Specify verbose mode; less than debug, more than normal.
 
-  <dt>-?
+  <dt>-f
+  <dd>Replace an existing Text_IO child (if any)
+
+  <dt>-q
+  <dd>Quiet mode - do not output some messages
+
+  <dt>-o
+  <dd>Set output directory
+
+  <dt>-Pfile
+  <dd>Specify a GNAT project file for the source code.
+
+  <dt>-t
+  <dd>Overwrite the existing GNAT tree file
+
+  <dt>-k
+  <dd>Do not remove the GNAT tree file
+
+  <dt>-r
+  <dd>Reuse the GNAT tree file instead of re-creating it. -r also implies -k
+
+  <dt>-i=arg
+  <dd>Number of spaces used for indenting the generated code (arg in 1 .. 9)
+
+  <dt>-p
+  <dd>Create Output Folders.
+
+  <dt>--version
+  <dd>Print version.
+
+  <dt>-h, --help
   <dd>Output this help information
+
+  <dt>--text_io
+  <dd>Generate Text_Io.
+
+  <dt>--image
+  <dd>Generate Image.
+
+  <dt>--json
+  <dd>Generate JSON.
+
 </dl>
 
 <p>If errors are encountered, no Text_IO child is produced. Errors are

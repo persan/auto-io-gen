@@ -38,8 +38,8 @@ private
 
 
    function Ada_Text_IO return String;
-   --  Return package name appropriate for Ada 83 or Ada 95, as
-   --  determined by Options.Ada_83.
+   --  Return "Ada.Text_IO".
+   --  TBC: Ada_83 mode was removed - candidate for removal.
 
    function Component_Type_Name
       (Type_Element         : in Asis.Element;
@@ -50,12 +50,6 @@ private
    --  corresponding package element. Return appropriate type name;
    --  just the type identifier if package name is nil and element
    --  name is An_Identifier, otherwise package name.type name.
-
-   procedure Indent (File : in Ada.Text_IO.File_Type; Text : in String);
-   --  Do Set_Indent (File), then Put (File, Text).
-
-   procedure Indent_Line (File : in Ada.Text_IO.File_Type; Text : in String);
-   --  Do Set_Indent (File), then Put_Line (File, Text).
 
    procedure Instantiate_Generic_Array_Text_IO
      (File            : in Ada.Text_IO.File_Type;

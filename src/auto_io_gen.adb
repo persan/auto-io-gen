@@ -198,8 +198,7 @@ package body Auto_Io_Gen is
 
       when A_Generic_Package_Declaration =>
          --  Don't need Check_Name here; the generic package can't
-         --  be a predefined one, and we assume we aren't doing
-         --  this with Ada 83.
+         --  be a predefined one.
 
          case Label is
          when Expression | Generic_Formal =>
@@ -227,6 +226,98 @@ package body Auto_Io_Gen is
       --  Indent 0 means column 1
       Set_Col (File, 1 + Count (Auto_Io_Gen.Options.Indent) * (Count (Indent_Level) - 1));
    end Set_Indent;
+
+   procedure Indent (File : in Ada.Text_IO.File_Type; Text : in String)
+   is begin
+      Set_Indent (File);
+      Ada.Text_IO.Put (File, Text);
+   end Indent;
+
+   procedure Indent_Line (File  : in Ada.Text_IO.File_Type;
+                          Text  : in String;
+                          Text1 : in String := "";
+                          Text2 : in String := "";
+                          Text3 : in String := "";
+                          Text4 : in String := "";
+                          Text5 : in String := "";
+                          Text6 : in String := "";
+                          Text7 : in String := "";
+                          Text8 : in String := "";
+                          Text9 : in String := "")
+   is begin
+      Set_Indent (File);
+      Ada.Text_IO.Put_Line (File, Text);
+      if Text1 /= "" then
+         Set_Indent (File);
+         Ada.Text_IO.Put_Line (File, Text1);
+         if Text2 /= "" then
+            Set_Indent (File);
+            Ada.Text_IO.Put_Line (File, Text2);
+            if Text3 /= "" then
+               Set_Indent (File);
+               Ada.Text_IO.Put_Line (File, Text3);
+               if Text4 /= "" then
+                  Set_Indent (File);
+                  Ada.Text_IO.Put_Line (File, Text4);
+                  if Text5 /= "" then
+                     Set_Indent (File);
+                     Ada.Text_IO.Put_Line (File, Text5);
+                     if Text6 /= "" then
+                        Set_Indent (File);
+                        Ada.Text_IO.Put_Line (File, Text6);
+                        if Text7 /= "" then
+                           Set_Indent (File);
+                           Ada.Text_IO.Put_Line (File, Text7);
+                           if Text8 /= "" then
+                              Set_Indent (File);
+                              Ada.Text_IO.Put_Line (File, Text8);
+                              if Text9 /= "" then
+                                 Set_Indent (File);
+                                 Ada.Text_IO.Put_Line (File, Text9);
+                              end if;
+                           end if;
+                        end if;
+                     end if;
+                  end if;
+               end if;
+            end if;
+         end if;
+      end if;
+   end Indent_Line;
+
+   procedure Indent_Incr (File : in Ada.Text_IO.File_Type; Text  : in String)
+   is
+      use type Ada.Text_Io.Count;
+   begin
+      Indent_Line (File, Text);
+      Indent_Level := Indent_Level + 1;
+   end Indent_Incr;
+
+   procedure Indent_Decr (File : in Ada.Text_IO.File_Type; Text  : in String)
+   is
+      use type Ada.Text_Io.Count;
+   begin
+      Indent_Level := Indent_Level - 1;
+      Indent_Line (File, Text);
+   end Indent_Decr;
+
+   procedure Indent_Less (File : in Ada.Text_IO.File_Type; Text : in String)
+   is
+      use type Ada.Text_Io.Count;
+   begin
+      Indent_Level := Indent_Level - 1;
+      Indent_Line (File, Text);
+      Indent_Level := Indent_Level + 1;
+   end Indent_Less;
+
+   procedure Indent_More (File : in Ada.Text_IO.File_Type; Text : in String)
+   is
+      use type Ada.Text_Io.Count;
+   begin
+      Indent_Level := Indent_Level + 1;
+      Indent_Line (File, Text);
+      Indent_Level := Indent_Level - 1;
+   end Indent_More;
 
    function Ada2file (Name : String) return String is
       Map : constant Ada.Strings.Maps.Character_Mapping :=
