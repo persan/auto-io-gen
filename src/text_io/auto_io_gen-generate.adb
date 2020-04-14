@@ -60,6 +60,8 @@
 
 with Ada.Exceptions;
 with Ada.IO_Exceptions;
+with Ada.Characters.Handling;
+with Ada.Strings.Unbounded;
 with Ada.Strings.Fixed;
 with Asis.Aux;
 with Asis.Elements;
@@ -430,41 +432,50 @@ package body Auto_Io_Gen.Generate is
 
    end Root_Type_Name;
 
+   function Ada95_Style (Lowercase_Name : in String) return String is
+      use Ada.Characters.Handling;
+      Ada95_Name : String (1 .. Lowercase_Name'Length) := Lowercase_Name;
+      I : Positive := 2;
+   begin
+      Ada95_Name (1) := To_Upper (Lowercase_Name (Lowercase_Name'First));
+      if Ada95_Name'Length < 3 then
+         return Ada95_Name;
+      end if;
+      while I < Ada95_Name'Last loop
+         if Ada95_Name (I) = '_' then
+            I := I + 1;
+            Ada95_Name (I) := To_Upper (Ada95_Name (I));
+         end if;
+         I := I + 1;
+      end loop;
+      return Ada95_Name;
+   end Ada95_Style;
+
    function Standard_Text_IO_Name (Type_Name : in String) return String
-   is begin
-      if Type_Name = "boolean" then
-         return "Auto_Text_Io.Boolean_Text_IO";
-
-      elsif Type_Name = "character" then
+   is
+      use Ada.Strings.Unbounded;
+      function "+" (Unary : String) return Unbounded_String
+                                    renames To_Unbounded_String;
+      type Var_Len_Array is array (Positive range <>) of Unbounded_String;
+      Known_Types : constant Var_Len_Array
+                  := ( +"boolean",
+                       +"duration",
+                       +"float",
+                       +"integer",
+                       +"short_integer",
+                       +"short_short_integer",
+                       +"long_integer",
+                       +"long_long_integer",
+                       +"long_float",
+                       +"long_long_float" );
+   begin
+      for I in Known_Types'Range loop
+         if Type_Name = To_String (Known_Types (I)) then
+            return "Auto_Text_Io." & Ada95_Style (Type_Name) & "_Text_IO";
+         end if;
+      end loop;
+      if Type_Name = "character" then
          return "Auto_Text_Io.Text_IO";
-
-      elsif Type_Name = "duration" then
-         return "Auto_Text_Io.Duration_Text_IO";
-
-      elsif Type_Name = "float" then
-         return "Auto_Text_Io.Float_Text_IO";
-
-      elsif Type_Name = "integer" then
-         return "Auto_Text_Io.Integer_Text_IO";
-
-      elsif Type_Name = "short_integer" then
-         return "Auto_Text_Io.Short_Integer_Text_IO";
-
-      elsif Type_Name = "short_short_integer" then
-         return "Auto_Text_Io.Short_Short_Integer_Text_IO";
-
-      elsif Type_Name = "long_integer" then
-         return "Auto_Text_Io.Long_Integer_Text_IO";
-
-      elsif Type_Name = "long_long_integer" then
-         return "Auto_Text_Io.Long_Long_Integer_Text_IO";
-
-      elsif Type_Name = "long_float" then
-         return "Auto_Text_Io.Long_Float_Text_IO";
-
-      elsif Type_Name = "long_long_float" then
-         return "Auto_Text_Io.Long_Long_Float_Text_IO";
-
       elsif Type_Name = "string" then
          return "Auto_Text_Io.Text_IO";
       elsif Type_Name = "wide_string" then
