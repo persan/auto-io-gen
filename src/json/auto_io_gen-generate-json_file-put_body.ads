@@ -18,7 +18,7 @@
 
 with Ada.Text_IO;
 with Auto_Io_Gen.Lists;
-private package Auto_Io_Gen.Generate_JSON.Put_Body is
+private package Auto_Io_Gen.Generate.JSON_File.Put_Body is
    pragma Elaborate_Body; --  Ada.Text_IO, Asis
 
    procedure Generate
@@ -26,4 +26,4 @@ private package Auto_Io_Gen.Generate_JSON.Put_Body is
       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
    --  Generate body code for a Put procedure for one type.
 
-end Auto_Io_Gen.Generate_JSON.Put_Body;
+end Auto_Io_Gen.Generate.JSON_File.Put_Body;

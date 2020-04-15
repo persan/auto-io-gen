@@ -27,6 +27,7 @@ with GNAT.Command_Line;
 with Ada.Directories;
 with Ada.Strings.Unbounded;
 with GNAT.Source_Info;
+with Ada.Text_IO;
 
 package body Auto_Io_Gen.Options is
 

@@ -22,7 +22,7 @@ with Asis.Declarations;
 with Asis.Elements;
 with Auto_Io_Gen.Options;
 with SAL.Gen.Alg.Process_All_Constant;
-package body Auto_Io_Gen.Generate.Get_Body is
+package body Auto_Io_Gen.Generate.Ada_File.Get_Body is
    use Ada.Text_IO;
 
    Body_First : Boolean := True; -- Shared between printing discriminants and components.
@@ -703,4 +703,4 @@ package body Auto_Io_Gen.Generate.Get_Body is
       New_Line (File);
    end Generate_Access;
 
-end Auto_Io_Gen.Generate.Get_Body;
+end Auto_Io_Gen.Generate.Ada_File.Get_Body;

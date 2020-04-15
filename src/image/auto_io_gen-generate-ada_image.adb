@@ -63,12 +63,12 @@ with Ada.IO_Exceptions;
 with Ada.Strings.Fixed;
 with Asis.Aux;
 with Asis.Elements;
-with Auto_Io_Gen.Generate_Image.Put_Body;
-with Auto_Io_Gen.Generate_Image.Spec;
+with Auto_Io_Gen.Generate.Ada_Image.Put_Body;
+with Auto_Io_Gen.Generate.Ada_Image.Spec;
 with Auto_Io_Gen.Options;
 with SAL.Gen.Alg.Process_All_Constant;
 with GNAT.Source_Info;
-package body Auto_Io_Gen.Generate_Image is
+package body Auto_Io_Gen.Generate.Ada_Image is
    use GNAT.Source_Info;
    --------------
    --  Local declarations
@@ -436,4 +436,4 @@ begin
       Generator => Create_Text_IO_Child'Access,
       Std_Names =>  Standard_Name'Access);
 
-end Auto_Io_Gen.Generate_Image;
+end Auto_Io_Gen.Generate.Ada_Image;

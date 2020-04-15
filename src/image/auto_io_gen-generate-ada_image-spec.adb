@@ -21,7 +21,7 @@ with Asis.Aux;
 with Auto_Io_Gen.Options;
 with SAL.Gen.Alg.Process_All_Constant;
 with GNAT.Source_Info;
-package body Auto_Io_Gen.Generate_Image.Spec is
+package body Auto_Io_Gen.Generate.Ada_Image.Spec is
    use  GNAT.Source_Info;
    procedure Generate_Put_Get_Array_Spec
      (File            : in Ada.Text_IO.File_Type;
@@ -344,7 +344,7 @@ package body Auto_Io_Gen.Generate_Image.Spec is
 
       Indent_Line (File, "function I_Image (  Item : in " & Type_Name & ") return String;");
       if Type_Descriptor.Record_Tagged then
-         Indent_Line (File, "function I__Image_Components (  Item : in " & Type_Name & ") return String;");
+         Indent_Line (File, "function I_Image_Components (  Item : in " & Type_Name & ") return String;");
       end if;
 
       New_Line (File);
@@ -386,4 +386,4 @@ package body Auto_Io_Gen.Generate_Image.Spec is
       Indent_Line (File, "function Image (  Item : " & Type_Name & ") return String is (Item'Img);");
    end Generate_Put_Get_Scalar_Spec;
 
-end Auto_Io_Gen.Generate_Image.Spec;
+end Auto_Io_Gen.Generate.Ada_Image.Spec;
