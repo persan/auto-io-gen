@@ -1,6 +1,6 @@
 --  Abstract :
 --
---  Generate Get procedure body for one type.
+--  Generate Put procedure body for one type.
 --
 --  Copyright (C) 2001, 2003 Stephen Leake.  All Rights Reserved.
 --
@@ -18,12 +18,12 @@
 
 with Ada.Text_IO;
 with Auto_Io_Gen.Lists;
-private package Auto_Io_Gen.Generate.Get_Body is
+private package Auto_Io_Gen.Generate.Ada_File.Put_Body is
    pragma Elaborate_Body; --  Ada.Text_IO, Asis
 
    procedure Generate
      (File            : in Ada.Text_IO.File_Type;
       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
-   --  Generate body code for a Get procedure for one type.
+   --  Generate body code for a Put procedure for one type.
 
-end Auto_Io_Gen.Generate.Get_Body;
+end Auto_Io_Gen.Generate.Ada_File.Put_Body;

@@ -16,9 +16,8 @@
 --  write to the Free Software Foundation, 59 Temple Place - Suite
 --  330, Boston, MA 02111-1307, USA.
 
-with Ada.Text_IO;
 with Auto_Io_Gen.Lists;
-package Auto_Io_Gen.Generate is
+package Auto_Io_Gen.Generate.JSON_File is
 --   pragma Elaborate_Body; -- Body depends on Text_IO, but this is circular due to child packages.
 
    procedure Create_Text_IO_Child
@@ -37,14 +36,15 @@ private
 
    --  Visible for child packages.
 
+
    function Ada_Text_IO return String;
    --  Return "Ada.Text_IO".
    --  TBC: Ada_83 mode was removed - candidate for removal.
 
    function Component_Type_Name
-     (Type_Element         : in Asis.Element;
-      Type_Package_Element : in Asis.Element)
-       return String;
+      (Type_Element         : in Asis.Element;
+       Type_Package_Element : in Asis.Element)
+      return String;
    --  Type_Element must be from Type_Descriptor_Type.Array_Component
    --  or Component_Type.Type_Name; Type_Package_Element must be from
    --  corresponding package element. Return appropriate type name;
@@ -63,4 +63,4 @@ private
    function Root_Type_Name (Type_Name : in String) return String;
    --  Return Type_Name without trailing _Type, if any.
 
-end Auto_Io_Gen.Generate;
+end Auto_Io_Gen.Generate.JSON_File;

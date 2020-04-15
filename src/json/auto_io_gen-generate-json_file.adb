@@ -33,7 +33,7 @@
 --  3) Record types declared in the private part: generate
 --     Private_Text_IO child package.
 --
---  4) Record types with discriminants, with defaults. Here we call
+--  4) Record types with discriminants, with no defaults. Here we call
 --     these "Constrained_Discriminants". Since the Item parameter is
 --     constrained, we can just compare the discriminants read from the
 --     file with the constraints, and raise Discriminant_Error for a
@@ -60,19 +60,16 @@
 
 with Ada.Exceptions;
 with Ada.IO_Exceptions;
-with Ada.Characters.Handling;
-with Ada.Strings.Unbounded;
 with Ada.Strings.Fixed;
+with Ada.Strings.Unbounded;
 with Asis.Aux;
 with Asis.Elements;
-with Auto_Io_Gen.Generate.Get_Body;
-with Auto_Io_Gen.Generate.Put_Body;
-with Auto_Io_Gen.Generate.Spec;
+with Auto_Io_Gen.Generate.JSON_File.Get_Body;
+with Auto_Io_Gen.Generate.JSON_File.Put_Body;
+with Auto_Io_Gen.Generate.JSON_File.Spec;
 with Auto_Io_Gen.Options;
 with SAL.Gen.Alg.Process_All_Constant;
-with GNAT.Source_Info;
-package body Auto_Io_Gen.Generate is
-   use GNAT.Source_Info;
+package body Auto_Io_Gen.Generate.JSON_File is
 
    --------------
    --  Local declarations
@@ -170,7 +167,6 @@ package body Auto_Io_Gen.Generate is
          end if;
 
          Put_Line (File, "package body " & Child_Package_Name & " is");
-         Put_Line (File, "   pragma Warnings(off);");
 
          New_Line (File);
          Indent_Level := 2;
@@ -232,27 +228,33 @@ package body Auto_Io_Gen.Generate is
    is
       use Ada.Text_IO;
       use Auto_Io_Gen.Options;
+      use Ada.Strings.Unbounded;
 
+      Child_File_Name : Unbounded_String := To_Unbounded_String
+        (Options.Destination_Dir.all &
+           Options.Root_File_Name.all &
+           Options.File_Package_Separator);
 
       Child_Spec_File : File_Type; --  The output .Text_IO spec
       Child_Body_File : File_Type; --  The output .Text_IO body
 
-      Child_Package_Name : constant String := Parent_Package_Name & Options.Package_Separator &
-      (if Is_Generic then "Gen_" else "" ) &
-      (if Invisible then "Private_" else "" ) & "Text_Io";
-
+      Child_Package_Name : Unbounded_String := To_Unbounded_String (Parent_Package_Name) & Options.Package_Separator;
    begin
 
-      if Options.Debug then
-         Put_Line (Enclosing_Entity & "(" & Parent_Package_Name &
-                   (if Needs_Body then ",Needs_Body" else "" ) &
-                   (if Needs_Text_IO_Utils then ",Needs_Body" else "" ) &
-                   (if Needs_Text_IO_Utils then ",Needs_Text_IO_Utils" else "" ) &
-                   (if Invisible then ",Invisible" else "" ) &
-                   (if Is_Generic then ",Is_Generic" else "" ) & ")");
+      if Is_Generic then
+         Child_File_Name    := Child_File_Name & "gen_";
+         Child_Package_Name := Child_Package_Name & "Gen_";
       end if;
 
-      Create_File (Child_Spec_File, Ada2file  (Options.Destination_Dir.all, Child_Package_Name, Options.Spec_File_Extension));
+      if Invisible then
+         Child_File_Name    := Child_File_Name & "private_";
+         Child_Package_Name := Child_Package_Name & "Private_";
+      end if;
+
+      Child_File_Name    := Child_File_Name & "text_io";
+      Child_Package_Name := Child_Package_Name & "Text_IO";
+
+      Create_File (Child_Spec_File, To_String (Child_File_Name & Options.Spec_File_Extension));
 
       Spec.Generate_Child_Spec
         (Child_Spec_File,
@@ -260,21 +262,21 @@ package body Auto_Io_Gen.Generate is
          With_List           => Spec_With_List,
          Formal_Package_List => Formal_Package_List,
          Parent_Package_Name => Parent_Package_Name,
-         Child_Package_Name  => Child_Package_Name,
+         Child_Package_Name  => To_String (Child_Package_Name),
          Invisible           => Invisible,
          Is_Generic          => Is_Generic);
 
       Close (Child_Spec_File);
 
       if Needs_Body then
-         Create_File (Child_Body_File, Ada2file  (Options.Destination_Dir.all, Child_Package_Name, Options.Body_File_Extension));
+         Create_File (Child_Body_File, To_String (Child_File_Name & Options.Body_File_Extension));
 
          Generate_Child_Body
            (Child_Body_File,
             Type_List,
             Body_With_List,
             Parent_Package_Name => Parent_Package_Name,
-            Child_Package_Name  => Child_Package_Name,
+            Child_Package_Name  => To_String (Child_Package_Name),
             Invisible           => Invisible,
             Needs_Text_IO_Utils => Needs_Text_IO_Utils);
 
@@ -320,8 +322,18 @@ package body Auto_Io_Gen.Generate is
 
    function Instantiated_Package_Name (Type_Name : in String) return String
    is
+      Root_Name_Index : Natural := Ada.Strings.Fixed.Index (Type_Name, "_Type");
    begin
-      return Type_Name & "_Impl";
+      if Root_Name_Index = 0 then
+         --  Name does not end in "_Type", so use all of it.
+         Root_Name_Index := Type_Name'Last;
+      else
+         --  Point Root_Index to just before "_Type"
+         Root_Name_Index := Root_Name_Index - 1;
+      end if;
+
+      return Type_Name (Type_Name'First .. Root_Name_Index) & "_Text_IO";
+
    end Instantiated_Package_Name;
 
    procedure Instantiate_Generic_Array_Text_IO
@@ -432,70 +444,54 @@ package body Auto_Io_Gen.Generate is
 
    end Root_Type_Name;
 
-   function Ada95_Style (Lowercase_Name : in String) return String is
-      use Ada.Characters.Handling;
-      Ada95_Name : String (1 .. Lowercase_Name'Length) := Lowercase_Name;
-      I : Positive := 2;
-   begin
-      Ada95_Name (1) := To_Upper (Lowercase_Name (Lowercase_Name'First));
-      if Ada95_Name'Length < 3 then
-         return Ada95_Name;
-      end if;
-      while I < Ada95_Name'Last loop
-         if Ada95_Name (I) = '_' then
-            I := I + 1;
-            Ada95_Name (I) := To_Upper (Ada95_Name (I));
-         end if;
-         I := I + 1;
-      end loop;
-      return Ada95_Name;
-   end Ada95_Style;
+   function Standard_Name (Type_Name : in String) return String
+   is begin
+      return "JUNK";
+      pragma Warnings (Off);
+      if Type_Name = "boolean" then
+         return "Auto_Text_Io.Boolean_Text_IO";
 
-   function Standard_Text_IO_Name (Type_Name : in String) return String
-   is
-      use Ada.Strings.Unbounded;
-      function "+" (Unary : String) return Unbounded_String
-                                    renames To_Unbounded_String;
-      type Var_Len_Array is array (Positive range <>) of Unbounded_String;
-      Known_Types : constant Var_Len_Array
-                  := ( +"boolean",
-                       +"duration",
-                       +"float",
-                       +"integer",
-                       +"short_integer",
-                       +"short_short_integer",
-                       +"long_integer",
-                       +"long_long_integer",
-                       +"long_float",
-                       +"long_long_float" );
-   begin
-      for I in Known_Types'Range loop
-         if Type_Name = To_String (Known_Types (I)) then
-            return "Auto_Text_Io." & Ada95_Style (Type_Name) & "_Text_IO";
-         end if;
-      end loop;
-      if Type_Name = "character" then
+      elsif Type_Name = "character" then
          return "Auto_Text_Io.Text_IO";
+
+      elsif Type_Name = "duration" then
+         return "Auto_Text_Io.Duration_Text_IO";
+
+      elsif Type_Name = "float" then
+         return "Auto_Text_Io.Float_Text_IO";
+
+      elsif Type_Name = "integer" then
+         return "Auto_Text_Io.Integer_Text_IO";
+
+      elsif Type_Name = "short_integer" then
+         return "Auto_Text_Io.Short_Integer_Text_IO";
+
+      elsif Type_Name = "short_short_integer" then
+         return "Auto_Text_Io.Short_Short_Integer_Text_IO";
+
+      elsif Type_Name = "long_integer" then
+         return "Auto_Text_Io.Long_Integer_Text_IO";
+
+      elsif Type_Name = "long_long_integer" then
+         return "Auto_Text_Io.Long_Long_Integer_Text_IO";
+
+      elsif Type_Name = "long_float" then
+         return "Auto_Text_Io.Long_Float_Text_IO";
+
+      elsif Type_Name = "long_long_float" then
+         return "Auto_Text_Io.Long_Long_Float_Text_IO";
+
       elsif Type_Name = "string" then
          return "Auto_Text_Io.Text_IO";
-      elsif Type_Name = "wide_string" then
-         return "Auto_Text_Io.Wide_Text_IO";
-      elsif Type_Name = "wide_wide_string" then
-         return "Auto_Text_Io.Wide_Wide_Text_IO";
-      elsif Type_Name = "wide_character" then
-         return "Auto_Text_Io.Wide_Text_IO";
-      elsif Type_Name = "wide_wide_character" then
-         return "Auto_Text_Io.Wide_Wide_Text_IO";
       else
-         Ada.Text_IO.Put_Line (Ada.Text_IO.Standard_Error, "Unsupported type:  " & Type_Name);
+         Ada.Text_IO.Put_Line (Ada.Text_IO.Standard_Error, "Unsuported type:  " & Type_Name);
          raise Not_Supported with Type_Name;
       end if;
 
-   end Standard_Text_IO_Name;
-
+   end Standard_Name;
 begin
    Auto_Io_Gen.Options.Register
-     (Option => "text_io", Language_Name => "Text_Io",
+     (Option => "json", Language_Name => "JSON",
       Generator => Create_Text_IO_Child'Access,
-      Std_Names =>  Standard_Text_IO_Name'Access);
-end Auto_Io_Gen.Generate;
+      Std_Names =>  Standard_Name'Access);
+end Auto_Io_Gen.Generate.JSON_File;

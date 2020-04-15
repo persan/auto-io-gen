@@ -37,9 +37,9 @@ with Auto_Io_Gen.Build;
 with Auto_Io_Gen.Options;
 with Gnatvsn;
 
-with Auto_Io_Gen.Generate; pragma Warnings (Off, Auto_Io_Gen.Generate);
-with Auto_Io_Gen.Generate_Image; pragma Warnings (Off, Auto_Io_Gen.Generate_Image);
-with Auto_Io_Gen.Generate_JSON; pragma Warnings (Off, Auto_Io_Gen.Generate_JSON);
+with Auto_Io_Gen.Generate.Ada_File; pragma Warnings (Off, Auto_Io_Gen.Generate.Ada_File);
+with Auto_Io_Gen.Generate.Ada_Image; pragma Warnings (Off, Auto_Io_Gen.Generate.Ada_Image);
+with Auto_Io_Gen.Generate.JSON_File; pragma Warnings (Off, Auto_Io_Gen.Generate.JSON_File);
 with A4G.A_Opt;
 procedure Auto_Io_Gen.Driver
 is

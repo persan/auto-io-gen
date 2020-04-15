@@ -1,8 +1,8 @@
 --  Abstract :
 --
---  Generate Put procedure body for one type.
+--  Generate child package spec.
 --
---  Copyright (C) 2001, 2003 Stephen Leake.  All Rights Reserved.
+--  Copyright (C) 2001 - 2004 Stephen Leake.  All Rights Reserved.
 --
 --  This program is free software; you can redistribute it and/or
 --  modify it under terms of the GNU General Public License as
@@ -16,14 +16,19 @@
 --  write to the Free Software Foundation, 59 Temple Place - Suite
 --  330, Boston, MA 02111-1307, USA.
 
-with Ada.Text_IO;
 with Auto_Io_Gen.Lists;
-private package Auto_Io_Gen.Generate.Put_Body is
-   pragma Elaborate_Body; --  Ada.Text_IO, Asis
+private package Auto_Io_Gen.Generate.JSON_File.Spec is
+   pragma Elaborate_Body;  --  Ada.Text_IO, Asis
 
-   procedure Generate
-     (File            : in Ada.Text_IO.File_Type;
-      Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
-   --  Generate body code for a Put procedure for one type.
+   procedure Generate_Child_Spec
+     (File                : in Ada.Text_IO.File_Type;
+      Type_List           : in Lists.Type_Descriptor_Lists.List_Type;
+      With_List           : in Lists.Context_Trees.Tree_Type;
+      Formal_Package_List : in Lists.Formal_Package_Lists.List_Type;
+      Parent_Package_Name : in String;
+      Child_Package_Name  : in String;
+      Invisible           : in Boolean;
+      Is_Generic          : in Boolean);
+   --  Generate child package spec. File must be open for write.
 
-end Auto_Io_Gen.Generate.Put_Body;
+end Auto_Io_Gen.Generate.JSON_File.Spec;
