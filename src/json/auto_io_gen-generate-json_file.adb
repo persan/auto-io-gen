@@ -61,15 +61,16 @@
 with Ada.Exceptions;
 with Ada.IO_Exceptions;
 with Ada.Strings.Fixed;
+with Ada.Strings.Unbounded;
 with Asis.Aux;
 with Asis.Elements;
-with Auto_Io_Gen.Generate_Image.Put_Body;
-with Auto_Io_Gen.Generate_Image.Spec;
+with Auto_Io_Gen.Generate.JSON_File.Get_Body;
+with Auto_Io_Gen.Generate.JSON_File.Put_Body;
+with Auto_Io_Gen.Generate.JSON_File.Spec;
 with Auto_Io_Gen.Options;
 with SAL.Gen.Alg.Process_All_Constant;
-with GNAT.Source_Info;
-package body Auto_Io_Gen.Generate_Image is
-   use GNAT.Source_Info;
+package body Auto_Io_Gen.Generate.JSON_File is
+
    --------------
    --  Local declarations
 
@@ -97,7 +98,7 @@ package body Auto_Io_Gen.Generate_Image is
                when Ada.IO_Exceptions.Use_Error =>
                   Ada.Exceptions.Raise_Exception
                     (Parameter_Error'Identity,
-                     "cannot create Images child " & Name & ". Possibly it exists but is read-only");
+                     "cannot create Text_IO child " & Name & ". Possibly it exists but is read-only");
             end;
             Delete (File);
             begin
@@ -106,12 +107,12 @@ package body Auto_Io_Gen.Generate_Image is
                when others =>
                   Ada.Exceptions.Raise_Exception
                     (Parameter_Error'Identity,
-                     "cannot create Images child " & Name);
+                     "cannot create Text_IO child " & Name);
             end;
          else
             Ada.Exceptions.Raise_Exception
               (Parameter_Error'Identity,
-               "Images child " & Name & " already exists. Use -f to overwrite it.");
+               "Text_IO child " & Name & " already exists. Use -f to overwrite it.");
          end if;
 
       when Ada.IO_Exceptions.Name_Error =>
@@ -129,7 +130,6 @@ package body Auto_Io_Gen.Generate_Image is
       Invisible           : in Boolean;
       Needs_Text_IO_Utils : in Boolean)
    is
-      pragma Unreferenced (Needs_Text_IO_Utils);
       use Ada.Text_IO;
 
       procedure Print_Header (Type_List : in Auto_Io_Gen.Lists.Type_Descriptor_Lists.List_Type)
@@ -137,6 +137,7 @@ package body Auto_Io_Gen.Generate_Image is
          pragma Unreferenced (Type_List);
          use Auto_Io_Gen.Lists.Context_Trees_Iterators;
          Iterator             : Iterator_Type := First (With_List);
+         Have_Use_Ada_Text_IO : Boolean       := False;
       begin
          Put_Line (File, "--  Abstract :");
          Put_Line (File, "--");
@@ -151,6 +152,9 @@ package body Auto_Io_Gen.Generate_Image is
                Put_Line (File, "with " & Current (Iterator).Name.all & "; use " &
                            Current (Iterator).Name.all & ";");
 
+               if Current (Iterator).Name.all = Ada_Text_IO then
+                  Have_Use_Ada_Text_IO := True;
+               end if;
             else
                Put_Line (File, "with " & Current (Iterator).Name.all & ";");
             end if;
@@ -158,14 +162,20 @@ package body Auto_Io_Gen.Generate_Image is
             Next (Iterator);
          end loop;
 
+         if  Needs_Text_IO_Utils then
+            Put_Line (File, "with Auto_Text_Io.Text_IO_Utils; use Auto_Text_Io.Text_IO_Utils;");
+         end if;
 
          Put_Line (File, "package body " & Child_Package_Name & " is");
-         Put_Line (File, "   pragma Warnings(off);");
 
          New_Line (File);
          Indent_Level := 2;
          Set_Indent (File);
 
+         if not Have_Use_Ada_Text_IO then
+            Put_Line (File, "use " & Ada_Text_IO & ";");
+            New_Line (File);
+         end if;
       end Print_Header;
 
       procedure Print_Type
@@ -183,6 +193,7 @@ package body Auto_Io_Gen.Generate_Image is
          end if;
 
          Put_Body.Generate (File, Type_Descriptor.all);
+         Get_Body.Generate (File, Type_Descriptor.all);
       end Print_Type;
 
       procedure Print_Footer (Type_List : in Auto_Io_Gen.Lists.Type_Descriptor_Lists.List_Type)
@@ -217,27 +228,33 @@ package body Auto_Io_Gen.Generate_Image is
    is
       use Ada.Text_IO;
       use Auto_Io_Gen.Options;
+      use Ada.Strings.Unbounded;
 
+      Child_File_Name : Unbounded_String := To_Unbounded_String
+        (Options.Destination_Dir.all &
+           Options.Root_File_Name.all &
+           Options.File_Package_Separator);
 
       Child_Spec_File : File_Type; --  The output .Text_IO spec
       Child_Body_File : File_Type; --  The output .Text_IO body
 
-      Child_Package_Name : constant String := Parent_Package_Name & Options.Package_Separator &
-      (if Is_Generic then "Gen_" else "" ) &
-      (if Invisible then "Private_" else "" ) & "Images";
-
+      Child_Package_Name : Unbounded_String := To_Unbounded_String (Parent_Package_Name) & Options.Package_Separator;
    begin
 
-      if Options.Debug then
-         Put_Line (Enclosing_Entity & "(" & Parent_Package_Name &
-                   (if Needs_Body then ",Needs_Body" else "" ) &
-                   (if Needs_Text_IO_Utils then ",Needs_Body" else "" ) &
-                   (if Needs_Text_IO_Utils then ",Needs_Text_IO_Utils" else "" ) &
-                   (if Invisible then ",Invisible" else "" ) &
-                   (if Is_Generic then ",Is_Generic" else "" ) & ")");
+      if Is_Generic then
+         Child_File_Name    := Child_File_Name & "gen_";
+         Child_Package_Name := Child_Package_Name & "Gen_";
       end if;
 
-      Create_File (Child_Spec_File, Ada2file  (Options.Destination_Dir.all, Child_Package_Name, Options.Spec_File_Extension));
+      if Invisible then
+         Child_File_Name    := Child_File_Name & "private_";
+         Child_Package_Name := Child_Package_Name & "Private_";
+      end if;
+
+      Child_File_Name    := Child_File_Name & "text_io";
+      Child_Package_Name := Child_Package_Name & "Text_IO";
+
+      Create_File (Child_Spec_File, To_String (Child_File_Name & Options.Spec_File_Extension));
 
       Spec.Generate_Child_Spec
         (Child_Spec_File,
@@ -245,21 +262,21 @@ package body Auto_Io_Gen.Generate_Image is
          With_List           => Spec_With_List,
          Formal_Package_List => Formal_Package_List,
          Parent_Package_Name => Parent_Package_Name,
-         Child_Package_Name  => Child_Package_Name,
+         Child_Package_Name  => To_String (Child_Package_Name),
          Invisible           => Invisible,
          Is_Generic          => Is_Generic);
 
       Close (Child_Spec_File);
 
       if Needs_Body then
-         Create_File (Child_Body_File, Ada2file  (Options.Destination_Dir.all, Child_Package_Name, Options.Body_File_Extension));
+         Create_File (Child_Body_File, To_String (Child_File_Name & Options.Body_File_Extension));
 
          Generate_Child_Body
            (Child_Body_File,
             Type_List,
             Body_With_List,
             Parent_Package_Name => Parent_Package_Name,
-            Child_Package_Name  => Child_Package_Name,
+            Child_Package_Name  => To_String (Child_Package_Name),
             Invisible           => Invisible,
             Needs_Text_IO_Utils => Needs_Text_IO_Utils);
 
@@ -284,6 +301,10 @@ package body Auto_Io_Gen.Generate_Image is
    -----------
    --  Operations for child packages
 
+   function Ada_Text_IO return String
+   is begin
+      return "Ada.Text_IO";
+   end Ada_Text_IO;
 
    function Component_Type_Name
      (Type_Element         : in Asis.Element;
@@ -311,7 +332,7 @@ package body Auto_Io_Gen.Generate_Image is
          Root_Name_Index := Root_Name_Index - 1;
       end if;
 
-      return Type_Name (Type_Name'First .. Root_Name_Index) & "_Images";
+      return Type_Name (Type_Name'First .. Root_Name_Index) & "_Text_IO";
 
    end Instantiated_Package_Name;
 
@@ -424,16 +445,53 @@ package body Auto_Io_Gen.Generate_Image is
    end Root_Type_Name;
 
    function Standard_Name (Type_Name : in String) return String
-   is
-      pragma Unreferenced (Type_Name);
-   begin
-      return "Auto_Image.Standard";
-   end Standard_Name;
+   is begin
+      return "JUNK";
+      pragma Warnings (Off);
+      if Type_Name = "boolean" then
+         return "Auto_Text_Io.Boolean_Text_IO";
 
+      elsif Type_Name = "character" then
+         return "Auto_Text_Io.Text_IO";
+
+      elsif Type_Name = "duration" then
+         return "Auto_Text_Io.Duration_Text_IO";
+
+      elsif Type_Name = "float" then
+         return "Auto_Text_Io.Float_Text_IO";
+
+      elsif Type_Name = "integer" then
+         return "Auto_Text_Io.Integer_Text_IO";
+
+      elsif Type_Name = "short_integer" then
+         return "Auto_Text_Io.Short_Integer_Text_IO";
+
+      elsif Type_Name = "short_short_integer" then
+         return "Auto_Text_Io.Short_Short_Integer_Text_IO";
+
+      elsif Type_Name = "long_integer" then
+         return "Auto_Text_Io.Long_Integer_Text_IO";
+
+      elsif Type_Name = "long_long_integer" then
+         return "Auto_Text_Io.Long_Long_Integer_Text_IO";
+
+      elsif Type_Name = "long_float" then
+         return "Auto_Text_Io.Long_Float_Text_IO";
+
+      elsif Type_Name = "long_long_float" then
+         return "Auto_Text_Io.Long_Long_Float_Text_IO";
+
+      elsif Type_Name = "string" then
+         return "Auto_Text_Io.Text_IO";
+      else
+         Ada.Text_IO.Put_Line (Ada.Text_IO.Standard_Error, "Unsuported type:  " & Type_Name);
+         raise Not_Supported with Type_Name;
+      end if;
+
+   end Standard_Name;
 begin
    Auto_Io_Gen.Options.Register
-     (Option => "image", Language_Name => "Image",
+     (Option => "json", Language_Name => "JSON",
       Generator => Create_Text_IO_Child'Access,
       Std_Names =>  Standard_Name'Access);
-
-end Auto_Io_Gen.Generate_Image;
+end Auto_Io_Gen.Generate.JSON_File;

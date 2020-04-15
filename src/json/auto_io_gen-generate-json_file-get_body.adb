@@ -22,7 +22,7 @@ with Asis.Declarations;
 with Asis.Elements;
 with Auto_Io_Gen.Options;
 with SAL.Gen.Alg.Process_All_Constant;
-package body Auto_Io_Gen.Generate.Get_Body is
+package body Auto_Io_Gen.Generate.JSON_File.Get_Body is
    use Ada.Text_IO;
 
    Body_First : Boolean := True; -- Shared between printing discriminants and components.
@@ -141,7 +141,9 @@ package body Auto_Io_Gen.Generate.Get_Body is
          Indent_Line (File, "Get (File, Temp_Item." & Component_Name & ");");
       else
          Indent_Line (File, "Get_Item (File, Temp_Item." & Component_Name & ",");
-         Indent_More (File, "Named_Association => Named_Association_Component);");
+         Indent_Level := Indent_Level + 1;
+         Indent_Line (File, "Named_Association => Named_Association_Component);");
+         Indent_Level := Indent_Level - 1;
       end if;
 
    end Generate_Component_Temp_Get;
@@ -153,12 +155,14 @@ package body Auto_Io_Gen.Generate.Get_Body is
       Indent_Line (File, "procedure Get");
       Indent_Level := Indent_Level + 1;
 
-      Indent_Line (File, "(File                      : in     " & Ada_Text_IO & ".File_Type;",
-                         " Item                      :    out " & Lists.Type_Name (Type_Descriptor) & ";",
-                         " Named_Association_Array   : in     Boolean := False;",
-                         " Named_Association_Element : in     Boolean := False)");
+      Indent_Line (File, "(File                      : in     " & Ada_Text_IO & ".File_Type;");
+      Indent_Line (File, " Item                      :    out " & Lists.Type_Name (Type_Descriptor) & ";");
+      Indent_Line (File, " Named_Association_Array   : in     Boolean := False;");
+      Indent_Line (File, " Named_Association_Element : in     Boolean := False)");
 
-      Indent_Less (File, "is begin");
+      Indent_Level := Indent_Level - 1;
+      Indent_Line (File, "is begin");
+      Indent_Level := Indent_Level + 1;
 
       if Asis.Elements.Is_Nil (Type_Descriptor.Derived_Root_Package_Declaration) then
          Indent_Line (File, "Get");
@@ -191,22 +195,32 @@ package body Auto_Io_Gen.Generate.Get_Body is
       Indent_Line (File, "end Get;");
       New_Line (File);
 
-      Indent_Incr (File, "procedure Get");
-      Indent_Line (File, "(Item                      :    out " & Lists.Type_Name (Type_Descriptor) & ";",
-                         " Named_Association_Array   : in     Boolean := False;",
-                         " Named_Association_Element : in     Boolean := False)");
-      Indent_Less (File, "is begin");
+      Indent_Line (File, "procedure Get");
+      Indent_Level := Indent_Level + 1;
+      Indent_Line (File, "(Item                      :    out " & Lists.Type_Name (Type_Descriptor) & ";");
+      Indent_Line (File, " Named_Association_Array   : in     Boolean := False;");
+      Indent_Line (File, " Named_Association_Element : in     Boolean := False)");
+      Indent_Level := Indent_Level - 1;
+
+      Indent_Line (File, "is begin");
+      Indent_Level := Indent_Level + 1;
       Indent_Line (File, "Get (Current_Input, Item, Named_Association_Array, Named_Association_Element);");
-      Indent_Decr (File, "end Get;");
+      Indent_Level := Indent_Level - 1;
+      Indent_Line (File, "end Get;");
       New_Line (File);
 
-      Indent_Incr (File, "procedure Get_Item");
-      Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;",
-                         " Item              :    out " & Lists.Type_Name (Type_Descriptor) & ";",
-                         " Named_Association : in     Boolean := False)");
-      Indent_Less (File, "is begin");
+      Indent_Line (File, "procedure Get_Item");
+      Indent_Level := Indent_Level + 1;
+      Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;");
+      Indent_Line (File, " Item              :    out " & Lists.Type_Name (Type_Descriptor) & ";");
+      Indent_Line (File, " Named_Association : in     Boolean := False)");
+      Indent_Level := Indent_Level - 1;
+
+      Indent_Line (File, "is begin");
+      Indent_Level := Indent_Level + 1;
       Indent_Line (File, "Get (File, Item, Named_Association, Named_Association);");
-      Indent_Decr (File, "end Get_Item;");
+      Indent_Level := Indent_Level - 1;
+      Indent_Line (File, "end Get_Item;");
       New_Line (File);
    end Generate_Derived_Array;
 
@@ -279,7 +293,9 @@ package body Auto_Io_Gen.Generate.Get_Body is
               Discriminant_Name &
               ") then");
       end if;
-      Indent_More (File, "raise Discriminant_Error;");
+      Indent_Level := Indent_Level + 1;
+      Indent_Line (File, "raise Discriminant_Error;");
+      Indent_Level := Indent_Level - 1;
       Indent_Line (File, "end if;");
 
    end Generate_Discriminant_Compare;
@@ -292,12 +308,13 @@ package body Auto_Io_Gen.Generate.Get_Body is
    begin
       --  Generic_Array_IO was instantiated by Put_Body.
 
-      Indent_Incr (File, "procedure Get");
+      Indent_Line (File, "procedure Get");
+      Indent_Level := Indent_Level + 1;
 
-      Indent_Line (File, "(File                        : in " & Ada_Text_IO & ".File_Type;",
-                         " Item                        :    out " & Lists.Type_Name (Type_Descriptor) & ";",
-                         " Named_Association_Record    : in     Boolean := False;",
-                         " Named_Association_Component : in     Boolean := False)");
+      Indent_Line (File, "(File                        : in " & Ada_Text_IO & ".File_Type;");
+      Indent_Line (File, " Item                        :    out " & Lists.Type_Name (Type_Descriptor) & ";");
+      Indent_Line (File, " Named_Association_Record    : in     Boolean := False;");
+      Indent_Line (File, " Named_Association_Component : in     Boolean := False)");
 
       Indent_Level := Indent_Level - 1;
 
@@ -320,19 +337,20 @@ package body Auto_Io_Gen.Generate.Get_Body is
          Indent_Line (File, " Named_Association_Record, Named_Association_Component);");
       end if;
 
-      Indent_Decr (File, "end Get;");
+      Indent_Level := Indent_Level - 1;
+      Indent_Line (File, "end Get;");
       New_Line (File);
 
       Indent_Line (File, "procedure Get");
       Indent_Level := Indent_Level + 1;
-      Indent_Line (File, "(Item                        :    out " & Lists.Type_Name (Type_Descriptor) & ";",
-                         " Named_Association_Record    : in     Boolean := False;",
-                         " Named_Association_Component : in     Boolean := False)");
+      Indent_Line (File, "(Item                        :    out " & Lists.Type_Name (Type_Descriptor) & ";");
+      Indent_Line (File, " Named_Association_Record    : in     Boolean := False;");
+      Indent_Line (File, " Named_Association_Component : in     Boolean := False)");
       Indent_Level := Indent_Level - 1;
 
       if Type_Descriptor.Array_Component_Label in Lists.Scalar_Array_Component_Labels_Type then
          Indent_Line (File, "is");
-         Indent_More (File, "pragma Unreferenced (Named_Association_Component);");
+         Indent_Line (File, "   pragma Unreferenced (Named_Association_Component);");
          Indent_Line (File, "begin");
       else
          Indent_Line (File, "is begin");
@@ -345,17 +363,22 @@ package body Auto_Io_Gen.Generate.Get_Body is
       else
          Indent_Line (File, " Named_Association_Record, Named_Association_Component);");
       end if;
-      Indent_Decr (File, "end Get;");
+      Indent_Level := Indent_Level - 1;
+      Indent_Line (File, "end Get;");
       New_Line (File);
 
       Indent_Line (File, "procedure Get_Item");
       Indent_Level := Indent_Level + 1;
-      Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;",
-                         " Item              :    out " & Lists.Type_Name (Type_Descriptor) & ";",
-                         " Named_Association : in     Boolean := False)");
-      Indent_Less (File, "is begin");
+      Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;");
+      Indent_Line (File, " Item              :    out " & Lists.Type_Name (Type_Descriptor) & ";");
+      Indent_Line (File, " Named_Association : in     Boolean := False)");
+      Indent_Level := Indent_Level - 1;
+
+      Indent_Line (File, "is begin");
+      Indent_Level := Indent_Level + 1;
       Indent_Line (File, Package_Name & ".Get_Item (File, Item, Named_Association);");
-      Indent_Decr (File, "end Get_Item;");
+      Indent_Level := Indent_Level - 1;
+      Indent_Line (File, "end Get_Item;");
       New_Line (File);
    end Generate_Private_Array_Wrapper;
 
@@ -369,10 +392,10 @@ package body Auto_Io_Gen.Generate.Get_Body is
       is begin
          Indent_Level := Indent_Level + 1;
 
-         Indent_Line (File, "(File                        : in     " & Ada_Text_IO & ".File_Type;",
-                            " Item                        :    out " & Lists.Type_Name (Type_Descriptor) & ";",
-                            " Named_Association_Record    : in     Boolean := False;",
-                            " Named_Association_Component : in     Boolean := False)");
+         Indent_Line (File, "(File                        : in     " & Ada_Text_IO & ".File_Type;");
+         Indent_Line (File, " Item                        :    out " & Lists.Type_Name (Type_Descriptor) & ";");
+         Indent_Line (File, " Named_Association_Record    : in     Boolean := False;");
+         Indent_Line (File, " Named_Association_Component : in     Boolean := False)");
 
          Indent_Level := Indent_Level - 1;
       end Print_Parameter_List;
@@ -504,7 +527,9 @@ package body Auto_Io_Gen.Generate.Get_Body is
             Indent_Line (File, "Temp_Item : " & Asis.Aux.Name (Type_Descriptor.Type_Name) & " renames Item;");
          end if;
 
-         Indent_Less (File, "begin");
+         Indent_Level := Indent_Level - 1;
+         Indent_Line (File, "begin");
+         Indent_Level := Indent_Level + 1;
 
          Body_First := True;
 
@@ -517,14 +542,17 @@ package body Auto_Io_Gen.Generate.Get_Body is
          if Type_Descriptor.Record_Constrained then
             Print_Discriminant_Compares (Type_Descriptor.Record_Discriminants);
          else
-            Indent_Incr (File, "declare");
+            Indent_Line (File, "declare");
+            Indent_Level := Indent_Level + 1;
             Indent_Line (File, "Temp_Item : " & Asis.Aux.Name (Type_Descriptor.Type_Name));
             Indent_Level := Indent_Level + 1;
             Indent (File, "(");
             Print_Discriminants (Type_Descriptor.Record_Discriminants);
             Put_Line (File, ");");
             Indent_Level := Indent_Level - 1;
-            Indent_Less (File, "begin");
+            Indent_Level := Indent_Level - 1;
+            Indent_Line (File, "begin");
+            Indent_Level := Indent_Level + 1;
          end if;
 
          if Type_Descriptor.Record_Derived then
@@ -540,16 +568,16 @@ package body Auto_Io_Gen.Generate.Get_Body is
               (File,
                Asis.Aux.Name (Type_Descriptor.Record_Parent_Package_Name) &
                  ".Text_IO.Get_Components");
-            Indent_Level := Indent_Level + 1;
             Indent_Line
               (File,
                " (File, " &
                  Asis.Aux.Name (Type_Descriptor.Record_Parent_Package_Name) &
                  "." &
                  Asis.Aux.Name (Type_Descriptor.Record_Parent_Type_Name) &
-                 " (Temp_Item),",
+                 " (Temp_Item),");
+            Indent_Line
+              (File,
                "Named_Association_Record, Named_Association_Component);");
-            Indent_Level := Indent_Level - 1;
          end if;
 
          if Type_Descriptor.Record_Tagged then
@@ -570,31 +598,43 @@ package body Auto_Io_Gen.Generate.Get_Body is
 
          if not Type_Descriptor.Record_Constrained then
             Indent_Line (File, "Item := Temp_Item;");
-            Indent_Decr (File, "end;");
+            Indent_Level := Indent_Level - 1;
+            Indent_Line (File, "end;");
          end if;
 
          Indent_Line (File, "Check (File, "")"");");
-         Indent_Decr (File, "end Get;");
+         Indent_Level := Indent_Level - 1;
+         Indent_Line (File, "end Get;");
          New_Line (File);
 
       end if;
 
-      Indent_Incr (File, "procedure Get");
-      Indent_Line (File, "(Item                        :    out " & Lists.Type_Name (Type_Descriptor) & ";",
-                         " Named_Association_Record    : in     Boolean := False;",
-                         " Named_Association_Component : in     Boolean := False)");
-      Indent_Less (File, "is begin");
+      Indent_Line (File, "procedure Get");
+      Indent_Level := Indent_Level + 1;
+      Indent_Line (File, "(Item                        :    out " & Lists.Type_Name (Type_Descriptor) & ";");
+      Indent_Line (File, " Named_Association_Record    : in     Boolean := False;");
+      Indent_Line (File, " Named_Association_Component : in     Boolean := False)");
+      Indent_Level := Indent_Level - 1;
+
+      Indent_Line (File, "is begin");
+      Indent_Level := Indent_Level + 1;
       Indent_Line (File, "Get (Current_Input, Item, Named_Association_Record, Named_Association_Component);");
-      Indent_Decr (File, "end Get;");
+      Indent_Level := Indent_Level - 1;
+      Indent_Line (File, "end Get;");
       New_Line (File);
 
-      Indent_Incr (File, "procedure Get_Item");
-      Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;",
-                         " Item              :    out " & Lists.Type_Name (Type_Descriptor) & ";",
-                         " Named_Association : in     Boolean := False)");
-      Indent_Less (File, "is begin");
+      Indent_Line (File, "procedure Get_Item");
+      Indent_Level := Indent_Level + 1;
+      Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;");
+      Indent_Line (File, " Item              :    out " & Lists.Type_Name (Type_Descriptor) & ";");
+      Indent_Line (File, " Named_Association : in     Boolean := False)");
+      Indent_Level := Indent_Level - 1;
+
+      Indent_Line (File, "is begin");
+      Indent_Level := Indent_Level + 1;
       Indent_Line (File, "Get (File, Item, Named_Association, Named_Association);");
-      Indent_Decr (File, "end Get_Item;");
+      Indent_Level := Indent_Level - 1;
+      Indent_Line (File, "end Get_Item;");
       New_Line (File);
 
       if Type_Descriptor.Record_Tagged then
@@ -602,17 +642,20 @@ package body Auto_Io_Gen.Generate.Get_Body is
          Print_Parameter_List;
 
          Indent_Line (File, "is");
-         Indent_More (File, "Temp_Item : " & Asis.Aux.Name (Type_Descriptor.Type_Name) & " renames Item;");
+         Indent_Level := Indent_Level + 1;
+         Indent_Line (File, "Temp_Item : " & Asis.Aux.Name (Type_Descriptor.Type_Name) & " renames Item;");
+         Indent_Level := Indent_Level - 1;
          Indent_Line (File, "begin");
          Indent_Level := Indent_Level + 1;
 
          Body_First := True;
          Print_Component_Gets (Type_Descriptor.Record_Components);
 
-         Indent_Decr (File, "end Get_Components;");
+         Indent_Level := Indent_Level - 1;
+         Indent_Line (File, "end Get_Components;");
          New_Line (File);
       end if;
 
    end Generate_Record;
 
-end Auto_Io_Gen.Generate.Get_Body;
+end Auto_Io_Gen.Generate.JSON_File.Get_Body;

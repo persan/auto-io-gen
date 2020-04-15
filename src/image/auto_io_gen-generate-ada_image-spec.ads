@@ -17,7 +17,7 @@
 --  330, Boston, MA 02111-1307, USA.
 
 with Auto_Io_Gen.Lists;
-private package Auto_Io_Gen.Generate.Spec is
+private package Auto_Io_Gen.Generate.Ada_Image.Spec is
    pragma Elaborate_Body;  --  Ada.Text_IO, Asis
 
    procedure Generate_Child_Spec
@@ -31,4 +31,4 @@ private package Auto_Io_Gen.Generate.Spec is
       Is_Generic          : in Boolean);
    --  Generate child package spec. File must be open for write.
 
-end Auto_Io_Gen.Generate.Spec;
+end Auto_Io_Gen.Generate.Ada_Image.Spec;
