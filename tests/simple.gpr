@@ -2,7 +2,7 @@ with "../auto_text_io.gpr";
 with "../auto_image.gpr";
 project Simple is
 
-   type Languages is ("text_io", "image", "json");
+   type Languages is ("text_io", "images", "json");
    Language := external ("LANGUAGE", "text_io");
    for Languages use ("Ada", "Text");
    for Source_Dirs use (".", "src", "src/" & Language & "/**");

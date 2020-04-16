@@ -3,6 +3,7 @@
 --  See spec.
 --
 --  Copyright (C) 2001 - 2004, 2006 - 2007 Stephen Leake.  All Rights Reserved.
+--  Copyright (C) 2020  Oliver Kellogg  <okellogg@users.sf.net>
 --
 --  This program is free software; you can redistribute it and/or
 --  modify it under terms of the GNU General Public License as
@@ -20,10 +21,34 @@ with Asis.Aux;
 with Asis.Elements;
 with Auto_Io_Gen.Options;
 with SAL.Gen.Alg.Process_All_Constant;
+
 package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
    use Ada.Text_IO;
 
    Body_First : Boolean := True; --  Shared between printing discriminants and components.
+
+   procedure End_Function_Image (File : in Ada.Text_IO.File_Type)
+   is begin
+      Indent_Line (File, "return To_String (Buffer);");
+      Indent_Decr (File, "end Image;");
+      New_Line (File);
+   end End_Function_Image;
+
+   procedure Declare_Function_Image
+     (File            : in Ada.Text_IO.File_Type;
+      Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type;
+      Trivial         : in Boolean := True)
+   is begin
+      Indent_Incr (File, "function Image (Item : " &
+                         Lists.Type_Name (Type_Descriptor) & ") return String");
+      Indent_Less (File, "is");
+      Indent_Line (File, "Buffer : Unbounded_String;");
+      Indent_Less (File, "begin");
+      if Trivial then
+         Indent_Line (File, "Put (Buffer, Item);");
+         End_Function_Image (File);
+      end if;
+   end Declare_Function_Image;
 
    procedure Generate_Component_Line
      (File      : in Ada.Text_IO.File_Type;
@@ -34,7 +59,6 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
    procedure Generate_Derived_Array
      (File            : in Ada.Text_IO.File_Type;
       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
-
    --  Generate body code for all Put subprograms for a derived array type.
 
    procedure Generate_Private_Array_Wrapper
@@ -61,8 +85,14 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
          if Type_Descriptor.Private_Implementation then
             Generate_Private_Array_Wrapper (File, Type_Descriptor);
          else
-            --  No body needed; SAL.Gen_Array_Text_IO instantiated in spec.
-            null;
+            declare
+               Type_Name    : constant String := Asis.Aux.Name (Type_Descriptor.Type_Name);
+               Package_Name : constant String := Instantiated_Package_Name (Type_Name);
+            begin
+               Declare_Function_Image (File, Type_Descriptor, Trivial => False);
+               Indent_Line (File, Package_Name & ".Put (Buffer, Item);");
+               End_Function_Image (File);
+            end;
          end if;
 
       when Lists.Scalar_Labels_Type =>
@@ -98,29 +128,35 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
    is
       pragma Unreferenced (First);
       Component_Name : constant String := Asis.Aux.Name (Component.Component_Name);
+      Type_Name      : constant String := Asis.Aux.Name (Component.Type_Name);
+      Method_Suffix  : String (1 .. 2) := "  ";
+      Delimiter      : String (1 .. 3) := "   ";
+      Is_String      : Boolean := False;
    begin
 
       if not Body_First then
          --  Finish last component put
          Indent_Line
            (File,
-            "Put (File, Character'(',')); if not Single_Line_Record then New_Line (File); end if;");
+            "Put (To, Character' (','));",
+            "if not Single_Line_Record then New_Line (To); end if;");
 
          --  Start current component put
-         Indent (File, "Put (File, Character'(' '));");
+         Indent_Line (File, "Put (To, Character' (' '));");
 
       else
          Body_First := False;
       end if;
 
-      Indent_Line (File, "if Named_Association_Record then");
-      Indent_Line (File, "   Put (File, """ & Component_Name & " => "");");
-      Indent_Line (File, "   if not Single_Line_Component then New_Line (File); end if;");
-      Indent_Line (File, "end if;");
+      --  Indent_Line (File, "-- Generate_Component_Line : " & Type_Name);
+      Indent_Incr (File, "if Named_Association_Record then");
+      Indent_Line (File, "Put (To, """ & Component_Name & " => "");",
+                         "if not Single_Line_Component then New_Line (To); end if;");
+      Indent_Decr (File, "end if;");
 
       if Asis.Elements.Is_Nil (Component.Type_Package) then
          if Component.Invisible then
-            Indent (File, "Private_Text_IO.");
+            Indent (File, "Private_Images.");
          else
             Set_Indent (File);
          end if;
@@ -128,17 +164,38 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
          Indent (File, Text_IO_Child_Name (Component.Type_Package) & '.');
       end if;
 
-      if Component.Scalar then
-         Put_Line (File, "Put (File, Item." & Component_Name & ");");
-      else
-         Put_Line (File, "Put_Item (File, Item." & Component_Name & ",");
-         Indent_Level := Indent_Level + 1;
-
-         Indent_Line
-           (File,
-            "Single_Line => Single_Line_Component, Named_Association => Named_Association_Component);");
-         Indent_Level := Indent_Level - 1;
+      if Type_Name = "String" then
+         Delimiter := "'""'";
+      elsif Type_Name = "Wide_String" then
+         Method_Suffix := "w ";
+         Delimiter := "'""'";
+      elsif Type_Name = "Wide_Wide_String" then
+         Method_Suffix := "ww";
+         Delimiter := "'""'";
+      elsif Type_Name = "Character" then
+         Delimiter := "'''";
+      elsif Type_Name = "Wide_Character" then
+         Method_Suffix := "w ";
+         Delimiter := "'''";
+      elsif Type_Name = "Wide_Wide_Character" then
+         Method_Suffix := "ww";
+         Delimiter := "'''";
       end if;
+      if Delimiter /= "   " then
+         Put (File, "Put" & Method_Suffix & "(To, " & Delimiter & " & ");
+      else
+         Put (File, "Put (To, ");
+         if Component.Scalar then
+            Put (File, "Image (");
+         end if;
+      end if;
+      Put (File, "Item." & Component_Name);
+      if Delimiter /= "   " then
+         Put (File, " & " & Delimiter);
+      elsif Component.Scalar then
+         Put (File, ")");
+      end if;
+      Put_Line (File, ");");
 
    end Generate_Component_Line;
 
@@ -146,78 +203,29 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
      (File            : in Ada.Text_IO.File_Type;
       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
    is begin
-      Indent_Line (File, "procedure Put");
-      Indent_Level := Indent_Level + 1;
-
-      Indent_Line (File, " Item                      : in " & Lists.Type_Name (Type_Descriptor) & ";");
-      Indent_Line (File, " Single_Line_Array         : in Boolean := False;");
-      Indent_Line (File, " Named_Association_Array   : in Boolean := False;");
-      Indent_Line (File, " Single_Line_Element       : in Boolean := True;");
-      Indent_Line (File, " Named_Association_Element : in Boolean := False)");
-
-      Indent_Level := Indent_Level - 1;
-      Indent_Line (File, "is begin");
-      Indent_Level := Indent_Level + 1;
+      Indent_Incr (File, "procedure Put  -- Generate_Derived_Array");
+      Indent_Line (File, "(To   : in out Unbounded_String;",
+                         " Item : in " & Lists.Type_Name (Type_Descriptor) & ")");
+      Indent_Less (File, "is begin");
 
       if Asis.Elements.Is_Nil (Type_Descriptor.Derived_Root_Package_Declaration) then
-         Indent (File, "Put");
          Indent_Line
-           (File,
-            " (File, " &
-              Asis.Aux.Name (Type_Descriptor.Derived_Root_Type_Declaration) &
-              " (Item),");
+           (File, "Put (To, " &
+                  Asis.Aux.Name (Type_Descriptor.Derived_Root_Type_Declaration) &
+                  " (Item));");
       else
          Indent_Line
-           (File,
-            Asis.Aux.Name (Type_Descriptor.Derived_Root_Package_Declaration) &
-              ".Text_IO.Put");
-
-         Indent_Line
-           (File,
-            " (File, " &
-              Asis.Aux.Name (Type_Descriptor.Derived_Root_Package_Declaration) &
-              "." &
-              Asis.Aux.Name (Type_Descriptor.Derived_Root_Type_Declaration) &
-              " (Item),");
+           (File, Asis.Aux.Name (Type_Descriptor.Derived_Root_Package_Declaration) &
+                  ".Images.Put (To, " &
+                  Asis.Aux.Name (Type_Descriptor.Derived_Root_Package_Declaration) &
+                  "." &
+                  Asis.Aux.Name (Type_Descriptor.Derived_Root_Type_Declaration) &
+                  " (Item));");
       end if;
 
-      Indent_Line
-        (File, " Single_Line_Array, Named_Association_Array, Single_Line_Element, Named_Association_Element);");
-      Indent_Level := Indent_Level - 1;
-      Indent_Line (File, "end Put;");
+      Indent_Decr (File, "end Put;");
       New_Line (File);
-
-      Indent_Line (File, "procedure Put");
-      Indent_Level := Indent_Level + 1;
-      Indent_Line (File, "(Item                      : in " & Lists.Type_Name (Type_Descriptor) & ";");
-      Indent_Line (File, " Single_Line_Array         : in Boolean := False;");
-      Indent_Line (File, " Named_Association_Array   : in Boolean := False;");
-      Indent_Line (File, " Single_Line_Element       : in Boolean := True;");
-      Indent_Line (File, " Named_Association_Element : in Boolean := False)");
-      Indent_Level := Indent_Level - 1;
-
-      Indent_Line (File, "is begin");
-      Indent_Level := Indent_Level + 1;
-      Indent_Line (File, "Put (Current_Output, Item,");
-      Indent_Line
-        (File, "     Single_Line_Array, Named_Association_Array, Single_Line_Element, Named_Association_Element);");
-      Indent_Level := Indent_Level - 1;
-      Indent_Line (File, "end Put;");
-      New_Line (File);
-
-      Indent_Line (File, "procedure Put_Item");
-      Indent_Level := Indent_Level + 1;
-      Indent_Line (File, " Item              : in " & Lists.Type_Name (Type_Descriptor) & ";");
-      Indent_Line (File, " Single_Line       : in Boolean := False;");
-      Indent_Line (File, " Named_Association : in Boolean := False)");
-      Indent_Level := Indent_Level - 1;
-
-      Indent_Line (File, "is begin");
-      Indent_Level := Indent_Level + 1;
-      Indent_Line (File, "Put (File, Item, Single_Line, Named_Association, Single_Line, Named_Association);");
-      Indent_Level := Indent_Level - 1;
-      Indent_Line (File, "end Put_Item;");
-      New_Line (File);
+      Declare_Function_Image (File, Type_Descriptor);
    end Generate_Derived_Array;
 
    procedure Generate_Private_Array_Wrapper
@@ -228,148 +236,15 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
    begin
       Instantiate_Generic_Array_Text_IO (File, Type_Descriptor);
 
-      case Type_Descriptor.Array_Component_Label is
-      when Lists.Private_Label =>
-         null;
+      Indent_Incr (File, "procedure Put  -- Generate_Private_Array_Wrapper");
+      Indent_Line (File, "(To   : in out Unbounded_String;",
+                         " Item : in " & Lists.Type_Name (Type_Descriptor) & ")");
 
-      when Lists.Enumeration_Label =>
-         Indent_Line (File, "procedure Set_" & Package_Name & "_Default_Width (Width : in Ada.Text_IO.Field)");
-         Indent_Line (File, "is begin");
-         Indent_Level := Indent_Level + 1;
-         Indent_Line (File, Package_Name & ".Default_Width := Width;");
-         Indent_Level := Indent_Level - 1;
-         Indent_Line (File, "end Set_" & Package_Name & "_Default_Width;");
-
-         Indent_Line (File, "procedure Set_" & Package_Name & "_Default_Setting (Setting : in Ada.Text_IO.Type_Set)");
-         Indent_Line (File, "is begin");
-         Indent_Level := Indent_Level + 1;
-         Indent_Line (File, Package_Name & ".Default_Setting := Setting;");
-         Indent_Level := Indent_Level - 1;
-         Indent_Line (File, "end Set_" & Package_Name & "_Default_Setting;");
-
-      when Lists.Float_Label =>
-         Indent_Line (File, "procedure Set_" & Package_Name & "_Default_Fore (Fore : in Ada.Text_IO.Field)");
-         Indent_Line (File, "is begin");
-         Indent_Level := Indent_Level + 1;
-         Indent_Line (File, Package_Name & ".Default_Fore := Fore;");
-         Indent_Level := Indent_Level - 1;
-         Indent_Line (File, "end Set_" & Package_Name & "_Default_Fore;");
-
-         Indent_Line (File, "procedure Set_" & Package_Name & "_Default_Aft (Aft : in Ada.Text_IO.Field)");
-         Indent_Line (File, "is begin");
-         Indent_Level := Indent_Level + 1;
-         Indent_Line (File, Package_Name & ".Default_Aft := Aft;");
-         Indent_Level := Indent_Level - 1;
-         Indent_Line (File, "end Set_" & Package_Name & "_Default_Aft;");
-
-         Indent_Line (File, "procedure Set_" & Package_Name & "_Default_Exp (Exp : in Ada.Text_IO.Field)");
-         Indent_Line (File, "is begin");
-         Indent_Level := Indent_Level + 1;
-         Indent_Line (File, Package_Name & ".Default_Exp := Exp;");
-         Indent_Level := Indent_Level - 1;
-         Indent_Line (File, "end Set_" & Package_Name & "_Default_Exp;");
-
-      when Lists.Signed_Integer_Label | Lists.Modular_Integer_Label =>
-         Indent_Line (File, "procedure Set_" & Package_Name & "_Default_Width (Width : Ada.Text_IO.Field)");
-         Indent_Line (File, "is begin");
-         Indent_Level := Indent_Level + 1;
-         Indent_Line (File, Package_Name & ".Default_Width := Width;");
-         Indent_Level := Indent_Level - 1;
-         Indent_Line (File, "end Set_" & Package_Name & "_Default_Width;");
-
-         Indent_Line (File, "procedure Set_" & Package_Name & "_Default_Base (Base : Ada.Text_IO.Number_Base)");
-         Indent_Line (File, "is begin");
-         Indent_Level := Indent_Level + 1;
-         Indent_Line (File, Package_Name & ".Default_Base := Base;");
-         Indent_Level := Indent_Level - 1;
-         Indent_Line (File, "end Set_" & Package_Name & "_Default_Base;");
-
-      end case;
-
-      Indent_Line (File, "procedure Put");
-      Indent_Level := Indent_Level + 1;
-
-      Indent_Line (File, " Item                        : in " & Lists.Type_Name (Type_Descriptor) & ";");
-      Indent_Line (File, " Single_Line_Record          : in Boolean := True;");
-      Indent_Line (File, " Named_Association_Record    : in Boolean := False;");
-      Indent_Line (File, " Single_Line_Component       : in Boolean := True;");
-      Indent_Line (File, " Named_Association_Component : in Boolean := False)");
-
-      Indent_Level := Indent_Level - 1;
-
-      if Type_Descriptor.Array_Component_Label in Lists.Scalar_Array_Component_Labels_Type then
-         Indent_Line (File, "is");
-         Indent_Line (File, "   pragma Unreferenced (Single_Line_Component);");
-         Indent_Line (File, "   pragma Unreferenced (Named_Association_Component);");
-         Indent_Line (File, "begin");
-      else
-         Indent_Line (File, "is begin");
-      end if;
-
-      Indent_Level := Indent_Level + 1;
-
-      Indent (File, Package_Name & ".Put");
-      Indent_Line (File, " (File, Item,");
-      if Type_Descriptor.Array_Component_Label in Lists.Scalar_Array_Component_Labels_Type then
-         Indent_Line (File, " Single_Line => Single_Line_Record, Named_Association => Named_Association_Record);");
-      else
-         Indent_Line
-           (File,
-            " Single_Line_Record, Named_Association_Record, Single_Line_Component, Named_Association_Component);");
-      end if;
-
-      Indent_Level := Indent_Level - 1;
-      Indent_Line (File, "end Put;");
+      Indent_Less (File, "is begin");
+      Indent_Line (File, Package_Name & ".Put (To, Item);");
+      Indent_Decr (File, "end Put;");
       New_Line (File);
-
-      Indent_Line (File, "procedure Put");
-      Indent_Level := Indent_Level + 1;
-      Indent_Line (File, "(Item                        : in " & Lists.Type_Name (Type_Descriptor) & ";");
-      Indent_Line (File, " Single_Line_Record          : in Boolean := True;");
-      Indent_Line (File, " Named_Association_Record    : in Boolean := False;");
-      Indent_Line (File, " Single_Line_Component       : in Boolean := True;");
-      Indent_Line (File, " Named_Association_Component : in Boolean := False)");
-      Indent_Level := Indent_Level - 1;
-
-      if Type_Descriptor.Array_Component_Label in Lists.Scalar_Array_Component_Labels_Type then
-         Indent_Line (File, "is");
-         Indent_Line (File, "   pragma Unreferenced (Single_Line_Component);");
-         Indent_Line (File, "   pragma Unreferenced (Named_Association_Component);");
-         Indent_Line (File, "begin");
-      else
-         Indent_Line (File, "is begin");
-      end if;
-
-      Indent_Level := Indent_Level + 1;
-      Indent_Line (File, Package_Name & ".Put (Current_Output, Item,");
-      case Type_Descriptor.Array_Component_Label is
-      when Lists.Scalar_Array_Component_Labels_Type =>
-         Indent_Line (File, " Single_Line => Single_Line_Record,");
-         Indent_Line (File, " Named_Association => Named_Association_Record);");
-
-      when Lists.Private_Label =>
-         Indent_Line
-           (File,
-            " Single_Line_Record, Named_Association_Record, Single_Line_Component, Named_Association_Component);");
-      end case;
-
-      Indent_Level := Indent_Level - 1;
-      Indent_Line (File, "end Put;");
-      New_Line (File);
-
-      Indent_Line (File, "procedure Put_Item");
-      Indent_Level := Indent_Level + 1;
-      Indent_Line (File, " Item              : in " & Lists.Type_Name (Type_Descriptor) & ";");
-      Indent_Line (File, " Single_Line       : in Boolean := False;");
-      Indent_Line (File, " Named_Association : in Boolean := False)");
-      Indent_Level := Indent_Level - 1;
-
-      Indent_Line (File, "is begin");
-      Indent_Level := Indent_Level + 1;
-      Indent_Line (File, Package_Name & ".Put_Item (File, Item, Single_Line, Named_Association);");
-      Indent_Level := Indent_Level - 1;
-      Indent_Line (File, "end Put_Item;");
-      New_Line (File);
+      Declare_Function_Image (File, Type_Descriptor);
    end Generate_Private_Array_Wrapper;
 
    procedure Generate_Record
@@ -379,23 +254,15 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
       Separate_Body_Name : constant String := "Put_" & Root_Type_Name (Asis.Aux.Name (Type_Descriptor.Type_Name));
 
       procedure Print_Parameter_List
-        (With_File          : in Boolean;
-         Is_Item            : in Boolean;
-         Check_Unreferenced : in Boolean;
+        (Check_Unreferenced : in Boolean;
          Discriminants      : in Boolean;
          Separate_Body      : in Boolean)
       is
-         pragma Unreferenced (Is_Item, With_File, Check_Unreferenced, Separate_Body, Discriminants);
+         pragma Unreferenced (Check_Unreferenced, Discriminants, Separate_Body);
       begin
-         Indent_Level := Indent_Level + 1;
-
-         Put_Line (File, "Item : in " & Lists.Type_Name (Type_Descriptor) & ";");
-
-
-         Indent_Level := Indent_Level - 1;
-
-         Indent_Line (File, "begin");
-         Indent_Level := Indent_Level + 1;
+         Indent_Line (File, "(To    : in out Unbounded_String;",
+                            " Item : in " & Lists.Type_Name (Type_Descriptor) & ")");
+         Indent_Less (File, "is begin");
       end Print_Parameter_List;
 
       procedure Print_Component
@@ -451,12 +318,10 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
             raise SAL.Not_Implemented;
          end if;
 
-         Indent_Line (File, "procedure Put_Components");
+         Indent_Incr (File, "procedure Put_Components");
 
          Print_Parameter_List
-           (Is_Item            => False,
-            With_File          => True,
-            Check_Unreferenced => True,
+           (Check_Unreferenced => True,
             Discriminants      => False,
             Separate_Body      => False);
 
@@ -466,15 +331,14 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
             Indent_Line
               (File,
                Asis.Aux.Name (Type_Descriptor.Record_Parent_Package_Name) &
-                 Options.Package_Separator & "Text_IO.Put_Components");
-            Indent_Line
+                 Options.Package_Separator & "Images.Put_Components");
+            Indent_More
               (File,
-               "(File, " &
+               "(To, " &
                  Asis.Aux.Name (Type_Descriptor.Record_Parent_Package_Name) &
                  "." &
                  Asis.Aux.Name (Type_Descriptor.Record_Parent_Type_Name) &
-                 " (Item), Single_Line_Record, Named_Association_Record,");
-            Indent_Line (File, "     Single_Line_Component, Named_Association_Component);");
+                 " (Item));");
             Body_First := False;
          end if;
 
@@ -487,31 +351,29 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
       end if;
 
       if Type_Descriptor.Separate_Body then
-         Indent_Line (File, "procedure " & Separate_Body_Name);
+         Indent_Incr (File, "procedure " & Separate_Body_Name);
 
          Print_Parameter_List
-           (Is_Item            => False,
-            With_File          => True,
-            Check_Unreferenced => not Type_Descriptor.Record_Tagged,
+           (Check_Unreferenced => not Type_Descriptor.Record_Tagged,
             Discriminants      => True,
             Separate_Body      => True);
 
-         Indent_Line (File, "is separate;");
+         Indent_More (File, "is separate;");
+         New_Line (File);
+         Indent_Level := Indent_Level - 1;
       end if;
 
-      Indent_Line (File, "procedure Put");
+      Indent_Incr (File, "procedure Put");
 
       Print_Parameter_List
-        (Is_Item            => False,
-         With_File          => True,
-         Check_Unreferenced => not Type_Descriptor.Record_Tagged,
+        (Check_Unreferenced => not Type_Descriptor.Record_Tagged,
          Discriminants      => True,
          Separate_Body      => Type_Descriptor.Separate_Body);
 
       if Type_Descriptor.Separate_Body then
-         Indent_Line (File, "renames " & Separate_Body_Name & ";");
+         Indent_More (File, "renames " & Separate_Body_Name & ";");
       else
-         Indent_Line (File, "Put (File, String'(""(""));");
+         Indent_Line (File, "Put (To, String' (""(""));");
 
          Body_First := True;
          Print_Components (Type_Descriptor.Record_Discriminants);
@@ -521,56 +383,28 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
                --  Finish last discriminant put
                Indent_Line
                  (File,
-                  "Put (File, Character'(',')); if not Single_Line_Record then New_Line (File); end if;");
+                  "Put (To, Character' (','));",
+                  "if not Single_Line_Record then New_Line (To); end if;");
                --  Start components put
-               Indent_Line (File, "Put (File, Character'(' '));");
+               Indent_Line (File, "Put (To, Character' (' '));");
 
             else
                Body_First := False;
             end if;
-            Indent_Line (File, "Put_Components (File, Item, Single_Line_Record, Named_Association_Record,");
-            Indent_Line (File, "     Single_Line_Component, Named_Association_Component);");
+            Indent_Line (File, "Put_Components (To, Item);");
          else
             Print_Components (Type_Descriptor.Record_Components);
             Print_Variant_Part;
          end if;
 
-         Indent_Line (File, "Put (File, String'("")""));");
+         Indent_Line (File, "Put (To, String' ("")""));");
          Indent_Level := Indent_Level - 1;
          Indent_Line (File, "end Put;");
       end if;
 
       New_Line (File);
 
-      Indent_Line (File, "procedure Put");
-
-      Print_Parameter_List
-        (Is_Item            => False,
-         With_File          => False,
-         Check_Unreferenced => False,
-         Discriminants      => True,
-         Separate_Body      => False);
-
-      Indent_Line (File, "Put (Current_Output, Item, Single_Line_Record, Named_Association_Record,");
-      Indent_Line (File, "     Single_Line_Component, Named_Association_Component);");
-      Indent_Level := Indent_Level - 1;
-      Indent_Line (File, "end Put;");
-      New_Line (File);
-
-      Indent_Line (File, "procedure Put_Item");
-
-      Print_Parameter_List
-        (Is_Item            => True,
-         With_File          => True,
-         Check_Unreferenced => False,
-         Discriminants      => True,
-         Separate_Body      => False);
-
-      Indent_Line (File, "Put (File, Item, Single_Line, Named_Association,");
-      Indent_Line (File, "     Single_Line, Named_Association);");
-      Indent_Level := Indent_Level - 1;
-      Indent_Line (File, "end Put_Item;");
-      New_Line (File);
+      Declare_Function_Image (File, Type_Descriptor);
    end Generate_Record;
 
 end Auto_Io_Gen.Generate.Ada_Image.Put_Body;
