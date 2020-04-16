@@ -1,10 +1,10 @@
 exec_dir=$(shell gprinfo -P ../auto_io_gen.gpr  --exec-dir)
 export PATH:=${exec_dir}:${PATH}
 export GPR_PROJECT_PATH=$(shell dirname ${CURDIR})
-all: text_io
+all: text_io images
 
 
-json text_io image:
+json text_io images:
 	@rm -rf src/$@/gen
 	mkdir -p results
 	auto_io_gen  -d -v -T -p src/simple.ads src/$@/gen --$@ | tee generate-$@.txt

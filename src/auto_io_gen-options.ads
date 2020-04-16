@@ -23,6 +23,8 @@ with Ada.Strings.Wide_Unbounded;
 with GNAT.Strings;
 with Auto_Io_Gen.Lists;
 with Ada.Containers.Vectors;
+with Ada.Strings.Unbounded;
+
 package Auto_Io_Gen.Options is
    pragma Elaborate_Body; --  Gnat.OS_Lib (in body) is.
 
@@ -132,6 +134,7 @@ package Auto_Io_Gen.Options is
                        Std_Names             : Standard_IO_Name_Proc);
 
    type Language_Description is record
+      Option    : Ada.Strings.Unbounded.Unbounded_String;
       Enabled   : aliased Boolean := False;
       Generator : Create_Text_IO_Child_Proc;
       Standard  : Standard_IO_Name_Proc;
