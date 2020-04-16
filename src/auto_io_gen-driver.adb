@@ -21,6 +21,7 @@ with Ada.Command_Line;
 with Ada.Exceptions;   use Ada.Exceptions;
 with Ada.Strings.Fixed;
 with Ada.Strings.Maps;
+with Ada.Strings.Unbounded;
 with Ada.Strings.Wide_Unbounded;
 with Ada.Text_IO;      use Ada.Text_IO;
 with Ada.Wide_Text_IO;
@@ -146,6 +147,18 @@ begin
             for I of Options.Languages loop
                Options.Current := I;
                if I.Enabled then
+                  declare
+                     Backend : constant String := Ada.Strings.Unbounded.To_String (I.Option);
+                  begin
+                     if Backend = "images" then
+                        Options.Generate_Image   := True;
+                     elsif Backend = "json" then
+                        Options.Generate_JSON    := True;
+                     else
+                        Options.Generate_Text_Io := True;
+                     end if;
+                  end;
+
                   Auto_Io_Gen.Build.Build_Tree
                     (Element => Asis.Elements.Unit_Declaration (CU),
                      Control => Control,

@@ -21,6 +21,8 @@ with Asis.Declarations;
 with Asis.Definitions;
 with Asis.Elements;
 with Auto_Io_Gen.Build.Process_Element_Utils; use Auto_Io_Gen.Build.Process_Element_Utils;
+with Auto_Io_Gen.Options;
+
 procedure Auto_Io_Gen.Build.Process_Element_Do_Type
   (Element : in     Asis.Element;
    Control : in out Asis.Traverse_Control;
@@ -146,7 +148,11 @@ begin
                State.Needs_Body := True;
             end if;
 
-            Add_Spec_With (State, "Auto_Text_Io.Gen_Array_Text_IO", State.Private_State.Current_Type.Invisible);
+            if Options.Generate_Image then
+               Add_Spec_With (State, "Auto_Image.Gen_Array_Image_IO", State.Private_State.Current_Type.Invisible);
+            else
+               Add_Spec_With (State, "Auto_Text_Io.Gen_Array_Text_IO", State.Private_State.Current_Type.Invisible);
+            end if;
 
             --  The children of this element include the index and
             --  component types of the array, which we want.
