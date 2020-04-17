@@ -638,9 +638,10 @@ package body Auto_Io_Gen.Generate.Ada_File.Get_Body is
                          " Named_Association_Item : in     Boolean := False;",
                          " Named_Association_Part : in     Boolean := False)");
       Indent_Less (File, "is");
-      Indent_Line (File, "C : Character;");
-      Indent_Line (File, "S  : " & Acc_Pkg & ".Address_String := (others => ' ');");
-      Indent_Line (File, "ID : System.Storage_Elements.Integer_Address := 0;");
+      Indent_Line (File, "use type " & Acc_Pkg & ".ID_T;");
+      Indent_Line (File, "C  : Character;");
+      Indent_Line (File, "S  : String (1 .. 4) := (others => ' ');");
+      Indent_Line (File, "ID : " & Acc_Pkg & ".ID_T := 0;");
       Indent_Line (File, "Is_Reference : Boolean := False;");
       Indent_Less (File, "begin");
       Indent_Line (File, Ada_Text_IO & ".Get (File, C);");
@@ -652,13 +653,11 @@ package body Auto_Io_Gen.Generate.Ada_File.Get_Body is
       Indent_Decr (File, "end if;");
       Indent_Line (File, "Is_Reference := C = '^';");
       Indent_Line (File, "Check (File, C = '#' or Is_Reference, "": Expecting # or ^"");");
-      Indent_Line (File, Ada_Text_IO & ".Get (File, S);");
-      Indent_Line (File, "Check (File, " & Acc_Pkg & ".Is_Valid_Hex_String (S)," &
-                         " "": Expecting hex number"");");
-      Indent_Line (File, "ID := " & Acc_Pkg & ".Hex_Str_to_Unsigned (S);");
+      Indent_Line (File, Acc_Pkg & ".ID_IO.Get (File, ID);");
+      Indent_Line (File, "Check (File, ID /= 0, "": Expecting positive number"");");
       Indent_Incr (File, "if Is_Reference then");
       Indent_Line (File, "Check (File, " & Acc_Pkg & ".Id2Addr_Map.Contains (ID)," &
-                         " "": Unknown reference "" & S);");
+                         " "": Unknown reference"" & ID'Img);");
       Indent_Line (File, "Item := " & Aux_Pkg & ".To_Access" &
                          " (" & Acc_Pkg & ".Id2Addr_Map.Element (ID));");
       Indent_Line (File, "return;");
@@ -670,6 +669,7 @@ package body Auto_Io_Gen.Generate.Ada_File.Get_Body is
       Indent_Line (File, "Addr : constant System.Address := " & Aux_Pkg & ".To_Address (Item);");
       Indent_Less (File, "begin");
       Indent_Line (File, Acc_Pkg & ".Id2Addr_Map.Insert (ID, Addr);",
+                         "-- not strictly required; for consistency only:",
                          Acc_Pkg & ".Addr2Id_Map.Insert (Addr, ID);");
       Indent_Decr (File, "end;");
       Indent_Line (File, Ada_Text_IO & ".Get (File, C);");

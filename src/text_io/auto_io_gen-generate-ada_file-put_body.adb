@@ -589,19 +589,23 @@ package body Auto_Io_Gen.Generate.Ada_File.Put_Body is
                          " Named_Association_Part : in Boolean := False)");
       Indent_Less (File, "is");
       Indent_Line (File, "Addr : constant System.Address := " & Aux_Pkg & ".To_Address (Item);");
-      Indent_Line (File, "ID   : constant System.Storage_Elements.Integer_Address",
-                         "     := System.Storage_Elements.To_Integer (Addr);");
-      Indent_Line (File, "Str  : constant Auto_Text_IO.Access_IO.Address_String := " &
-                         Aux_Pkg & ".To_String (Item);");
+      Indent_Line (File, "ID   : Auto_Text_IO.Access_IO.ID_T := 0;");
       Indent_Less (File, "begin");
       Indent_Incr (File, "if Item = null then");
       Indent_Line (File, Ada_Text_IO & ".Put (File, ""null"");");
       Indent_Less (File, "elsif Auto_Text_IO.Access_IO.Addr2Id_Map.Contains (Addr) then");
-      Indent_Line (File, Ada_Text_IO & ".Put (File, '^' & Str);");          -- Ref
+      Indent_Line (File, Ada_Text_IO & ".Put (File, '^');  -- Ref");
+      Indent_Line (File, "ID := Auto_Text_IO.Access_IO.Addr2Id_Map.Element (Addr);");
+      Indent_Line (File, "Auto_Text_IO.Access_IO.ID_IO.Put (File, ID, Width => 0);");
       Indent_Less (File, "else");
-      Indent_Line (File, "Auto_Text_IO.Access_IO.Id2Addr_Map.Insert (ID, Addr);",
-                         "Auto_Text_IO.Access_IO.Addr2Id_Map.Insert (Addr, ID);",
-                         Ada_Text_IO & ".Put (File, '#' & Str & ""' "");"); -- Def
+      Indent_Line (File, "ID := Auto_Text_IO.Access_IO.Next_ID;");
+      Indent_Line (File, "Auto_Text_IO.Access_IO.Addr2Id_Map.Insert (Addr, ID);");
+      Indent_Line (File, "-- not strictly required; for consistency only:",
+                         "Auto_Text_IO.Access_IO.Id2Addr_Map.Insert (ID, Addr);");
+      New_Line (File);
+      Indent_Line (File, Ada_Text_IO & ".Put (File, '#');  -- Def",
+                         "Auto_Text_IO.Access_IO.ID_IO.Put (File, ID, Width => 0);",
+                         Ada_Text_IO & ".Put (File, ""' "");");
       if Type_Descriptor.Is_Scalar then
          Indent_Line (File, "Put (File, Item.all);");
       else

@@ -24,44 +24,44 @@
 --  executable file might be covered by the GNU Public License.
 
 with System.Storage_Elements;
+with Ada.Text_IO;
 with Ada.Containers.Ordered_Maps;
 with Ada.Unchecked_Conversion;
 
 package Auto_Text_IO.Access_IO is
 
-   -- 16 hexadecimal characters represent an 8 byte value
-   -- (assuming 64 bit addresses)
-   subtype Address_String is String (1 .. 16);
+   type ID_T is new System.Storage_Elements.Integer_Address;
 
-   function Unsigned_to_Hex_Str
-              (Value : in System.Storage_Elements.Integer_Address)
-      return Address_String;
+   package ID_IO is new Ada.Text_IO.Modular_IO (ID_T);
 
-   function Hex_Str_to_Unsigned (S : in String)
-            return System.Storage_Elements.Integer_Address;
-
-   function Is_Valid_Hex_String (S : in String) return Boolean;
-
-   use type System.Storage_Elements.Integer_Address;
    use type System.Address;
 
-   -- On initial *write*, the Element will be directly derived from the
-   -- Key.
-   -- However, on *reading* (or write after read etc), there will be no
-   -- such correlation.
+   -- Forward mapping for writing keeps track of which pointers
+   -- were written and which were not.
+   -- Pointers which were not yet written create a "definition" (#num)
+   -- Pointers which were written before create a "reference" (^num)
    package Address_To_ID is new Ada.Containers.Ordered_Maps
      (Key_Type     => System.Address,
-      Element_Type => System.Storage_Elements.Integer_Address);
+      Element_Type => ID_T);
 
    -- Reverse mapping is required on reading, for reconstructing
    -- the proper pointer relationships in the user data structures.
    package ID_To_Address is new Ada.Containers.Ordered_Maps
-     (Key_Type     => System.Storage_Elements.Integer_Address,
+     (Key_Type     => ID_T,
       Element_Type => System.Address);
 
    Addr2Id_Map : Address_To_ID.Map;
 
    Id2Addr_Map : ID_To_Address.Map;
+
+   -- Return stringified ID without leading space.
+   function To_String (ID : ID_T) return String;
+
+   Count : ID_T := 0;
+
+   function Next_ID return ID_T;   -- increment Count and return it
+
+   procedure Reset;                -- reset Count to 0 and reset the maps
 
    generic
       type T is private;
@@ -72,11 +72,6 @@ package Auto_Text_IO.Access_IO is
                                    (T_Access, System.Address);
       function To_Access  is new Ada.Unchecked_Conversion
                                    (System.Address, T_Access);
-
-      function To_Integer (A : T_Access)
-               return System.Storage_Elements.Integer_Address;
-
-      function To_String (A : T_Access) return Address_String;
 
    end Conversions;
 
