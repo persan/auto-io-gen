@@ -3,6 +3,7 @@
 --  See spec.
 --
 --  Copyright (C) 2001 - 2004, 2006 - 2007 Stephen Leake.  All Rights Reserved.
+--  Copyright (C) 2020  Oliver Kellogg  <okellogg@users.sf.net>
 --
 --  This program is free software; you can redistribute it and/or
 --  modify it under terms of the GNU General Public License as
@@ -20,6 +21,7 @@ with Asis.Aux;
 with Asis.Elements;
 with Auto_Io_Gen.Options;
 with SAL.Gen.Alg.Process_All_Constant;
+
 package body Auto_Io_Gen.Generate.Ada_File.Put_Body is
    use Ada.Text_IO;
 
@@ -111,16 +113,16 @@ package body Auto_Io_Gen.Generate.Ada_File.Put_Body is
                             "if not Single_Line_Record then New_Line (File); end if;");
 
          --  Start current component put
-         Indent (File, "Put (File, Character' (' '));");
+         Indent_Line (File, "Put (File, Character' (' '));");
 
       else
          Body_First := False;
       end if;
 
-      Indent_Line (File, "if Named_Association_Record then",
-                         "   Put (File, """ & Component_Name & " => "");",
-                         "   if not Single_Line_Component then New_Line (File); end if;",
-                         "end if;");
+      Indent_Incr (File, "if Named_Association_Record then");
+      Indent_Line (File, "Put (File, """ & Component_Name & " => "");",
+                         "if not Single_Line_Component then New_Line (File); end if;");
+      Indent_Decr (File, "end if;");
 
       if Asis.Elements.Is_Nil (Component.Type_Package) then
          if Component.Invisible then
@@ -471,7 +473,7 @@ package body Auto_Io_Gen.Generate.Ada_File.Put_Body is
               (File,
                Asis.Aux.Name (Type_Descriptor.Record_Parent_Package_Name) &
                  Options.Package_Separator & "Text_IO.Put_Components");
-            Indent_Line
+            Indent_More
               (File,
                "(File, " &
                  Asis.Aux.Name (Type_Descriptor.Record_Parent_Package_Name) &
@@ -499,7 +501,7 @@ package body Auto_Io_Gen.Generate.Ada_File.Put_Body is
             Discriminants      => True,
             Separate_Body      => True);
 
-         Indent_Line (File, "is separate;");
+         Indent_More (File, "is separate;");
          New_Line (File);
       end if;
 

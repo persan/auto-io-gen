@@ -8,6 +8,7 @@ procedure Simple.Images.Main is
    F4 : Struct_With_Discriminant_and_Default;
    F5 : Tagged_Record_Childern;
    F6 : Standard_Types_Record;
+   F7a, F7b : constant Linked_List_Access := new Linked_List;
 begin
    Auto_Image.Named_Association_Record := True;
 
@@ -20,5 +21,10 @@ begin
    Ada.Text_IO.Put_Line (Image (F4));
    Ada.Text_IO.Put_Line (Image (F5));
    Ada.Text_IO.Put_Line (Image (F6));
+
+   F7a.Next := F7b;
+   F7b.Data := True;
+   F7b.Prev := F7a;
+   Ada.Text_IO.Put_Line (Image (F7a));
 
 end Simple.Images.Main;

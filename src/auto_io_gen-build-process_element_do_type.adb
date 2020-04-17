@@ -146,7 +146,7 @@ begin
                   State.Private_State.Current_Type.Accessed_Subtype_Ident := A_Subtype_Mark;
                   State.Private_State.Current_Type.Is_Scalar :=
                                             Process_Element_Utils.Is_Scalar (A_Subtype_Mark);
-                  Process_Element_Utils.Add_Body_With (State, "System.Storage_Elements");
+                  Process_Element_Utils.Add_Body_With (State, "System");
                   Process_Element_Utils.Add_Body_With (State, "Auto_Text_IO.Access_IO");
                   Control := Abandon_Siblings;
                else

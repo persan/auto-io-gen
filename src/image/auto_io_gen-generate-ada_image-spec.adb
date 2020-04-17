@@ -26,12 +26,12 @@ package body Auto_Io_Gen.Generate.Ada_Image.Spec is
    procedure Generate_Put_Array_Spec
      (File            : in Ada.Text_IO.File_Type;
       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
-   --  Generate spec code for the Get and Put procedures for an array type.
+   --  Generate spec code for the Put and Image subprograms for an array type.
 
    procedure Generate_Put_Derived_Array_Spec
      (File            : in Ada.Text_IO.File_Type;
       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
-   --  Generate spec code for the Get and Put procedures for a derived array type.
+   --  Generate spec code for the Put and Image subprograms for a derived array type.
 
    procedure Generate_Put_Private_Array_Defaults
      (File      : in Ada.Text_IO.File_Type;
@@ -41,18 +41,23 @@ package body Auto_Io_Gen.Generate.Ada_Image.Spec is
    procedure Generate_Put_Private_Spec
      (File            : in Ada.Text_IO.File_Type;
       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
-   --  Generate spec code for the Get and Put procedures for a private
+   --  Generate spec code for the Put and Image subprograms for a private
    --  type; full implementation is in body or private child.
 
    procedure Generate_Put_Record_Spec
      (File            : in Ada.Text_IO.File_Type;
       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
-   --  Generate spec code for the Get and Put procedures for a record type.
+   --  Generate spec code for the Put and Image subprograms for a record type.
 
    procedure Generate_Put_Scalar_Spec
      (File            : in Ada.Text_IO.File_Type;
       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
-   --  Generate spec code for the Get and Put procedures for a Scalar type.
+   --  Generate spec code for the Put and Image subprograms for a scalar type.
+
+   procedure Generate_Put_Access_Spec
+     (File            : in Ada.Text_IO.File_Type;
+      Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
+   --  Generate spec code for the Put and Image subprograms for an access type.
 
    procedure Generate_Child_Spec
      (File                : in Ada.Text_IO.File_Type;
@@ -206,7 +211,7 @@ package body Auto_Io_Gen.Generate.Ada_Image.Spec is
               " should have been replaced; perhaps add 'ignore' to public part";
 
          when Lists.Access_Label =>
-            null;         --  TODO
+            Generate_Put_Access_Spec (File, Type_Descriptor.all);
 
          when Auto_Io_Gen.Lists.Scalar_Labels_Type =>
             Generate_Put_Scalar_Spec (File, Type_Descriptor.all);
@@ -393,5 +398,28 @@ package body Auto_Io_Gen.Generate.Ada_Image.Spec is
       end if;
       Indent_Line (File, "function Image (Item : " & Type_Name & ") return String is (Item'Img);");
    end Generate_Put_Scalar_Spec;
+
+   procedure Generate_Put_Access_Spec
+     (File            : in Ada.Text_IO.File_Type;
+      Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
+   is
+      use Ada.Text_IO;
+
+      Type_Name : constant String := Asis.Aux.Name (Type_Descriptor.Type_Name);
+
+   begin
+      if Options.Debug then
+         Put_Line ("Generate_Put_Access_Spec. " & Type_Name);
+      end if;
+
+      Indent_Incr (File, "procedure Put");
+      Indent_Line (File, "(To   : in out Unbounded_String;",
+                         " Item : in " & Type_Name & ");");
+      Indent_Level := Indent_Level - 1;
+      New_Line (File);
+
+      Indent_Line (File, "function Image (Item : " & Type_Name & ") return String;");
+      New_Line (File);
+   end Generate_Put_Access_Spec;
 
 end Auto_Io_Gen.Generate.Ada_Image.Spec;
