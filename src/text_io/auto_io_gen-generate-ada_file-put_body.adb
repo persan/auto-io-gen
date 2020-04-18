@@ -3,6 +3,7 @@
 --  See spec.
 --
 --  Copyright (C) 2001 - 2004, 2006 - 2007 Stephen Leake.  All Rights Reserved.
+--  Copyright (C) 2020  Oliver Kellogg  <okellogg@users.sf.net>
 --
 --  This program is free software; you can redistribute it and/or
 --  modify it under terms of the GNU General Public License as
@@ -20,6 +21,7 @@ with Asis.Aux;
 with Asis.Elements;
 with Auto_Io_Gen.Options;
 with SAL.Gen.Alg.Process_All_Constant;
+
 package body Auto_Io_Gen.Generate.Ada_File.Put_Body is
    use Ada.Text_IO;
 
@@ -46,6 +48,11 @@ package body Auto_Io_Gen.Generate.Ada_File.Put_Body is
       (File            : in Ada.Text_IO.File_Type;
        Type_Descriptor : in Auto_Io_Gen.Lists.Record_Type_Descriptor_Type);
    --  Generate body code for all Put subprograms for a record type.
+
+   procedure Generate_Access
+      (File            : in Ada.Text_IO.File_Type;
+       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
+   --  Generate body code for all Put subprograms for an access type.
 
    procedure Generate
      (File            : in Ada.Text_IO.File_Type;
@@ -84,6 +91,10 @@ package body Auto_Io_Gen.Generate.Ada_File.Put_Body is
          --  These should have been replaced by a specific label when
          --  the full type declaration was processed.
          raise Program_Error;
+
+      when Lists.Access_Label =>
+         Generate_Access (File, Type_Descriptor);
+
       end case;
    end Generate;
 
@@ -98,21 +109,20 @@ package body Auto_Io_Gen.Generate.Ada_File.Put_Body is
 
       if not Body_First then
          --  Finish last component put
-         Indent_Line
-            (File,
-             "Put (File, Character' (',')); if not Single_Line_Record then New_Line (File); end if;");
+         Indent_Line (File, "Put (File, Character' (','));",
+                            "if not Single_Line_Record then New_Line (File); end if;");
 
          --  Start current component put
-         Indent (File, "Put (File, Character' (' '));");
+         Indent_Line (File, "Put (File, Character' (' '));");
 
       else
          Body_First := False;
       end if;
 
-      Indent_Line (File, "if Named_Association_Record then",
-                         "   Put (File, """ & Component_Name & " => "");",
-                         "   if not Single_Line_Component then New_Line (File); end if;",
-                         "end if;");
+      Indent_Incr (File, "if Named_Association_Record then");
+      Indent_Line (File, "Put (File, """ & Component_Name & " => "");",
+                         "if not Single_Line_Component then New_Line (File); end if;");
+      Indent_Decr (File, "end if;");
 
       if Asis.Elements.Is_Nil (Component.Type_Package) then
          if Component.Invisible then
@@ -463,7 +473,7 @@ package body Auto_Io_Gen.Generate.Ada_File.Put_Body is
               (File,
                Asis.Aux.Name (Type_Descriptor.Record_Parent_Package_Name) &
                  Options.Package_Separator & "Text_IO.Put_Components");
-            Indent_Line
+            Indent_More
               (File,
                "(File, " &
                  Asis.Aux.Name (Type_Descriptor.Record_Parent_Package_Name) &
@@ -491,7 +501,7 @@ package body Auto_Io_Gen.Generate.Ada_File.Put_Body is
             Discriminants      => True,
             Separate_Body      => True);
 
-         Indent_Line (File, "is separate;");
+         Indent_More (File, "is separate;");
          New_Line (File);
       end if;
 
@@ -515,9 +525,8 @@ package body Auto_Io_Gen.Generate.Ada_File.Put_Body is
          if Type_Descriptor.Record_Tagged then
             if not Body_First then
                --  Finish last discriminant put
-               Indent_Line
-                 (File,
-                  "Put (File, Character' (',')); if not Single_Line_Record then New_Line (File); end if;");
+               Indent_Line (File, "Put (File, Character' (','));",
+                                  "if not Single_Line_Record then New_Line (File); end if;");
                --  Start components put
                Indent_Line (File, "Put (File, Character' (' '));");
 
@@ -565,5 +574,75 @@ package body Auto_Io_Gen.Generate.Ada_File.Put_Body is
       Indent_Decr (File, "end Put_Item;");
       New_Line (File);
    end Generate_Record;
+
+   procedure Generate_Access
+      (File            : in Ada.Text_IO.File_Type;
+       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
+   is
+      Type_Name : constant String := Lists.Type_Name (Type_Descriptor);
+      Aux_Pkg   : constant String := Type_Name & "_Aux";
+   begin
+      Indent_Incr (File, "procedure Put");
+      Indent_Line (File, "(File              : in " & Ada_Text_IO & ".File_Type;",
+                         " Item              : in " & Type_Name & ";",
+                         " Single_Line_Item       : in Boolean := True;",
+                         " Named_Association_Item : in Boolean := False;",
+                         " Single_Line_Part       : in Boolean := True;",
+                         " Named_Association_Part : in Boolean := False)");
+      Indent_Less (File, "is");
+      Indent_Line (File, "Addr : constant System.Address := " & Aux_Pkg & ".To_Address (Item);");
+      Indent_Line (File, "ID   : Auto_Text_IO.Access_IO.ID_T := 0;");
+      Indent_Less (File, "begin");
+      Indent_Incr (File, "if Item = null then");
+      Indent_Line (File, Ada_Text_IO & ".Put (File, ""null"");");
+      Indent_Less (File, "elsif Auto_Text_IO.Access_IO.Addr2Id_Map.Contains (Addr) then");
+      Indent_Line (File, Ada_Text_IO & ".Put (File, '^');  -- Ref");
+      Indent_Line (File, "ID := Auto_Text_IO.Access_IO.Addr2Id_Map.Element (Addr);");
+      Indent_Line (File, "Auto_Text_IO.Access_IO.ID_IO.Put (File, ID, Width => 0);");
+      Indent_Less (File, "else");
+      Indent_Line (File, "ID := Auto_Text_IO.Access_IO.Next_ID;");
+      Indent_Line (File, "Auto_Text_IO.Access_IO.Addr2Id_Map.Insert (Addr, ID);");
+      Indent_Line (File, "-- not strictly required; for consistency only:",
+                         "Auto_Text_IO.Access_IO.Id2Addr_Map.Insert (ID, Addr);");
+      New_Line (File);
+      Indent_Line (File, Ada_Text_IO & ".Put (File, '#');  -- Def",
+                         "Auto_Text_IO.Access_IO.ID_IO.Put (File, ID, Width => 0);",
+                         Ada_Text_IO & ".Put (File, ""' "");");
+      if Type_Descriptor.Is_Scalar then
+         Indent_Line (File, "Put (File, Item.all);");
+      else
+         Indent_Line (File, "Put (File, Item.all, Single_Line_Item, Named_Association_Item,",
+                            "                     Single_Line_Part, Named_Association_Part);");
+      end if;
+      Indent_Decr (File, "end if;");
+      Indent_Decr (File, "end Put;");
+
+      New_Line (File);
+
+      Indent_Incr (File, "procedure Put");
+      Indent_Line (File, "(Item              : in " & Type_Name & ";",
+                         " Single_Line_Item       : in Boolean := True;",
+                         " Named_Association_Item : in Boolean := False;",
+                         " Single_Line_Part       : in Boolean := True;",
+                         " Named_Association_Part : in Boolean := False)");
+      Indent_Less (File, "is");
+      Indent_Less (File, "begin");
+      Indent_Line (File, "Put (Current_Output, Item, Single_Line_Item, Named_Association_Item,",
+                         "                           Single_Line_Part, Named_Association_Part);");
+      Indent_Decr (File, "end Put;");
+
+      Indent_Incr (File, "procedure Put_Item");
+      Indent_Line (File, "(File              : in " & Ada_Text_IO & ".File_Type;",
+                         " Item              : in " & Type_Name & ";",
+                         " Single_Line       : in Boolean := False;",
+                         " Named_Association : in Boolean := False)");
+      Indent_Less (File, "is");
+      Indent_Less (File, "begin");
+      Indent_Line (File, "Put (File, Item, Single_Line, Named_Association,",
+                         "                 Single_Line, Named_Association);");
+      Indent_Decr (File, "end Put_Item;");
+
+      New_Line (File);
+   end Generate_Access;
 
 end Auto_Io_Gen.Generate.Ada_File.Put_Body;

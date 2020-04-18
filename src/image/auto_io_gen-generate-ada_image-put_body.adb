@@ -59,18 +59,23 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
    procedure Generate_Derived_Array
      (File            : in Ada.Text_IO.File_Type;
       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
-   --  Generate body code for all Put subprograms for a derived array type.
+   --  Generate body code for Put subprogram for a derived array type.
 
    procedure Generate_Private_Array_Wrapper
      (File            : in Ada.Text_IO.File_Type;
       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
-   --  Generate body code for all Put subprograms in the public child
+   --  Generate body code for Put subprogram in the public child
    --  for a private array type.
 
    procedure Generate_Record
      (File            : in Ada.Text_IO.File_Type;
       Type_Descriptor : in Auto_Io_Gen.Lists.Record_Type_Descriptor_Type);
-   --  Generate body code for all Put subprograms for a record type.
+   --  Generate body code for Put subprogram for a record type.
+
+   procedure Generate_Access
+      (File            : in Ada.Text_IO.File_Type;
+       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
+   --  Generate body code for Put subprogram for an access type.
 
    procedure Generate
      (File            : in Ada.Text_IO.File_Type;
@@ -115,6 +120,9 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
          --  These should have been replaced by a specific label when
          --  the full type declaration was processed.
          raise Program_Error;
+
+      when Lists.Access_Label =>
+         Generate_Access (File, Type_Descriptor);
       end case;
    end Generate;
 
@@ -128,15 +136,12 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
       Type_Name      : constant String := Asis.Aux.Name (Component.Type_Name);
       Method_Suffix  : String (1 .. 2) := "  ";
       Delimiter      : String (1 .. 3) := "   ";
-      Is_String      : Boolean := False;
    begin
 
       if not Body_First then
          --  Finish last component put
-         Indent_Line
-           (File,
-            "Put (To, Character' (','));",
-            "if not Single_Line_Record then New_Line (To); end if;");
+         Indent_Line (File, "Put (To, Character' (','));",
+                            "if not Single_Line_Record then New_Line (To); end if;");
 
          --  Start current component put
          Indent_Line (File, "Put (To, Character' (' '));");
@@ -200,7 +205,7 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
      (File            : in Ada.Text_IO.File_Type;
       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
    is begin
-      Indent_Incr (File, "procedure Put  -- Generate_Derived_Array");
+      Indent_Incr (File, "procedure Put");
       Indent_Line (File, "(To   : in out Unbounded_String;",
                          " Item : in " & Lists.Type_Name (Type_Descriptor) & ")");
       Indent_Less (File, "is begin");
@@ -257,6 +262,7 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
       is
          pragma Unreferenced (Check_Unreferenced, Discriminants, Separate_Body);
       begin
+         Indent_Level := Indent_Level + 1;
          Indent_Line (File, "(To    : in out Unbounded_String;",
                             " Item : in " & Lists.Type_Name (Type_Descriptor) & ")");
          Indent_Less (File, "is begin");
@@ -315,7 +321,7 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
             raise SAL.Not_Implemented;
          end if;
 
-         Indent_Incr (File, "procedure Put_Components");
+         Indent_Line (File, "procedure Put_Components");
 
          Print_Parameter_List
            (Check_Unreferenced => True,
@@ -342,13 +348,12 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
          Print_Components (Type_Descriptor.Record_Components);
          Print_Variant_Part;
 
-         Indent_Level := Indent_Level - 1;
-         Indent_Line (File, "end Put_Components;");
+         Indent_Decr (File, "end Put_Components;");
          New_Line (File);
       end if;
 
       if Type_Descriptor.Separate_Body then
-         Indent_Incr (File, "procedure " & Separate_Body_Name);
+         Indent_Line (File, "procedure " & Separate_Body_Name);
 
          Print_Parameter_List
            (Check_Unreferenced => not Type_Descriptor.Record_Tagged,
@@ -360,7 +365,7 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
          Indent_Level := Indent_Level - 1;
       end if;
 
-      Indent_Incr (File, "procedure Put");
+      Indent_Line (File, "procedure Put");
 
       Print_Parameter_List
         (Check_Unreferenced => not Type_Descriptor.Record_Tagged,
@@ -378,10 +383,8 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
          if Type_Descriptor.Record_Tagged then
             if not Body_First then
                --  Finish last discriminant put
-               Indent_Line
-                 (File,
-                  "Put (To, Character' (','));",
-                  "if not Single_Line_Record then New_Line (To); end if;");
+               Indent_Line (File, "Put (To, Character' (','));",
+                                  "if not Single_Line_Record then New_Line (To); end if;");
                --  Start components put
                Indent_Line (File, "Put (To, Character' (' '));");
 
@@ -403,5 +406,43 @@ package body Auto_Io_Gen.Generate.Ada_Image.Put_Body is
 
       Declare_Function_Image (File, Type_Descriptor);
    end Generate_Record;
+
+   procedure Generate_Access
+      (File            : in Ada.Text_IO.File_Type;
+       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
+   is
+      Type_Name : constant String := Lists.Type_Name (Type_Descriptor);
+      Aux_Pkg   : constant String := Type_Name & "_Aux";
+   begin
+      Indent_Incr (File, "procedure Put");
+      Indent_Line (File, "(To   : in out Unbounded_String;",
+                         " Item : in " & Type_Name & ")");
+      Indent_Less (File, "is");
+      Indent_Line (File, "Addr : constant System.Address := " & Aux_Pkg & ".To_Address (Item);");
+      Indent_Line (File, "ID   : Auto_Text_IO.Access_IO.ID_T := 0;");
+      Indent_Less (File, "begin");
+      Indent_Incr (File, "if Item = null then");
+      Indent_Line (File, "Put (To, ""null"");");
+      Indent_Less (File, "elsif Auto_Text_IO.Access_IO.Addr2Id_Map.Contains (Addr) then");
+      Indent_Line (File, "Put (To, '^');  -- Ref");
+      Indent_Line (File, "ID := Auto_Text_IO.Access_IO.Addr2Id_Map.Element (Addr);");
+      Indent_Line (File, "Put (To, Auto_Text_IO.Access_IO.To_String (ID));");
+      Indent_Less (File, "else");
+      Indent_Line (File, "ID := Auto_Text_IO.Access_IO.Next_ID;");
+      Indent_Line (File, "Auto_Text_IO.Access_IO.Addr2Id_Map.Insert (Addr, ID);");
+      Indent_Line (File, "-- not strictly required; for consistency only:",
+                         "Auto_Text_IO.Access_IO.Id2Addr_Map.Insert (ID, Addr);");
+      New_Line (File);
+      Indent_Line (File, "Put (To, '#');  -- Def",
+                         "Put (To, Auto_Text_IO.Access_IO.To_String (ID));",
+                         "Put (To, ""' "");");
+      Indent_Line (File, "Put (To, Item.all);");
+      Indent_Decr (File, "end if;");
+      Indent_Decr (File, "end Put;");
+
+      New_Line (File);
+
+      Declare_Function_Image (File, Type_Descriptor);
+   end Generate_Access;
 
 end Auto_Io_Gen.Generate.Ada_Image.Put_Body;

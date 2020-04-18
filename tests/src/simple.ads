@@ -55,6 +55,18 @@ package Simple is
       Extra : Float := -1.0;
    end record;
 
+
+   type Linked_List;
+
+   type Linked_List_Access is access all Linked_List;
+
+   type Linked_List is record
+      Data : Boolean := False;
+      Prev : Linked_List_Access;
+      Next : Linked_List_Access;
+   end record;
+
+
    type Standard_Types_Record is record
       Boolean_Field  : Boolean := False;
 

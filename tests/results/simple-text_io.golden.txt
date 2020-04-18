@@ -29,3 +29,6 @@
  Wide_Wide_String_Field => "11111111111111111111",
  Duration_Field =>  ,
  Integer_Type_Field =>   0)
+#1' (Data => FALSE,
+ Prev => null,
+ Next => #2' (TRUE, ^1, null))

@@ -15,7 +15,7 @@ gps:
 	gps -P auto_io_gen.gpr&
 	gps -P tests/simple.gpr&
 	
-tag:clean compile test
+tag: realclean compile test
 	@if [ -n "`git status --porcelain`" ] ; then\
 		echo "Folder is not clean";\
 		git status;\
@@ -26,6 +26,11 @@ tag:clean compile test
 	@git tag v`bin/auto_io_gen --version`-`date +%Y%m%d`
 	@git push
 	@git push --tag			
+
 clean:
+	rm -rf sal/.obj .obj tests/.obj
+	rm -f  bin/auto_io_gen
+
+realclean: clean
 	git clean -xdf
-	
+

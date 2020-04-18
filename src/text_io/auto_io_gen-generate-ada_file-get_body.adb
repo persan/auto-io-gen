@@ -63,6 +63,11 @@ package body Auto_Io_Gen.Generate.Ada_File.Get_Body is
    --  Generate body code for all Put subprograms in the public child
    --  for a private array type.
 
+   procedure Generate_Access
+      (File            : in Ada.Text_IO.File_Type;
+       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
+   --  Generate body code for all Get subprograms for an access type.
+
    procedure Generate
      (File            : in Ada.Text_IO.File_Type;
       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
@@ -100,6 +105,9 @@ package body Auto_Io_Gen.Generate.Ada_File.Get_Body is
          --  These should have been replaced by a specific label when
          --  the full type declaration was processed.
          raise Program_Error;
+
+      when Lists.Access_Label =>
+         Generate_Access (File, Type_Descriptor);
       end case;
    end Generate;
 
@@ -614,5 +622,85 @@ package body Auto_Io_Gen.Generate.Ada_File.Get_Body is
       end if;
 
    end Generate_Record;
+
+   procedure Generate_Access
+      (File            : in Ada.Text_IO.File_Type;
+       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
+   is
+      Type_Name : constant String := Lists.Type_Name (Type_Descriptor);
+      Base_Name : constant String := Asis.Aux.Name (Type_Descriptor.Accessed_Subtype_Ident);
+      Aux_Pkg   : constant String := Type_Name & "_Aux";
+      Acc_Pkg   : constant String := "Auto_Text_IO.Access_IO";
+   begin
+      Indent_Incr (File, "procedure Get");
+      Indent_Line (File, "(File                   : in     " & Ada_Text_IO & ".File_Type;",
+                         " Item                   :    out " & Type_Name & ";",
+                         " Named_Association_Item : in     Boolean := False;",
+                         " Named_Association_Part : in     Boolean := False)");
+      Indent_Less (File, "is");
+      Indent_Line (File, "use type " & Acc_Pkg & ".ID_T;");
+      Indent_Line (File, "C  : Character;");
+      Indent_Line (File, "S  : String (1 .. 4) := (others => ' ');");
+      Indent_Line (File, "ID : " & Acc_Pkg & ".ID_T := 0;");
+      Indent_Line (File, "Is_Reference : Boolean := False;");
+      Indent_Less (File, "begin");
+      Indent_Line (File, Ada_Text_IO & ".Get (File, C);");
+      Indent_Incr (File, "if C = 'n' then");
+      Indent_Line (File, Ada_Text_IO & ".Get (File, S (1 .. 3));");
+      Indent_Line (File, "Check (File, S (1 .. 3) = ""ull"", "": Expecting 'null'"");");
+      Indent_Line (File, "Item := null;");
+      Indent_Line (File, "return;");
+      Indent_Decr (File, "end if;");
+      Indent_Line (File, "Is_Reference := C = '^';");
+      Indent_Line (File, "Check (File, C = '#' or Is_Reference, "": Expecting # or ^"");");
+      Indent_Line (File, Acc_Pkg & ".ID_IO.Get (File, ID);");
+      Indent_Line (File, "Check (File, ID /= 0, "": Expecting positive number"");");
+      Indent_Incr (File, "if Is_Reference then");
+      Indent_Line (File, "Check (File, " & Acc_Pkg & ".Id2Addr_Map.Contains (ID)," &
+                         " "": Unknown reference"" & ID'Img);");
+      Indent_Line (File, "Item := " & Aux_Pkg & ".To_Access" &
+                         " (" & Acc_Pkg & ".Id2Addr_Map.Element (ID));");
+      Indent_Line (File, "return;");
+      Indent_Decr (File, "end if;");
+      -- Not null and not a reference: Create new instance
+      Indent_Line (File, "Item := new " & Base_Name & ";");
+      -- Enter it into the address maps
+      Indent_Incr (File, "declare");
+      Indent_Line (File, "Addr : constant System.Address := " & Aux_Pkg & ".To_Address (Item);");
+      Indent_Less (File, "begin");
+      Indent_Line (File, Acc_Pkg & ".Id2Addr_Map.Insert (ID, Addr);",
+                         "-- not strictly required; for consistency only:",
+                         Acc_Pkg & ".Addr2Id_Map.Insert (Addr, ID);");
+      Indent_Decr (File, "end;");
+      Indent_Line (File, Ada_Text_IO & ".Get (File, C);");
+      Indent_Line (File, "Check (File, C = ''', "": Expecting Tic (')"");");
+      -- Call the generated Get procedure for Item.all
+      -- if Type_Descriptor.Is_Scalar then
+      --    Indent_Line (File, Text_IO_Child_Name (Type_Descriptor.Type_Package) & "Get (File, Item.all);");
+      -- else
+      Indent_Line (File, "Get (File, Item.all, Named_Association_Item, Named_Association_Part);");
+      -- end if;
+      Indent_Decr (File, "end Get;");
+
+      Indent_Incr (File, "procedure Get");
+      Indent_Line (File, "(Item                   :    out " & Type_Name & ";",
+                         " Named_Association_Item : in     Boolean := False;",
+                         " Named_Association_Part : in     Boolean := False)");
+      Indent_Less (File, "is");
+      Indent_Less (File, "begin");
+      Indent_Line (File, "Get (Current_Input, Item, Named_Association_Item, Named_Association_Part);");
+      Indent_Decr (File, "end Get;");
+
+      Indent_Incr (File, "procedure Get_Item");
+      Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;",
+                         " Item              :    out " & Type_Name & ";",
+                         " Named_Association : in     Boolean := False)");
+      Indent_Less (File, "is");
+      Indent_Less (File, "begin");
+      Indent_Line (File, "Get (File, Item, Named_Association, Named_Association);");
+      Indent_Decr (File, "end Get_Item;");
+
+      New_Line (File);
+   end Generate_Access;
 
 end Auto_Io_Gen.Generate.Ada_File.Get_Body;

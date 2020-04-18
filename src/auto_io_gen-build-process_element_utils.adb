@@ -99,6 +99,7 @@ package body Auto_Io_Gen.Build.Process_Element_Utils is
      --  output an error message.
    is
       use Asis;
+      D_Kind : Asis.Declaration_Kinds := Asis.Not_A_Declaration;
    begin
       case Elements.Element_Kind (El) is
       when An_Expression =>
@@ -123,12 +124,18 @@ package body Auto_Io_Gen.Build.Process_Element_Utils is
       case Elements.Element_Kind (Corresponding_Declaration) is
       when A_Declaration =>
 
-         case Elements.Declaration_Kind (Corresponding_Declaration) is
+         D_Kind := Elements.Declaration_Kind (Corresponding_Declaration);
+         case D_Kind is
          when A_Formal_Type_Declaration |
               An_Ordinary_Type_Declaration |
               A_Private_Type_Declaration |
+              An_Incomplete_Type_Declaration |
               A_Subtype_Declaration =>
 
+            if D_Kind = An_Incomplete_Type_Declaration then
+               Corresponding_Declaration :=
+                  Declarations.Corresponding_Type_Declaration (Corresponding_Declaration);
+            end if;
             Corresponding_Definition := Declarations.Type_Declaration_View (Corresponding_Declaration);
 
             case Elements.Definition_Kind (Corresponding_Definition) is
@@ -145,6 +152,7 @@ package body Auto_Io_Gen.Build.Process_Element_Utils is
             end case;
 
          when others =>
+            Ada.Text_IO.Put_Line ("Corresponding_Type : " & Asis.Declaration_Kinds'Image (D_Kind));
             raise Not_Supported;
 
          end case;
@@ -617,9 +625,10 @@ package body Auto_Io_Gen.Build.Process_Element_Utils is
    is
       use Asis;
       Corresponding_Definition : constant Asis.Element := Corresponding_Root_Type_Definition (El);
+      E_Kind : constant Asis.Element_Kinds := Elements.Element_Kind (Corresponding_Definition);
    begin
 
-      case Elements.Element_Kind (Corresponding_Definition) is
+      case E_Kind is
       when A_Definition =>
 
          case Elements.Definition_Kind (Corresponding_Definition) is
@@ -657,6 +666,21 @@ package body Auto_Io_Gen.Build.Process_Element_Utils is
                  A_Modular_Type_Definition =>
                return True;
 
+            when An_Access_Type_Definition =>
+               declare
+                  A_Kind : constant Asis.Access_Type_Kinds
+                        := Elements.Access_Type_Kind (Corresponding_Definition);
+                  Accessed_Subtype_Mark : Asis.Subtype_Mark;
+               begin
+                  if A_Kind in Asis.Access_To_Object_Definition then
+                     Accessed_Subtype_Mark :=
+                        Definitions.Subtype_Mark
+                           (Definitions.Access_To_Object_Definition (Corresponding_Definition));
+                     return Is_Scalar (Accessed_Subtype_Mark);
+                  end if;
+               end;
+               return True;
+
             when A_Record_Type_Definition |
                  A_Tagged_Record_Type_Definition =>
 
@@ -678,6 +702,7 @@ package body Auto_Io_Gen.Build.Process_Element_Utils is
          end case;
 
       when others =>
+         Ada.Text_IO.Put_Line ("Is_Scalar : " & Asis.Element_Kinds'Image (E_Kind));
          raise Not_Supported;
 
       end case;

@@ -53,6 +53,11 @@ package body Auto_Io_Gen.Generate.Ada_File.Spec is
       Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
    --  Generate spec code for the Get and Put procedures for a Scalar type.
 
+   procedure Generate_Put_Get_Access_Spec
+     (File            : in Ada.Text_IO.File_Type;
+      Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type);
+   --  Generate spec code for the Get and Put procedures for an access type.
+
    procedure Generate_Child_Spec
      (File                : in Ada.Text_IO.File_Type;
       Type_List           : in Lists.Type_Descriptor_Lists.List_Type;
@@ -203,6 +208,9 @@ package body Auto_Io_Gen.Generate.Ada_File.Spec is
               Program_Error with
                 "Private_Label " & Lists.Type_Name (Type_Descriptor.all) &
               " should have been replaced; perhaps add 'ignore' to public part";
+
+         when Lists.Access_Label =>
+            Generate_Put_Get_Access_Spec (File, Type_Descriptor.all);
 
          when Auto_Io_Gen.Lists.Scalar_Labels_Type =>
             Generate_Put_Get_Scalar_Spec (File, Type_Descriptor.all);
@@ -811,5 +819,61 @@ package body Auto_Io_Gen.Generate.Ada_File.Spec is
 
       New_Line (File);
    end Generate_Put_Get_Scalar_Spec;
+
+   procedure Generate_Put_Get_Access_Spec
+     (File            : in Ada.Text_IO.File_Type;
+      Type_Descriptor : in Auto_Io_Gen.Lists.Type_Descriptor_Type)
+   is
+      use Ada.Text_IO;
+
+      Type_Name : constant String := Asis.Aux.Name (Type_Descriptor.Type_Name);
+
+   begin
+      if Options.Debug then
+         Put_Line ("Generate_Put_Get_Access_Spec. " & Type_Name);
+      end if;
+
+      Indent_Incr (File, "procedure Put");
+      Indent_Line (File, "(File              : in " & Ada_Text_IO & ".File_Type;",
+                         " Item              : in " & Type_Name & ";",
+                         " Single_Line_Item       : in Boolean := True;",
+                         " Named_Association_Item : in Boolean := False;",
+                         " Single_Line_Part       : in Boolean := True;",
+                         " Named_Association_Part : in Boolean := False);");
+
+      Indent_Less (File, "procedure Put");
+      Indent_Line (File, "(Item              : in " & Type_Name & ";",
+                         " Single_Line_Item       : in Boolean := True;",
+                         " Named_Association_Item : in Boolean := False;",
+                         " Single_Line_Part       : in Boolean := True;",
+                         " Named_Association_Part : in Boolean := False);");
+
+      Indent_Less (File, "procedure Put_Item");
+      Indent_Line (File, "(File              : in " & Ada_Text_IO & ".File_Type;",
+                         " Item              : in " & Type_Name & ";",
+                         " Single_Line       : in Boolean := False;",
+                         " Named_Association : in Boolean := False);");
+
+      New_Line (File);
+
+      Indent_Less (File, "procedure Get");
+      Indent_Line (File, "(File                   : in     " & Ada_Text_IO & ".File_Type;",
+                         " Item                   :    out " & Type_Name & ";",
+                         " Named_Association_Item : in     Boolean := False;",
+                         " Named_Association_Part : in     Boolean := False);");
+
+      Indent_Less (File, "procedure Get");
+      Indent_Line (File, "(Item                   :    out " & Type_Name & ";",
+                         " Named_Association_Item : in     Boolean := False;",
+                         " Named_Association_Part : in     Boolean := False);");
+
+      Indent_Less (File, "procedure Get_Item");
+      Indent_Line (File, "(File              : in     " & Ada_Text_IO & ".File_Type;",
+                         " Item              :    out " & Type_Name & ";",
+                         " Named_Association : in     Boolean := False);");
+      Indent_Level := Indent_Level - 1;
+
+      New_Line (File);
+   end Generate_Put_Get_Access_Spec;
 
 end Auto_Io_Gen.Generate.Ada_File.Spec;

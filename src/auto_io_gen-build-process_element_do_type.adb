@@ -133,6 +133,29 @@ begin
       when A_Type_Definition =>
 
          case Elements.Type_Kind (Element) is
+         when An_Access_Type_Definition =>
+
+            declare
+               A_Kind : constant Asis.Access_Type_Kinds
+                     := Elements.Access_Type_Kind (Element);
+               A_Subtype_Mark : constant Asis.Expression
+                     := Definitions.Subtype_Mark (Definitions.Access_To_Object_Definition (Element));
+            begin
+               if A_Kind in Asis.Access_To_Object_Definition then
+                  Add_Descriptor (State, Lists.Access_Label);
+                  State.Private_State.Current_Type.Accessed_Subtype_Ident := A_Subtype_Mark;
+                  State.Private_State.Current_Type.Is_Scalar :=
+                                            Process_Element_Utils.Is_Scalar (A_Subtype_Mark);
+                  Process_Element_Utils.Add_Body_With (State, "System");
+                  Process_Element_Utils.Add_Body_With (State, "Auto_Text_IO.Access_IO");
+                  Control := Abandon_Siblings;
+               else
+                  Report_Unsupported
+                    (State, Element, Access_Type_Kinds'Image (A_Kind));
+                  Control := Abandon_Siblings;
+               end if;
+            end;
+
          when A_Constrained_Array_Definition |
               An_Unconstrained_Array_Definition =>
 

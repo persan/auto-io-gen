@@ -56,7 +56,7 @@ package Auto_Io_Gen is
    --  example, the name returned for Interfaces.C.Text_IO is
    --  Interfaces_C_Text_IO.
    --
-   --  Raises Programmer_Error if Element is not an appropriate type.
+   --  Raises Program_Error if Element is not an appropriate type.
 
    function Private_Text_IO_Child_Name (Package_Declaration : in Asis.Element) return String;
    --  Similar to Text_IO_Child_Name, but return the name for the
